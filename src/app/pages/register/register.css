@@ -1,0 +1,120 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #ffe6f2;
+  padding: 20px;
+}
+
+.register-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+h1 {
+  color: #e91e63;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+h1 span {
+  color: #ff4081;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #e91e63;
+  box-shadow: 0 0 4px rgba(233, 30, 99, 0.3);
+}
+
+.btn-register {
+  background: #e91e63;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s;
+}
+
+.btn-register:hover {
+  background: #d81b60;
+}
+
+.msg {
+  margin-top: 10px;
+  color: #4caf50;
+}
+
+.login-text {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.login-link {
+  color: #e91e63;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+/* 🔙 Botón volver */
+.btn-volver {
+  background: transparent;
+  color: #e91e63;
+  border: 2px solid #e91e63;
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-top: 1.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.btn-volver:hover {
+  background: #e91e63;
+  color: white;
+}

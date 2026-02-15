@@ -1,0 +1,226 @@
+/* 🌸 CONTENEDOR PRINCIPAL */
+.productos-crud-container {
+  padding: 2rem 3rem;
+  background: #fff8fa;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  color: #444;
+}
+
+/* 🏷️ TÍTULO */
+.titulo {
+  text-align: center;
+  font-size: 2rem;
+  color: #d63384;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+/* 💬 MENSAJE */
+.mensaje {
+  text-align: center;
+  background: #ffe2ec;
+  color: #b82a70;
+  padding: 0.7rem;
+  border-radius: 10px;
+  margin-bottom: 1.2rem;
+  font-weight: 500;
+  box-shadow: 0 1px 6px rgba(214, 51, 132, 0.15);
+}
+
+/* 📋 FORMULARIO */
+.formulario {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(214, 51, 132, 0.1);
+  margin-bottom: 2rem;
+}
+
+/* 📐 GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+/* 🧩 CAMPOS */
+.campo label {
+  display: block;
+  font-weight: 600;
+  color: #c2185b;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+/* 🔘 INPUTS */
+.campo input,
+.campo textarea,
+.campo select {
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid #f3c3d9;
+  border-radius: 6px;
+  outline: none;
+  background-color: #fff;
+  color: #333;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.campo input:focus,
+.campo textarea:focus,
+.campo select:focus {
+  border-color: #d63384;
+  box-shadow: 0 0 3px rgba(214, 51, 132, 0.25);
+}
+
+/* 🔽 SELECT */
+.campo select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='10' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d63384' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px;
+}
+
+.campo select option {
+  background: #fff5f9;
+  color: #d63384;
+  font-weight: 500;
+}
+
+/* 🎯 BOTONES */
+.acciones {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+button {
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0.55rem 1.2rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: 0.25s ease;
+}
+
+/* 💾 GUARDAR */
+.btn-guardar {
+  background-color: #d63384;
+  color: white;
+  box-shadow: 0 1px 4px rgba(214, 51, 132, 0.2);
+}
+.btn-guardar:hover {
+  background-color: #b82a70;
+}
+
+/* ❌ CANCELAR */
+.btn-cancelar {
+  background-color: #efefef;
+  color: #444;
+}
+.btn-cancelar:hover {
+  background-color: #e0e0e0;
+}
+
+/* 📊 TABLA */
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(214, 51, 132, 0.05);
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  table-layout: auto; /* 👈 deja que las columnas se ajusten naturalmente */
+}
+
+/* CABECERAS Y CELDAS */
+.tabla th,
+.tabla td {
+  padding: 0.9rem 0.8rem; /* 👈 más espacio vertical y horizontal */
+  border-bottom: 1px solid #f0b9d1;
+  text-align: center;
+  vertical-align: middle;
+  word-wrap: break-word;
+  white-space: normal; /* 👈 permite varias líneas */
+}
+
+.tabla th {
+  background-color: #ffe6ef;
+  color: #b82a70;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.4px;
+}
+
+.tabla tbody tr:nth-child(even) {
+  background-color: #fffafd;
+}
+
+.tabla tbody tr:hover {
+  background-color: #fff0f6;
+}
+
+/* 🖋️ BOTONES TABLA */
+.btn-editar,
+.btn-eliminar {
+  border-radius: 4px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  color: #fff;
+  margin: 0 0.2rem;
+  transition: 0.25s ease;
+}
+.btn-editar {
+  background-color: #81c784;
+}
+.btn-editar:hover {
+  background-color: #66bb6a;
+}
+.btn-eliminar {
+  background-color: #e57373;
+}
+.btn-eliminar:hover {
+  background-color: #ef5350;
+}
+
+/* 🖼️ IMÁGENES */
+.tabla img {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #f4b7d2;
+  transition: transform 0.25s ease;
+}
+.tabla img:hover {
+  transform: scale(1.12);
+}
+
+/* ⏳ ESTADO DE CARGA */
+.cargando {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  margin-top: 0.8rem;
+  font-size: 0.95rem;
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 900px) {
+  .tabla {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

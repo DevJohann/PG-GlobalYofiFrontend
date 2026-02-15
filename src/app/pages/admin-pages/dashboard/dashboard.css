@@ -1,0 +1,172 @@
+/* 🌸 Estructura general del dashboard */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  background-color: #fff;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ==============================
+   🩷 SIDEBAR (menú lateral)
+   ============================== */
+.sidebar {
+  width: 260px;
+  background-color: #ffeef8;
+  color: #4a235a;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-right: 2px solid #f8d1eb;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  z-index: 10; /* 🔒 Siempre por encima del contenido */
+}
+
+/* 🌸 Logo principal */
+.sidebar h2 {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #e91e63;
+}
+
+/* 🧾 Menú con scroll */
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #f48fb1 #ffeef8;
+}
+
+/* 🎀 Scroll personalizado (para Chrome, Edge, Safari) */
+.menu::-webkit-scrollbar {
+  width: 8px;
+}
+.menu::-webkit-scrollbar-track {
+  background: #ffeef8;
+  border-radius: 4px;
+}
+.menu::-webkit-scrollbar-thumb {
+  background-color: #f48fb1;
+  border-radius: 4px;
+}
+.menu::-webkit-scrollbar-thumb:hover {
+  background-color: #ec407a;
+}
+
+/* 🩷 Títulos de sección */
+.menu-section {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #b71c5a;
+  margin: 1rem 0 0.5rem 0;
+  border-bottom: 1px solid #f4b7d2;
+  padding-bottom: 0.3rem;
+}
+
+/* 🔗 Enlaces del menú */
+.menu li a {
+  display: block;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  color: #4a235a;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.menu li a:hover {
+  background-color: #f9cce2;
+}
+
+/* 🌺 Activo */
+.active a {
+  background-color: #e91e63;
+  color: white !important;
+}
+
+/* 🚪 Botón de cerrar sesión */
+.btn-logout {
+  background-color: #e91e63;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+  margin-top: 1rem;
+}
+
+.btn-logout:hover {
+  background-color: #c2185b;
+}
+
+/* ✅ Que el menú haga scroll pero el botón quede fijo */
+.sidebar .menu {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+/* ==============================
+   🌼 ÁREA PRINCIPAL
+   ============================== */
+.main-content {
+  margin-left: 260px; /* Deja espacio para el sidebar */
+  padding: 2rem;
+  width: calc(100% - 260px);
+  background-color: #ffffff;
+  min-height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+/* 🌸 Scroll personalizado del contenido */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+.main-content::-webkit-scrollbar-thumb {
+  background-color: #f48fb1;
+  border-radius: 4px;
+}
+.main-content::-webkit-scrollbar-track {
+  background-color: #ffeef8;
+}
+
+/* ==============================
+   ✨ Estilo general de páginas internas
+   ============================== */
+h1, h2, h3 {
+  color: #b71c5a;
+}
+
+button {
+  font-family: "Poppins", sans-serif;
+}
+
+/* 🌸 Animación sutil de aparición del contenido */
+.main-content {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

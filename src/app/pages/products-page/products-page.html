@@ -1,0 +1,46 @@
+<!-- 🌸 NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-logo">🌸 Global Yofi</div>
+    <button class="btn btn-primary" routerLink="/login">Login</button>
+  </div>
+</nav>
+
+<!-- 🧴 SECCIÓN DE PRODUCTOS -->
+<section class="productos-page">
+  <h1>Nuestros Productos 🌸</h1>
+
+  <!-- 🔎 FILTROS -->
+  <div class="filtros">
+    <select [(ngModel)]="filtroCategoria">
+      <option [ngValue]="null">Todas las categorías</option>
+      <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
+    </select>
+
+    <input type="number" [(ngModel)]="filtroMin" placeholder="Precio mínimo" min="0">
+    <input type="number" [(ngModel)]="filtroMax" placeholder="Precio máximo" min="0">
+
+    <button (click)="aplicarFiltro()">Filtrar</button>
+    <button class="btn-reset" (click)="cargarProductos()">Reiniciar</button>
+  </div>
+
+  <!-- 💄 GRID DE PRODUCTOS -->
+  <div class="productos-grid">
+    <div *ngFor="let p of productos" class="producto-card">
+      <img
+        *ngIf="p.imagenUrl"
+        [src]="'http://localhost:8080' + p.imagenUrl"
+        [alt]="p.nombre"
+        class="producto-img"
+      />
+
+
+      <div class="producto-info">
+        <h3>{{ p.nombre }}</h3>
+        <p>{{ p.descripcion }}</p>
+        <p class="precio">💰 {{ p.precio | currency:'COP':'symbol-narrow' }}</p>
+        <small>{{ p.marca }} — {{ p.categoria }}</small>
+      </div>
+    </div>
+  </div>
+</section>

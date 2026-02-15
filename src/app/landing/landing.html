@@ -1,0 +1,114 @@
+<!-- 🌸 NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-logo">🌸 Global Yofi</div>
+    <ul class="navbar-links">
+      <li><a (click)="scrollToSection('about')">Nosotros</a></li>
+      <li><a (click)="scrollToSection('values')">Valores</a></li>
+      <li><a (click)="scrollToSection('products')">Productos</a></li>
+      <li><a (click)="scrollToSection('cta')">Contacto</a></li>
+    </ul>
+    <button class="btn btn-primary" routerLink="/login">Inicia sesión</button>
+    <button class="btn btn-primary" routerLink="/registro">Registro</button>
+  </div>
+</nav>
+
+<!-- 🏠 HERO SECTION -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1>Brilla a tu manera con <strong>Global Yofi ✨</strong></h1>
+      <p>Productos de belleza, cuidado facial y bienestar pensados para resaltar lo mejor de ti.</p>
+      <p>💋 Inspira. Cuida. Transforma.</p>
+      <button routerLink="/productos">Descubre nuestra colección</button>
+    </div>
+    <div class="hero-image">
+      <img src="assets/img/yofi/Yofi_Sosteniendo_Letrero_Presentacionpng.png" alt="Yofi dando la bienvenida">
+    </div>
+  </div>
+</section>
+
+<!-- 💄 SOBRE NOSOTROS -->
+<section id="about" class="about">
+  <div class="section-content">
+    <div class="section-text">
+      <h2>Sobre nosotros</h2>
+      <p>
+        En <strong>Global Yofi</strong>, creemos que la belleza va más allá de la apariencia:
+        es <em>cuidarte, sentirte bien y reflejar confianza cada día.</em>
+      </p>
+      <p>
+        Nacimos del sueño de una pareja que decidió transformar su pasión por la belleza en una experiencia para todos.
+        Empezamos vendiendo con amor desde redes sociales, y hoy seguimos creciendo para ofrecerte una
+        <strong>tienda en línea cercana, moderna y llena de propósito.</strong>
+      </p>
+      <p>
+        Porque entendemos que cada producto que eliges, es una forma de decirte a ti misma:
+        <em>“mereces verte y sentirte increíble”.</em>
+      </p>
+    </div>
+    <div class="section-image">
+      <img src="../../assets/img/yofi/Yofi_Quienes_Somos.png" alt="Yofi presentando quienes somos">
+    </div>
+  </div>
+</section>
+
+<!-- 💫 NUESTROS VALORES -->
+<section id="values" class="values">
+  <h2>Nuestros valores</h2>
+  <div class="values-header">
+    <img src="../../assets/img/yofi/Yofi_Cuales_Son_Nuestros_Valores_2.png" alt="Yofi preguntando por los valores">
+  </div>
+  <div class="values-grid">
+    <div class="value-card">
+      🌿 <h3>Autenticidad</h3>
+      <p>Cada producto refleja nuestra esencia y compromiso real con el bienestar.</p>
+    </div>
+    <div class="value-card">
+      💕 <h3>Pasión</h3>
+      <p>Amamos lo que hacemos y lo transmitimos en cada detalle.</p>
+    </div>
+    <div class="value-card">
+      💎 <h3>Calidad</h3>
+      <p>Trabajamos solo con marcas y fórmulas que cuidan tu piel y el planeta.</p>
+    </div>
+    <div class="value-card">
+      🌍 <h3>Cercanía</h3>
+      <p>Creemos en las relaciones humanas, no en simples transacciones.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 🧴 NUESTROS PRODUCTOS -->
+<section id="products" class="products">
+  <h2>Nuestros productos</h2>
+  <div class="products-content">
+    <div class="products-text">
+      <p>Diseñados para resaltar tu belleza natural, con fórmulas seguras y modernas:</p>
+      <div class="products-list">
+        <div class="product-item">💋 Maquillaje profesional y para uso diario</div>
+        <div class="product-item">🌸 Cuidado facial y corporal</div>
+        <div class="product-item">💫 Accesorios de belleza</div>
+        <div class="product-item">🕯️ Kits de regalo y sets personalizados</div>
+      </div>
+      <p style="margin-top:30px;">
+        Cada artículo es elegido con amor, pensando en mujeres (y hombres) que quieren cuidar su imagen
+        con confianza, autenticidad y estilo.
+      </p>
+    </div>
+    <div class="products-image">
+      <img src="../../assets/img/yofi/Yofi_Nuestros_Productos.png" alt="Yofi mostrando productos de belleza">
+    </div>
+  </div>
+</section>
+
+<!-- 💌 CTA FINAL -->
+<section id="cta" class="cta">
+  <h2>Únete al movimiento Yofi 💖</h2>
+  <p>Descubre una nueva forma de sentirte bella, segura y auténtica.</p>
+  <button class="btn btn-primary">🌟 Visita nuestra tienda</button>
+  <button style="margin-left:10px;" class="btn btn-primary">💬 Síguenos en Instagram</button>
+  <div class="cta-image">
+    <img src="../../assets/img/yofi/MascotaGlobalYofi.png" alt="Yofi feliz despidiéndose">
+  </div>
+</section>

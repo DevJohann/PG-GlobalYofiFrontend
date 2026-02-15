@@ -1,0 +1,50 @@
+<section class="reportes-container">
+  <h1 class="titulo">📦 Reportes de Inventario</h1>
+  <p class="descripcion">
+    Visualiza la rotación y los movimientos recientes del inventario.
+  </p>
+
+  <div class="graficos-grid">
+    <!-- Gráfico de rotación -->
+    <div class="grafico-card">
+      <h3>🔄 Rotación de Inventario</h3>
+      <canvas #rotacionChart></canvas>
+    </div>
+
+    <!-- Tabla de historial -->
+    <div class="grafico-card full-width">
+      <h3>📋 Historial de Movimientos</h3>
+
+      <div class="tabla-container" *ngIf="historialInventario.length > 0; else sinDatos">
+
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Tipo</th>
+              <th>Cantidad</th>
+              <th>Fecha</th>
+              <th>Usuario</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of historialInventario">
+              <td>{{ item.producto }}</td>
+              <td [ngClass]="item.tipoMovimiento === 'entrada' ? 'entrada' : 'salida'">
+                {{ item.tipoMovimiento | titlecase }}
+              </td>
+              <td>{{ item.cantidad }}</td>
+              <td>{{ item.fecha | date:'short' }}</td>
+              <td>{{ item.usuario }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mensaje cuando no hay registros -->
+      <ng-template #sinDatos>
+        <p class="sin-datos">📭 No hay movimientos de inventario disponibles.</p>
+      </ng-template>
+    </div>
+  </div>
+</section>

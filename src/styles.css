@@ -1,0 +1,101 @@
+/* ===========================
+   🌸 GLOBAL YOFI STYLE GUIDE (Unificada)
+   =========================== */
+
+/* 🎨 PALETA DE COLORES UNIFICADA */
+:root {
+  /* Rosado global Yofi */
+  --pink-main: #f4a6b8;
+  --pink-light: #f9bfd0; /* solo para degradados más suaves */
+  --pink-strong: #f27a9b; /* hover */
+  --white-pure: #ffffff;
+  --white-soft: #fff9fb;
+  --gray-dark: #3d3d3d;
+  --shadow-light: 0 4px 10px rgba(244, 166, 184, 0.25);
+  --shadow-medium: 0 6px 15px rgba(244, 166, 184, 0.35);
+}
+
+
+/* 🧱 ESTRUCTURA GENERAL */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--white-soft);
+  color: var(--gray-dark);
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4 {
+  color: var(--gray-dark);
+  margin-bottom: 15px;
+}
+
+p {
+  font-family: 'Open Sans', sans-serif;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+/* ✨ UTILIDADES */
+.text-center { text-align: center; }
+.text-pink { color: var(--pink-main); }
+.bg-pink { background-color: var(--pink-main); }
+.bg-lightpink { background-color: var(--pink-light); }
+.rounded { border-radius: 20px; }
+.shadow { box-shadow: var(--shadow-light); }
+.shadow-hover:hover { box-shadow: var(--shadow-medium); }
+
+/* 💖 BOTONES */
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-primary {
+  background-color: var(--pink-main);
+  color: var(--white-pure);
+  box-shadow: var(--shadow-light);
+}
+
+.btn-primary:hover {
+  background-color: var(--pink-strong);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-medium);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--pink-main);
+  border: 2px solid var(--pink-main);
+}
+
+.btn-outline:hover {
+  background-color: var(--pink-main);
+  color: var(--white-pure);
+  transform: translateY(-3px);
+}
+
+/* 💫 ANIMACIONES SUAVES */
+.fade-in {
+  animation: fadeIn 1s ease-in-out both;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 📱 RESPONSIVIDAD GLOBAL */
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.6rem; }
+  section { padding: 60px 15px; }
+}

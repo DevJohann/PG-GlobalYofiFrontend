@@ -1,0 +1,68 @@
+<section class="register-container">
+  <div class="register-card">
+    <h1>🌸 Crea tu cuenta en <span>Global Yofi</span></h1>
+    <p class="subtitle">Descubre tu mejor versión con nosotros 💄</p>
+
+    <form class="register-form" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" [(ngModel)]="nombre" name="nombre" required />
+        </div>
+
+        <div class="form-group">
+          <label for="apellido">Apellido</label>
+          <input id="apellido" [(ngModel)]="apellido" name="apellido" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input
+          type="email"
+          id="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="ejemplo@yofi.com"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input
+          type="text"
+          id="telefono"
+          [(ngModel)]="telefono"
+          name="telefono"
+          placeholder="+57 300 000 0000"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="contrasena">Contraseña</label>
+        <input
+          type="password"
+          id="contrasena"
+          [(ngModel)]="contrasena"
+          name="contrasena"
+          placeholder="••••••••"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn-register" [disabled]="cargando">
+        {{ cargando ? 'Registrando...' : 'Crear cuenta' }}
+      </button>
+
+      <p *ngIf="mensaje" class="msg">{{ mensaje }}</p>
+    </form>
+
+    <p class="login-text">
+      ¿Ya tienes cuenta?
+      <a routerLink="/login" class="login-link">Inicia sesión aquí</a>
+    </p>
+    <button class="btn-volver" routerLink="/" type="button">Volver al inicio</button>
+  </div>
+</section>
