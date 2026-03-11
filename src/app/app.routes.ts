@@ -9,19 +9,22 @@ import { VentasReportPageComponent } from './pages/admin-pages/ventas-report-pag
 import { ClientesReportPageComponent } from './pages/admin-pages/clientes-report-page/clientes-report-page';
 import { InventarioReportPageComponent } from './pages/admin-pages/inventario-report-page/inventario-report-page';
 import { ProductosCrudPage } from './pages/admin-pages/productos-crud-page/productos-crud-page';
+import { ProductDetail } from './pages/product-detail/product-detail';
 
 export const routes: Routes = [
     { path: '', component: Landing },
-    {path:  'productos', component: ProductsPage},
-    {path: 'login', component: Login},
-    {path: 'registro', component: Register},
-    {path: 'admin', component: Dashboard,
+    { path: 'productos', component: ProductsPage },
+    { path: 'productos/:id', component: ProductDetail },
+    { path: 'login', component: Login },
+    { path: 'registro', component: Register },
+    {
+        path: 'admin', component: Dashboard,
         children: [
-            {path: 'reportes-productos', component: ProductosReportPage},
-            {path: 'reportes-ventas', component: VentasReportPageComponent},
-            {path: 'reportes-clientes', component: ClientesReportPageComponent},
-            {path: 'reportes-inventario', component: InventarioReportPageComponent},
-            {path: 'crud-productos', component: ProductosCrudPage}
+            { path: 'reportes-productos', component: ProductosReportPage },
+            { path: 'reportes-ventas', component: VentasReportPageComponent },
+            { path: 'reportes-clientes', component: ClientesReportPageComponent },
+            { path: 'reportes-inventario', component: InventarioReportPageComponent },
+            { path: 'crud-productos', component: ProductosCrudPage }
         ]
     }
 ];

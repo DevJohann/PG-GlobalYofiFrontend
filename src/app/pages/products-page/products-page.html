@@ -32,8 +32,9 @@
 
   <!-- 💄 GRID DE PRODUCTOS -->
   <div class="productos-grid">
-    <div *ngFor="let p of productos" class="producto-card">
-      <img *ngIf="p.imagenUrl" [src]="'http://localhost:8080' + p.imagenUrl" [alt]="p.nombre" class="producto-img" />
+    <div *ngFor="let p of productos" class="producto-card" [routerLink]="['/productos', p.id]">
+      <img *ngIf="p.imagenUrl" [src]="productoService.getImagenUrl(p.imagenUrl)" [alt]="p.nombre"
+        class="producto-img" />
 
 
       <div class="producto-info">

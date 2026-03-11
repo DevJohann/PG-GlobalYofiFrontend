@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -21,7 +21,11 @@ export class Register {
   cargando = false;
   mensaje = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   onSubmit() {
     this.cargando = true;
@@ -40,6 +44,7 @@ export class Register {
       next: () => {
         this.cargando = false;
         this.mensaje = '✅ Registro exitoso, redirigiendo...';
+        this.cdr.detectChanges();
         alert('Registro exitoso');
         setTimeout(() => this.router.navigate(['/login']), 2000);
       },
@@ -48,6 +53,7 @@ export class Register {
         alert('Error al registrar el usuario. Verifica tus datos.');
         this.cargando = false;
         this.mensaje = 'Error al registrar el usuario. Verifica tus datos.';
+        this.cdr.detectChanges();
       }
     });
   }

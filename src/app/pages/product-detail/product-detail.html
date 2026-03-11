@@ -1,0 +1,72 @@
+<!-- 🌸 NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-logo" routerLink="/">🌸 Global Yofi</div>
+        <div class="navbar-auth" *ngIf="isLoggedIn; else loginButton">
+            <span class="user-email">📧 {{ userEmail }}</span>
+            <button class="btn btn-outline" (click)="logout()">Cerrar sesión</button>
+        </div>
+        <ng-template #loginButton>
+            <button class="btn btn-primary" routerLink="/login">Login</button>
+        </ng-template>
+    </div>
+</nav>
+
+<div class="container product-detail-container" *ngIf="!cargando && producto; else stateTemplate">
+    <div class="product-layout">
+        <!-- 🖼️ IMAGEN DEL PRODUCTO -->
+        <div class="product-image-section">
+            <div class="image-card">
+                <img [src]="productosService.getImagenUrl(producto.imagenUrl)" [alt]="producto.nombre"
+                    class="main-image" />
+            </div>
+        </div>
+
+        <!-- 📝 INFORMACIÓN DEL PRODUCTO -->
+        <div class="product-info-section">
+            <nav class="breadcrumb">
+                <a routerLink="/productos">Productos</a> / <span>{{ producto.categoria }}</span>
+            </nav>
+
+            <h1 class="product-title">{{ producto.nombre }}</h1>
+            <p class="product-brand">{{ producto.marca }}</p>
+
+            <div class="price-tag">
+                <span class="currency">$</span>
+                <span class="amount">{{ producto.precio | number }}</span>
+            </div>
+
+            <div class="product-description">
+                <h3>Descripción</h3>
+                <p>{{ producto.descripcion }}</p>
+            </div>
+
+            <div class="purchase-actions">
+                <button class="btn-add-cart" (click)="agregarAlCarrito()">
+                    🛒 Agregar al carrito
+                </button>
+                <button class="btn-back" routerLink="/productos">
+                    ← Volver al catálogo
+                </button>
+            </div>
+
+            <div class="extra-info">
+                <p>🚚 Envío gratuito en compras superiores a $150,000</p>
+                <p>✨ 100% Autenticidad garantizada</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #stateTemplate>
+    <div class="container state-container">
+        <div *ngIf="cargando" class="loading">
+            <div class="spinner"></div>
+            <p>Cargando detalles del producto...</p>
+        </div>
+        <div *ngIf="error" class="error-view">
+            <p>❌ {{ error }}</p>
+            <button class="btn btn-primary" routerLink="/productos">Volver al catálogo</button>
+        </div>
+    </div>
+</ng-template>

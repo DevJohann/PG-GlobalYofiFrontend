@@ -28,7 +28,7 @@ export class ProductsPage implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private productoService: ProductosService,
+    public productoService: ProductosService,
     private categoriaService: CategoriaService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
