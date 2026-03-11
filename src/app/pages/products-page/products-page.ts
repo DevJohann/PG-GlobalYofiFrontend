@@ -5,6 +5,7 @@ import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { Subject, filter, takeUntil } from 'rxjs';
 import { ProductosService, Producto } from '../../services/productos';
 import { CategoriaService, Categoria } from '../../services/categoria-service';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-products-page',
@@ -21,15 +22,18 @@ export class ProductsPage implements OnInit, OnDestroy {
   filtroMin: number = 0;
   filtroMax: number = 1000000;
   cargando = false;
+  userEmail: string | null = null;
+  isLoggedIn = false;
 
   private destroy$ = new Subject<void>();
 
   constructor(
     private productoService: ProductosService,
     private categoriaService: CategoriaService,
+    private authService: AuthService,
     private cdr: ChangeDetectorRef,
     private router: Router
-  ) {}
+  ) { }
 
   // =========================================================
   // 🚀 Inicialización
@@ -38,6 +42,7 @@ export class ProductsPage implements OnInit, OnDestroy {
     // ✅ Cargar datos al inicio
     this.cargarCategorias();
     this.cargarProductos();
+    this.checkLoginStatus();
 
     // ✅ Detectar cuando se navega nuevamente a esta ruta
     this.router.events
@@ -48,8 +53,24 @@ export class ProductsPage implements OnInit, OnDestroy {
       .subscribe(() => {
         if (this.router.url === '/productos') {
           this.cargarProductos();
+          this.checkLoginStatus();
         }
       });
+  }
+
+  checkLoginStatus(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
+    if (this.isLoggedIn) {
+      const user = this.authService.getUser();
+      this.userEmail = user ? user.email : null;
+    }
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.isLoggedIn = false;
+    this.userEmail = null;
+    this.router.navigate(['/login']);
   }
 
   // =========================================================

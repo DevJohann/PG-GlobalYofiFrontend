@@ -105,6 +105,43 @@
   }
 }
 
+/* 🔐 AUTH SECTION IN NAVBAR */
+.navbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-email {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--white-pure);
+  background: rgba(255, 255, 255, 0.15);
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--white-pure);
+  border: 2px solid var(--white-pure);
+  border-radius: 25px;
+  padding: 8px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+  background-color: var(--white-pure);
+  color: var(--pink-main);
+  transform: translateY(-2px);
+}
+
 /* 🔝 Espacio para que no tape el Hero */
 .hero {
   margin-top: 60px;

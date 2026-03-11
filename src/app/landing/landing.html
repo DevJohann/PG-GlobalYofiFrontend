@@ -8,8 +8,16 @@
       <li><a (click)="scrollToSection('products')">Productos</a></li>
       <li><a (click)="scrollToSection('cta')">Contacto</a></li>
     </ul>
-    <button class="btn btn-primary" routerLink="/login">Inicia sesión</button>
-    <button class="btn btn-primary" routerLink="/registro">Registro</button>
+
+    <div class="navbar-auth" *ngIf="isLoggedIn; else loginButtons">
+      <span class="user-email">📧 {{ userEmail }}</span>
+      <button class="btn btn-outline" (click)="logout()">Cerrar sesión</button>
+    </div>
+
+    <ng-template #loginButtons>
+      <button class="btn btn-primary" routerLink="/login">Inicia sesión</button>
+      <button class="btn btn-primary" routerLink="/registro">Registro</button>
+    </ng-template>
   </div>
 </nav>
 

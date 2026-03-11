@@ -2,7 +2,13 @@
 <nav class="navbar">
   <div class="navbar-container">
     <div class="navbar-logo">🌸 Global Yofi</div>
-    <button class="btn btn-primary" routerLink="/login">Login</button>
+    <div class="navbar-auth" *ngIf="isLoggedIn; else loginButton">
+      <span class="user-email">📧 {{ userEmail }}</span>
+      <button class="btn btn-outline" (click)="logout()">Cerrar sesión</button>
+    </div>
+    <ng-template #loginButton>
+      <button class="btn btn-primary" routerLink="/login">Login</button>
+    </ng-template>
   </div>
 </nav>
 
@@ -27,12 +33,7 @@
   <!-- 💄 GRID DE PRODUCTOS -->
   <div class="productos-grid">
     <div *ngFor="let p of productos" class="producto-card">
-      <img
-        *ngIf="p.imagenUrl"
-        [src]="'http://localhost:8080' + p.imagenUrl"
-        [alt]="p.nombre"
-        class="producto-img"
-      />
+      <img *ngIf="p.imagenUrl" [src]="'http://localhost:8080' + p.imagenUrl" [alt]="p.nombre" class="producto-img" />
 
 
       <div class="producto-info">

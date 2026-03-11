@@ -1,14 +1,40 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../services/auth';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './landing.html',
-  styleUrls: ['./landing.css'], 
+  styleUrls: ['./landing.css'],
 })
-export class Landing {
+export class Landing implements OnInit {
+  userEmail: string | null = null;
+  isLoggedIn = false;
+
+  constructor(private authService: AuthService, private router: Router) { }
+
+  ngOnInit(): void {
+    this.checkLoginStatus();
+  }
+
+  checkLoginStatus(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
+    if (this.isLoggedIn) {
+      const user = this.authService.getUser();
+      this.userEmail = user ? user.email : null;
+    }
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.isLoggedIn = false;
+    this.userEmail = null;
+    this.router.navigate(['/login']);
+  }
+
   scrollToSection(sectionId: string): void {
     const element = document.getElementById(sectionId);
     if (element) {
