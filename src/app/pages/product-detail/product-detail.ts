@@ -3,6 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductosService, Producto } from '../../services/productos';
 import { AuthService } from '../../services/auth';
+import { CarritoService } from '../../services/carrito.service';
 
 @Component({
     selector: 'app-product-detail',
@@ -17,12 +18,14 @@ export class ProductDetail implements OnInit {
     error = '';
     isLoggedIn = false;
     userEmail: string | null = null;
+    cantidad: number = 1;
     private isBrowser: boolean;
 
     constructor(
         private route: ActivatedRoute,
         public productosService: ProductosService,
         private authService: AuthService,
+        public carritoService: CarritoService,
         private cdr: ChangeDetectorRef,
         @Inject(PLATFORM_ID) private platformId: Object
     ) {
@@ -68,12 +71,25 @@ export class ProductDetail implements OnInit {
         this.userEmail = null;
     }
 
-    agregarAlCarrito(): void {
-        if (!this.isLoggedIn) {
-            alert('Debes iniciar sesión para agregar productos al carrito.');
-            return;
+    cambiarCantidad(delta: number): void {
+        const nuevaCantidad = this.cantidad + delta;
+        const maxStock = this.producto?.stockActual !== undefined ? this.producto.stockActual : 99;
+
+        if (nuevaCantidad >= 1 && nuevaCantidad <= maxStock) {
+            this.cantidad = nuevaCantidad;
+        } else if (nuevaCantidad > maxStock) {
+            alert(`Solo hay ${maxStock} unidades disponibles en stock.`);
         }
-        console.log('Producto añadido al carrito:', this.producto);
-        alert('✨ ¡Producto añadido al carrito! (Funcionalidad completa próximamente)');
+    }
+
+    agregarAlCarrito(): void {
+        if (!this.producto) return;
+
+        const resultado = this.carritoService.agregar(this.producto, this.cantidad);
+        if (resultado.success) {
+            alert(resultado.message);
+        } else {
+            alert(resultado.message);
+        }
     }
 }

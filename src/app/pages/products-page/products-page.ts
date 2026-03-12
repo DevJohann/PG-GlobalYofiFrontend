@@ -6,6 +6,7 @@ import { Subject, filter, takeUntil } from 'rxjs';
 import { ProductosService, Producto } from '../../services/productos';
 import { CategoriaService, Categoria } from '../../services/categoria-service';
 import { AuthService } from '../../services/auth';
+import { CarritoService } from '../../services/carrito.service';
 
 @Component({
   selector: 'app-products-page',
@@ -31,6 +32,7 @@ export class ProductsPage implements OnInit, OnDestroy {
     public productoService: ProductosService,
     private categoriaService: CategoriaService,
     private authService: AuthService,
+    public carritoService: CarritoService,
     private cdr: ChangeDetectorRef,
     private router: Router
   ) { }

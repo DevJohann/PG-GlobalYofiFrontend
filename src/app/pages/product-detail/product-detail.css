@@ -294,7 +294,6 @@
   margin-bottom: 8px;
 }
 
-/* 🔄 ESTADOS */
 /* 🔢 SELECTOR DE CANTIDAD */
 .quantity-controller {
   display: flex;
@@ -362,6 +361,7 @@
   box-shadow: none;
   transform: none;
 }
+
 
 .state-container {
   margin-top: 150px;

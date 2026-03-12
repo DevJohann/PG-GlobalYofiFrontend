@@ -1,0 +1,82 @@
+<!-- 🌸 NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-logo" routerLink="/">🌸 Global Yofi</div>
+        <div class="navbar-links">
+            <li><a routerLink="/productos">Productos</a></li>
+        </div>
+    </div>
+</nav>
+
+<div class="carrito-container fade-in">
+    <div class="carrito-header">
+        <h1>Tu Carrito de Compras 🛒</h1>
+        <button class="btn btn-outline" *ngIf="items.length > 0" (click)="vaciarCarrito()">Vaciar Carrito</button>
+    </div>
+
+    <div class="carrito-content" *ngIf="items.length > 0; else emptyCart">
+
+        <!-- Lista de Productos -->
+        <div class="carrito-items">
+            <div class="cart-item-card" *ngFor="let item of items">
+                <div class="item-img-container">
+                    <img [src]="productosService.getImagenUrl(item.producto.imagenUrl)" [alt]="item.producto.nombre"
+                        class="item-img" />
+                </div>
+
+                <div class="item-details">
+                    <h3 class="item-title">{{ item.producto.nombre }}</h3>
+                    <p class="item-brand">{{ item.producto.marca }}</p>
+                    <p class="item-price">{{ item.producto.precio | number }} $</p>
+                </div>
+
+                <div class="item-actions">
+                    <div class="quantity-controller">
+                        <button class="btn-qty" (click)="cambiarCantidad(item, -1)"
+                            [disabled]="item.cantidad <= 1">−</button>
+                        <span class="qty-display">{{ item.cantidad }}</span>
+                        <button class="btn-qty" (click)="cambiarCantidad(item, 1)"
+                            [disabled]="item.producto.stockActual !== undefined && item.cantidad >= item.producto.stockActual">+</button>
+                    </div>
+                    <p class="item-subtotal">Subtotal: <strong>{{ (item.producto.precio * item.cantidad) | number }}
+                            $</strong></p>
+                </div>
+
+                <button class="btn-remove" (click)="eliminar(item)" title="Eliminar del carrito">
+                    ❌
+                </button>
+            </div>
+        </div>
+
+        <!-- Resumen de Compra -->
+        <div class="carrito-summary">
+            <h2>Resumen del pedido</h2>
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span>{{ total | number }} $</span>
+            </div>
+            <div class="summary-row">
+                <span>Envío</span>
+                <span>{{ total >= 150000 ? 'Gratis' : '15,000 $' }}</span>
+            </div>
+            <hr>
+            <div class="summary-row total-row">
+                <span>Total a pagar</span>
+                <span>{{ (total >= 150000 ? total : total + 15000) | number }} $</span>
+            </div>
+
+            <button class="btn btn-primary btn-block btn-pay" (click)="procederAlPago()">Proceder al Pago 💳</button>
+            <button class="btn btn-outline btn-block" routerLink="/productos">Seguir Comprando</button>
+        </div>
+
+    </div>
+
+    <ng-template #emptyCart>
+        <div class="empty-cart-view">
+            <div class="empty-icon">🛍️</div>
+            <h2>Tu carrito está vacío</h2>
+            <p>Aún no has agregado ningún producto resplandeciente a tu carrito.</p>
+            <button class="btn btn-primary" routerLink="/productos">Ver Productos</button>
+        </div>
+    </ng-template>
+</div>

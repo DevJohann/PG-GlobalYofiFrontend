@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth';
+import { CarritoService } from '../services/carrito.service';
 
 @Component({
   selector: 'app-landing',
@@ -14,7 +15,11 @@ export class Landing implements OnInit {
   userEmail: string | null = null;
   isLoggedIn = false;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    public carritoService: CarritoService
+  ) { }
 
   ngOnInit(): void {
     this.checkLoginStatus();
