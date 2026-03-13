@@ -35,6 +35,7 @@ export class Landing implements OnInit {
 
   logout(): void {
     this.authService.logout();
+    this.carritoService.vaciarEstado();
     this.isLoggedIn = false;
     this.userEmail = null;
     this.router.navigate(['/login']);

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { CarritoService, CartItem } from '../../services/carrito.service';
+import { CarritoService, CarritoDTO, ItemCarritoDTO } from '../../services/carrito.service';
 import { ProductosService } from '../../services/productos';
+import { AuthService } from '../../services/auth';
 
 @Component({
     selector: 'app-carrito-page',
@@ -12,41 +13,70 @@ import { ProductosService } from '../../services/productos';
     styleUrls: ['./carrito-page.css']
 })
 export class CarritoPageComponent implements OnInit {
-    items: CartItem[] = [];
-    total: number = 0;
+    carrito: CarritoDTO | null = null;
+    isLoggedIn = false;
+    userEmail: string | null = null;
 
     constructor(
         public carritoService: CarritoService,
-        public productosService: ProductosService
+        public productosService: ProductosService,
+        private authService: AuthService,
+        private cdr: ChangeDetectorRef
     ) { }
 
     ngOnInit(): void {
-        // Suscribirse a los cambios del carrito para mantener la UI actualizada
-        this.carritoService.getCarrito().subscribe(items => {
-            this.items = items;
-            this.total = this.carritoService.getTotalPrecio();
+        this.checkLoginStatus();
+        // Suscribirse al estado global del carrito
+        this.carritoService.cart$.subscribe(cart => {
+            this.carrito = cart;
+            this.cdr.detectChanges();
         });
-    }
 
-    cambiarCantidad(item: CartItem, delta: number): void {
-        const nuevaCantidad = item.cantidad + delta;
-        if (nuevaCantidad > 0) {
-            this.carritoService.actualizarCantidad(item.producto.id, nuevaCantidad);
+        // Cargar el carrito si no está presente
+        const user = this.authService.getUser();
+        const userId = user?.id || user?.clienteId;
+        
+        if (userId && !this.carrito) {
+            this.carritoService.getCartByClientId(userId).subscribe();
         }
     }
 
-    eliminar(item: CartItem): void {
-        this.carritoService.eliminar(item.producto.id);
+    checkLoginStatus(): void {
+        this.isLoggedIn = this.authService.isLoggedIn();
+        if (this.isLoggedIn) {
+            const user = this.authService.getUser();
+            this.userEmail = user ? user.email : null;
+        }
+        this.cdr.detectChanges();
+    }
+
+    logout(): void {
+        this.authService.logout();
+        this.carritoService.vaciarEstado();
+        this.isLoggedIn = false;
+        this.userEmail = null;
+        this.cdr.detectChanges();
+    }
+
+    cambiarCantidad(item: ItemCarritoDTO, delta: number): void {
+        const nuevaCantidad = item.cantidad + delta;
+        if (nuevaCantidad > 0) {
+            this.carritoService.actualizarCantidad(item.itemId, nuevaCantidad).subscribe();
+        }
+    }
+
+    eliminar(item: ItemCarritoDTO): void {
+        this.carritoService.eliminar(item.itemId).subscribe();
     }
 
     vaciarCarrito(): void {
-        if (confirm('¿Estás seguro de que deseas vaciar tu carrito?')) {
-            this.carritoService.vaciar();
+        if (this.carrito && confirm('¿Estás seguro de que deseas vaciar tu carrito?')) {
+            this.carritoService.vaciar(this.carrito.carritoId).subscribe();
         }
     }
 
     procederAlPago(): void {
-        if (this.items.length === 0) return;
+        if (!this.carrito || this.carrito.items.length === 0) return;
         alert('🛍️ Redirigiendo a la pasarela de pago... (Funcionalidad próximamente)');
     }
 }

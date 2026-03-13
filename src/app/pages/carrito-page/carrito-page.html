@@ -4,30 +4,42 @@
         <div class="navbar-logo" routerLink="/">🌸 Global Yofi</div>
         <div class="navbar-links">
             <li><a routerLink="/productos">Productos</a></li>
+            <li class="cart-nav">
+                <a routerLink="/carrito" class="nav-icon">
+                    🛒 <span *ngIf="carritoService.getTotalItems() > 0"
+                        style="background: white; color: var(--pink-main); border-radius: 50%; padding: 2px 8px; font-size: 0.8rem; font-weight: bold; margin-left: 5px;">{{
+                        carritoService.getTotalItems() }}</span>
+                </a>
+            </li>
+            <li *ngIf="!isLoggedIn"><a routerLink="/login" class="nav-btn">Ingresar</a></li>
+            <li *ngIf="isLoggedIn" class="user-menu">
+                <span class="user-email">👤 {{ userEmail }}</span>
+                <button (click)="logout()" class="nav-btn logout-btn">Cerrar sesión</button>
+            </li>
         </div>
     </div>
 </nav>
 
 <div class="carrito-container fade-in">
-    <div class="carrito-header">
+    <div class="carrito-header" *ngIf="carrito">
         <h1>Tu Carrito de Compras 🛒</h1>
-        <button class="btn btn-outline" *ngIf="items.length > 0" (click)="vaciarCarrito()">Vaciar Carrito</button>
+        <button class="btn btn-outline" *ngIf="carrito.items.length > 0" (click)="vaciarCarrito()">Vaciar
+            Carrito</button>
     </div>
 
-    <div class="carrito-content" *ngIf="items.length > 0; else emptyCart">
+    <div class="carrito-content" *ngIf="carrito && carrito.items.length > 0; else emptyCart">
 
         <!-- Lista de Productos -->
         <div class="carrito-items">
-            <div class="cart-item-card" *ngFor="let item of items">
+            <div class="cart-item-card" *ngFor="let item of carrito.items">
                 <div class="item-img-container">
-                    <img [src]="productosService.getImagenUrl(item.producto.imagenUrl)" [alt]="item.producto.nombre"
+                    <img src="../../assets/img/yofi/placeholder-beauty.png" [alt]="item.nombreProducto"
                         class="item-img" />
                 </div>
 
                 <div class="item-details">
-                    <h3 class="item-title">{{ item.producto.nombre }}</h3>
-                    <p class="item-brand">{{ item.producto.marca }}</p>
-                    <p class="item-price">{{ item.producto.precio | number }} $</p>
+                    <h3 class="item-title">{{ item.nombreProducto }}</h3>
+                    <p class="item-price">{{ item.precio | number }} $</p>
                 </div>
 
                 <div class="item-actions">
@@ -35,11 +47,9 @@
                         <button class="btn-qty" (click)="cambiarCantidad(item, -1)"
                             [disabled]="item.cantidad <= 1">−</button>
                         <span class="qty-display">{{ item.cantidad }}</span>
-                        <button class="btn-qty" (click)="cambiarCantidad(item, 1)"
-                            [disabled]="item.producto.stockActual !== undefined && item.cantidad >= item.producto.stockActual">+</button>
+                        <button class="btn-qty" (click)="cambiarCantidad(item, 1)">+</button>
                     </div>
-                    <p class="item-subtotal">Subtotal: <strong>{{ (item.producto.precio * item.cantidad) | number }}
-                            $</strong></p>
+                    <p class="item-subtotal">Subtotal: <strong>{{ item.subtotal | number }} $</strong></p>
                 </div>
 
                 <button class="btn-remove" (click)="eliminar(item)" title="Eliminar del carrito">
@@ -52,17 +62,18 @@
         <div class="carrito-summary">
             <h2>Resumen del pedido</h2>
             <div class="summary-row">
-                <span>Subtotal</span>
-                <span>{{ total | number }} $</span>
+                <span>Total estimado</span>
+                <span>{{ carrito.totalEstimado | number }} $</span>
             </div>
             <div class="summary-row">
                 <span>Envío</span>
-                <span>{{ total >= 150000 ? 'Gratis' : '15,000 $' }}</span>
+                <span>{{ carrito.totalEstimado >= 150000 ? 'Gratis' : '15,000 $' }}</span>
             </div>
             <hr>
             <div class="summary-row total-row">
                 <span>Total a pagar</span>
-                <span>{{ (total >= 150000 ? total : total + 15000) | number }} $</span>
+                <span>{{ (carrito.totalEstimado >= 150000 ? carrito.totalEstimado : carrito.totalEstimado + 15000) |
+                    number }} $</span>
             </div>
 
             <button class="btn btn-primary btn-block btn-pay" (click)="procederAlPago()">Proceder al Pago 💳</button>

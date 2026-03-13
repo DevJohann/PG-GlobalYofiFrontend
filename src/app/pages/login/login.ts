@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
+import { CarritoService } from '../../services/carrito.service';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class Login {
 
   constructor(
     private authService: AuthService,
+    private carritoService: CarritoService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) { }
@@ -33,6 +35,11 @@ export class Login {
       next: (response) => {
         this.cargando = false;
         this.cdr.detectChanges();
+
+        // 🛒 Fetch cart after login for non-admin users
+        if (response.rol !== 'ADMIN') {
+          this.carritoService.getCartByClientId(response.id).subscribe();
+        }
 
         // 🧭 Redirección según el rol del usuario
         if (response.rol === 'ADMIN') {

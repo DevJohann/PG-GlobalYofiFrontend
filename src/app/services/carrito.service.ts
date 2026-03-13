@@ -1,120 +1,89 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Producto } from './productos';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-export interface CartItem {
-    producto: Producto;
+export interface CarritoDTO {
+    carritoId: number;
+    clienteId: number;
+    items: ItemCarritoDTO[];
+    totalEstimado: number;
+}
+
+export interface ItemCarritoDTO {
+    itemId: number;
+    productoId: number;
+    nombreProducto: string;
+    precio: number;
     cantidad: number;
+    subtotal: number;
 }
 
 @Injectable({
     providedIn: 'root'
 })
 export class CarritoService {
-    private items: CartItem[] = [];
-    private itemsSubject = new BehaviorSubject<CartItem[]>([]);
-    private isBrowser: boolean;
+    private apiUrl = 'http://localhost:8080/api/carrito';
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-        this.isBrowser = isPlatformBrowser(this.platformId);
-        this.cargarCarrito();
+    // Estado global del carrito
+    private cartSubject = new BehaviorSubject<CarritoDTO | null>(null);
+    cart$ = this.cartSubject.asObservable();
+
+    constructor(private http: HttpClient) { }
+
+    // Obtener carrito por clienteId
+    getCartByClientId(clientId: number): Observable<CarritoDTO> {
+        return this.http.get<CarritoDTO>(`${this.apiUrl}/cliente/${clientId}`).pipe(
+            tap(cart => this.cartSubject.next(cart))
+        );
     }
 
-    // Cargar estado inicial del carrito desde localStorage
-    private cargarCarrito(): void {
-        if (this.isBrowser) {
-            const stored = localStorage.getItem('carritoYofi');
-            if (stored) {
-                try {
-                    this.items = JSON.parse(stored);
-                    this.itemsSubject.next([...this.items]);
-                } catch (e) {
-                    console.error('Error parseando carrito', e);
-                }
-            }
-        }
+    // Agregar producto al carrito
+    agregar(clientId: number, productId: number, quantity: number): Observable<CarritoDTO> {
+        return this.http.post<CarritoDTO>(`${this.apiUrl}/agregar-producto`, {
+            clienteId: clientId,
+            productoId: productId,
+            cantidad: quantity
+        }).pipe(
+            tap(cart => this.cartSubject.next(cart))
+        );
     }
 
-    // Guardar estado en localStorage
-    private guardarCarrito(): void {
-        if (this.isBrowser) {
-            localStorage.setItem('carritoYofi', JSON.stringify(this.items));
-        }
-        this.itemsSubject.next([...this.items]);
+    // Actualizar cantidad de un item
+    actualizarCantidad(itemId: number, quantity: number): Observable<CarritoDTO> {
+        return this.http.put<CarritoDTO>(`${this.apiUrl}/item/${itemId}`, {
+            cantidad: quantity
+        }).pipe(
+            tap(cart => this.cartSubject.next(cart))
+        );
     }
 
-    // Observable para suscribirse a los cambios
-    getCarrito(): Observable<CartItem[]> {
-        return this.itemsSubject.asObservable();
-    }
-
-    // Obtener items actuales de forma síncrona
-    getItems(): CartItem[] {
-        return this.items;
-    }
-
-    // Agregar al carrito verificando stock
-    agregar(producto: Producto, cantidad: number): { success: boolean, message: string } {
-        if (cantidad <= 0) return { success: false, message: 'La cantidad debe ser mayor a 0.' };
-
-        const maxStock = producto.stockActual !== undefined ? producto.stockActual : 99;
-
-        const indice = this.items.findIndex(item => item.producto.id === producto.id);
-
-        if (indice > -1) {
-            // Ya existe en carrito
-            const nuevaCantidad = this.items[indice].cantidad + cantidad;
-            if (nuevaCantidad > maxStock) {
-                return { success: false, message: `No puedes agregar esa cantidad. Solo hay ${maxStock} en stock (tienes ${this.items[indice].cantidad} en tu carrito).` };
-            }
-            this.items[indice].cantidad = nuevaCantidad;
-        } else {
-            // Nuevo producto
-            if (cantidad > maxStock) {
-                return { success: false, message: `No hay suficiente stock. Disponible: ${maxStock}.` };
-            }
-            this.items.push({ producto, cantidad });
-        }
-
-        this.guardarCarrito();
-        return { success: true, message: 'Producto añadido correctamente al carrito.' };
-    }
-
-    // Actualizar cantidad específica
-    actualizarCantidad(productoId: number, nuevaCantidad: number): void {
-        const indice = this.items.findIndex(item => item.producto.id === productoId);
-        if (indice > -1) {
-            if (nuevaCantidad <= 0) {
-                this.eliminar(productoId);
-            } else {
-                const p = this.items[indice].producto;
-                const maxStock = p.stockActual !== undefined ? p.stockActual : 99;
-                this.items[indice].cantidad = Math.min(nuevaCantidad, maxStock);
-                this.guardarCarrito();
-            }
-        }
-    }
-
-    // Eliminar producto
-    eliminar(productoId: number): void {
-        this.items = this.items.filter(item => item.producto.id !== productoId);
-        this.guardarCarrito();
+    // Eliminar un item
+    eliminar(itemId: number): Observable<CarritoDTO> {
+        return this.http.delete<CarritoDTO>(`${this.apiUrl}/item/${itemId}`).pipe(
+            tap(cart => this.cartSubject.next(cart))
+        );
     }
 
     // Vaciar carrito
-    vaciar(): void {
-        this.items = [];
-        this.guardarCarrito();
+    vaciar(cartId: number): Observable<CarritoDTO> {
+        return this.http.delete<CarritoDTO>(`${this.apiUrl}/vaciar/${cartId}`).pipe(
+            tap(cart => this.cartSubject.next(cart))
+        );
     }
 
-    // Total de items para badges en la navbar
+    // Resetear estado local (util para logout)
+    vaciarEstado(): void {
+        this.cartSubject.next(null);
+    }
+
+    // Helpers para obtener valores actuales del estado
+    get currentCart(): CarritoDTO | null {
+        return this.cartSubject.value;
+    }
+
     getTotalItems(): number {
-        return this.items.reduce((total, item) => total + item.cantidad, 0);
-    }
-
-    // Total precio a pagar
-    getTotalPrecio(): number {
-        return this.items.reduce((total, item) => total + (item.producto.precio * item.cantidad), 0);
+        const cart = this.cartSubject.value;
+        if (!cart || !cart.items) return 0;
+        return cart.items.reduce((total, item) => total + item.cantidad, 0);
     }
 }

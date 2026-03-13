@@ -67,6 +67,7 @@ export class ProductDetail implements OnInit {
 
     logout(): void {
         this.authService.logout();
+        this.carritoService.vaciarEstado();
         this.isLoggedIn = false;
         this.userEmail = null;
     }
@@ -83,13 +84,41 @@ export class ProductDetail implements OnInit {
     }
 
     agregarAlCarrito(): void {
+        const user = this.authService.getUser();
+        // Intentamos detectar el ID de forma flexible
+        let userId = user?.id || user?.clienteId || user?.usuarioId || user?.idUsuario;
+        
+        // Fallback: buscar cualquier propiedad que termine en ID
+        if (!userId && user) {
+            for (const key in user) {
+                if (key.toLowerCase().endsWith('id') && typeof user[key] === 'number') {
+                    userId = user[key];
+                    break;
+                }
+            }
+        }
+
+        console.log('DEBUG [Cart]: User session detected:', user, 'Resolved ID:', userId);
+        
+        if (!this.isLoggedIn || !userId) {
+            const dataFound = user ? JSON.stringify(user) : 'null';
+            alert(`⚠️ Error de sesión: No se encontró un ID de cliente válido. \nDatos detectados: ${dataFound}\n\nPor favor, intenta cerrar sesión e iniciar sesión de nuevo.`);
+            return;
+        }
+
         if (!this.producto) return;
 
-        const resultado = this.carritoService.agregar(this.producto, this.cantidad);
-        if (resultado.success) {
-            alert(resultado.message);
-        } else {
-            alert(resultado.message);
-        }
+        this.carritoService.agregar(userId, this.producto.id, this.cantidad).subscribe({
+            next: (cart) => {
+                alert('✨ ¡Producto añadido al carrito correctamente!');
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                console.error('Error al añadir al carrito:', err);
+                const errorDetail = err.error?.message || err.statusText || 'Error desconocido';
+                alert(`❌ No se pudo añadir el producto al carrito.\n\nDetalles:\n- ID Cliente enviado: ${userId}\n- Error del Servidor: ${errorDetail}\n- Estado: ${err.status}\n\nPor favor, verifica que tu perfil de cliente esté completo.`);
+            }
+        });
     }
 }
+
