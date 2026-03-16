@@ -23,6 +23,8 @@ export interface ItemCarritoDTO {
 })
 export class CarritoService {
     private apiUrl = 'http://localhost:8080/api/carrito';
+    private orderApiUrl = 'http://localhost:8080/api/pedidos';
+    private clienteApiUrl = 'http://localhost:8080/api/clientes';
 
     // Estado global del carrito
     private cartSubject = new BehaviorSubject<CarritoDTO | null>(null);
@@ -85,5 +87,22 @@ export class CarritoService {
         const cart = this.cartSubject.value;
         if (!cart || !cart.items) return 0;
         return cart.items.reduce((total, item) => total + item.cantidad, 0);
+    }
+
+    // Obtener perfil del cliente
+    getClienteProfile(clienteId: number): Observable<any> {
+        return this.http.get<any>(`${this.clienteApiUrl}/${clienteId}`);
+    }
+
+    // Realizar pedido (Checkout)
+    realizarPedido(clientId: number, paymentMethod: string, address: string, city: string): Observable<any> {
+        return this.http.post<any>(`${this.orderApiUrl}/realizar`, {
+            clienteId: clientId,
+            metodoPago: paymentMethod,
+            direccion: address,
+            ciudad: city
+        }).pipe(
+            tap(() => this.vaciarEstado())
+        );
     }
 }

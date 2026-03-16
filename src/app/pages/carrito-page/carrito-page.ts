@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CarritoService, CarritoDTO, ItemCarritoDTO } from '../../services/carrito.service';
 import { ProductosService } from '../../services/productos';
 import { AuthService } from '../../services/auth';
@@ -21,6 +21,7 @@ export class CarritoPageComponent implements OnInit {
         public carritoService: CarritoService,
         public productosService: ProductosService,
         private authService: AuthService,
+        private router: Router,
         private cdr: ChangeDetectorRef
     ) { }
 
@@ -77,6 +78,6 @@ export class CarritoPageComponent implements OnInit {
 
     procederAlPago(): void {
         if (!this.carrito || this.carrito.items.length === 0) return;
-        alert('🛍️ Redirigiendo a la pasarela de pago... (Funcionalidad próximamente)');
+        this.router.navigate(['/pago-metodo']);
     }
 }

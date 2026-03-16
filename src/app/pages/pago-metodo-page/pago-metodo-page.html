@@ -1,0 +1,93 @@
+<!-- 🌸 NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-logo" routerLink="/">🌸 Global Yofi</div>
+        <div class="navbar-links">
+            <li><a routerLink="/productos">Productos</a></li>
+            <li *ngIf="isLoggedIn" class="user-menu">
+                <span class="user-email">👤 {{ userEmail }}</span>
+                <button (click)="logout()" class="nav-btn logout-btn">Cerrar sesión</button>
+            </li>
+        </div>
+    </div>
+</nav>
+
+<div class="pago-container fade-in">
+    <header class="pago-header">
+        <h1>Finalizar Compra</h1>
+        <p>Completa tu información y elige cómo quieres pagar.</p>
+    </header>
+
+    <div class="pago-content">
+        <!-- Columna Izquierda: Formulario e Información -->
+        <div class="pago-main">
+            <!-- Sección: Información de Envío -->
+            <section class="envio-section card">
+                <h3><span class="step-badge">1</span> Información de Envío</h3>
+                <p class="section-desc">¿A dónde enviamos tu pedido?</p>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="ciudad">Ciudad</label>
+                        <input type="text" id="ciudad" [(ngModel)]="ciudad" name="ciudad" placeholder="Ej: Bogotá" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="direccion">Dirección completa</label>
+                        <input type="text" id="direccion" [(ngModel)]="direccion" name="direccion" placeholder="Ej: Calle 123 #45-67" required>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección: Métodos de Pago -->
+            <section class="metodos-section">
+                <h3><span class="step-badge">2</span> Método de Pago</h3>
+                <p class="section-desc">Selecciona tu opción preferida</p>
+                
+                <div class="metodos-grid">
+                    <div *ngFor="let metodo of metodos" 
+                         class="metodo-card" 
+                         [class.selected]="metodoSeleccionado === metodo.id"
+                         (click)="seleccionarMetodo(metodo.id)">
+                        <div class="metodo-icon">{{ metodo.icono }}</div>
+                        <div class="metodo-info">
+                            <h3>{{ metodo.nombre }}</h3>
+                            <p>{{ metodo.descripcion }}</p>
+                        </div>
+                        <div class="metodo-check" *ngIf="metodoSeleccionado === metodo.id">✔</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Columna Derecha: Resumen -->
+        <aside class="pago-sidebar">
+            <div class="pago-summary card" *ngIf="carrito">
+                <h2>Resumen de compra</h2>
+                <div class="summary-details">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>{{ carrito.totalEstimado | number }} $</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Envío</span>
+                        <span>{{ carrito.totalEstimado >= 150000 ? 'Gratis' : '15,000 $' }}</span>
+                    </div>
+                    <hr>
+                    <div class="summary-row total-row">
+                        <span>Total a pagar</span>
+                        <span>{{ (carrito.totalEstimado >= 150000 ? carrito.totalEstimado : carrito.totalEstimado + 15000) | number }} $</span>
+                    </div>
+                </div>
+
+                <div class="pago-actions">
+                    <button class="btn btn-primary btn-block" 
+                            [disabled]="!metodoSeleccionado || !direccion || !ciudad" 
+                            (click)="finalizarPedido()">
+                        Finalizar Pedido ✨
+                    </button>
+                    <button class="btn btn-outline btn-block" routerLink="/carrito">Volver al Carrito</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>

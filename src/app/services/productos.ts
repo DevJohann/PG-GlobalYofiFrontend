@@ -21,8 +21,8 @@ export interface Producto {
   providedIn: 'root'
 })
 export class ProductosService {
-  private readonly apiUrl = 'http://127.0.0.1:8080/api/productos';
-  private readonly baseUrl = 'http://127.0.0.1:8080';
+  private readonly apiUrl = 'http://localhost:8080/api/productos';
+  private readonly baseUrl = 'http://localhost:8080';
   private isBrowser: boolean;
 
   constructor(

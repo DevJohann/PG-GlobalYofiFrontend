@@ -116,7 +116,7 @@ export class ProductDetail implements OnInit {
             error: (err) => {
                 console.error('Error al añadir al carrito:', err);
                 const errorDetail = err.error?.message || err.statusText || 'Error desconocido';
-                alert(`❌ No se pudo añadir el producto al carrito.\n\nDetalles:\n- ID Cliente enviado: ${userId}\n- Error del Servidor: ${errorDetail}\n- Estado: ${err.status}\n\nPor favor, verifica que tu perfil de cliente esté completo.`);
+                alert(`❌ No se pudo añadir el producto al carrito.\n\nDetalles:\n- ID Cliente enviado: ${userId}\n- Error del Servidor: ${errorDetail}\n- Estado: ${err.status}`);
             }
         });
     }

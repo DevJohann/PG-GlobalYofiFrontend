@@ -11,12 +11,14 @@ import { InventarioReportPageComponent } from './pages/admin-pages/inventario-re
 import { ProductosCrudPage } from './pages/admin-pages/productos-crud-page/productos-crud-page';
 import { ProductDetail } from './pages/product-detail/product-detail';
 import { CarritoPageComponent } from './pages/carrito-page/carrito-page';
+import { PagoMetodoPageComponent } from './pages/pago-metodo-page/pago-metodo-page';
 
 export const routes: Routes = [
     { path: '', component: Landing },
     { path: 'productos', component: ProductsPage },
     { path: 'productos/:id', component: ProductDetail },
     { path: 'carrito', component: CarritoPageComponent },
+    { path: 'pago-metodo', component: PagoMetodoPageComponent },
     { path: 'login', component: Login },
     { path: 'registro', component: Register },
     {
