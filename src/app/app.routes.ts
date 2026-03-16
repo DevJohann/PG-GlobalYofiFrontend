@@ -9,6 +9,11 @@ import { VentasReportPageComponent } from './pages/admin-pages/ventas-report-pag
 import { ClientesReportPageComponent } from './pages/admin-pages/clientes-report-page/clientes-report-page';
 import { InventarioReportPageComponent } from './pages/admin-pages/inventario-report-page/inventario-report-page';
 import { ProductosCrudPage } from './pages/admin-pages/productos-crud-page/productos-crud-page';
+import { PedidosCrudPage } from './pages/admin-pages/pedidos-crud-page/pedidos-crud-page';
+import { CategoriasCrudPage } from './pages/admin-pages/categorias-crud-page/categorias-crud-page';
+import { ProveedoresCrudPage } from './pages/admin-pages/proveedores-crud-page/proveedores-crud-page';
+import { ClientesCrudPage } from './pages/admin-pages/clientes-crud-page/clientes-crud-page';
+import { DashboardGraficosPage } from './pages/admin-pages/dashboard-graficos-page/dashboard-graficos-page';
 import { ProductDetail } from './pages/product-detail/product-detail';
 import { CarritoPageComponent } from './pages/carrito-page/carrito-page';
 import { PagoMetodoPageComponent } from './pages/pago-metodo-page/pago-metodo-page';
@@ -24,11 +29,17 @@ export const routes: Routes = [
     {
         path: 'admin', component: Dashboard,
         children: [
+            { path: '', redirectTo: 'graficos', pathMatch: 'full' },
+            { path: 'graficos', component: DashboardGraficosPage },
             { path: 'reportes-productos', component: ProductosReportPage },
             { path: 'reportes-ventas', component: VentasReportPageComponent },
             { path: 'reportes-clientes', component: ClientesReportPageComponent },
             { path: 'reportes-inventario', component: InventarioReportPageComponent },
-            { path: 'crud-productos', component: ProductosCrudPage }
+            { path: 'crud-productos', component: ProductosCrudPage },
+            { path: 'pedidos-crud', component: PedidosCrudPage },
+            { path: 'categorias', component: CategoriasCrudPage },
+            { path: 'proveedores', component: ProveedoresCrudPage },
+            { path: 'clientes-crud', component: ClientesCrudPage }
         ]
     }
 ];

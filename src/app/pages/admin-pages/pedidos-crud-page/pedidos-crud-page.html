@@ -1,0 +1,104 @@
+<div class="pedidos-container">
+  <div class="header">
+    <h1>📦 Gestión de Pedidos</h1>
+    <p>Administra los pedidos realizados por los clientes y actualiza su estado.</p>
+  </div>
+
+  <div *ngIf="cargando" class="loading">Cargando pedidos...</div>
+
+  <div *ngIf="!cargando && pedidos.length === 0" class="no-data">
+    No hay pedidos registrados en el sistema.
+  </div>
+
+  <table *ngIf="!cargando && pedidos.length > 0" class="pedidos-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Cliente</th>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Método Pago</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pedido of pedidos">
+        <td>#{{ pedido.id }}</td>
+        <td>
+          <div class="cliente-info">
+            <strong>{{ pedido.nombreCliente }}</strong>
+            <span>{{ pedido.emailCliente }}</span>
+          </div>
+        </td>
+        <td>{{ pedido.fecha | date:'medium' }}</td>
+        <td class="total">{{ pedido.total | currency }}</td>
+        <td>{{ pedido.metodoPago }}</td>
+        <td>
+          <span class="badge" [ngClass]="pedido.estado.toLowerCase()">
+            {{ pedido.estado }}
+          </span>
+        </td>
+        <td>
+          <button class="btn-detail" (click)="verDetalles(pedido)">👁️ Ver Detalles</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Modal de Detalles -->
+  <div class="modal" *ngIf="pedidoSeleccionado">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Detalles del Pedido #{{ pedidoSeleccionado.id }}</h2>
+        <button class="btn-close" (click)="cerrarDetalles()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="info-grid">
+          <div>
+            <h3>Información de Envío</h3>
+            <p><strong>Dirección:</strong> {{ pedidoSeleccionado.direccion }}</p>
+            <p><strong>Ciudad:</strong> {{ pedidoSeleccionado.ciudad }}</p>
+          </div>
+          <div>
+            <h3>Cambiar Estado</h3>
+            <select #estadoSelect [value]="pedidoSeleccionado.estado" (change)="cambiarEstado(pedidoSeleccionado.id, estadoSelect.value)">
+              <option value="PENDIENTE">PENDIENTE</option>
+              <option value="PROCESANDO">PROCESANDO</option>
+              <option value="ENVIADO">ENVIADO</option>
+              <option value="ENTREGADO">ENTREGADO</option>
+              <option value="CANCELADO">CANCELADO</option>
+            </select>
+          </div>
+        </div>
+
+        <h3>Productos</h3>
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cant.</th>
+              <th>Precio</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of pedidoSeleccionado.items">
+              <td>{{ item.nombreProducto }}</td>
+              <td>{{ item.cantidad }}</td>
+              <td>{{ item.precioUnitario | currency }}</td>
+              <td>{{ item.subtotal | currency }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3" align="right"><strong>Total:</strong></td>
+              <td class="grand-total">{{ pedidoSeleccionado.total | currency }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
