@@ -1,7 +1,7 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable, tap, of } from 'rxjs';
+import { Observable, tap, of, BehaviorSubject } from 'rxjs';
 
 interface LoginRequest {
   email: string;
@@ -33,11 +33,20 @@ export class AuthService {
   private registerUrl = 'http://localhost:8080/api/auth/register';
   private isBrowser: boolean;
 
+  private currentUserSubject = new BehaviorSubject<any>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
+
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
+    if (this.isBrowser) {
+      const user = localStorage.getItem('user');
+      if (user) {
+        this.currentUserSubject.next(JSON.parse(user));
+      }
+    }
   }
 
   // 🔐 LOGIN
@@ -71,6 +80,7 @@ export class AuthService {
           if (!userObj.id && userObj.clienteId) userObj.id = userObj.clienteId;
           
           localStorage.setItem('user', JSON.stringify(userObj));
+          this.currentUserSubject.next(userObj);
         }
       })
     );
@@ -102,6 +112,7 @@ export class AuthService {
     if (this.isBrowser) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      this.currentUserSubject.next(null);
     }
   }
 

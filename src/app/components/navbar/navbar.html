@@ -1,0 +1,33 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-logo" routerLink="/">🌸 Global Yofi</div>
+
+    <!-- 🔎 BARRA DE BÚSQUEDA GLOBAL -->
+    <div class="navbar-search">
+      <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" placeholder="Buscar productos..." />
+      <button (click)="onSearch()">🔍</button>
+    </div>
+
+    <ul class="navbar-links">
+      <li><a (click)="scrollToSection('about')" class="nav-link">Nosotros</a></li>
+      <li><a (click)="scrollToSection('values')" class="nav-link">Valores</a></li>
+      <li><a routerLink="/productos" class="nav-link">Productos</a></li>
+    </ul>
+
+    <div class="navbar-actions">
+      <button class="btn-cart" routerLink="/carrito">
+        🛒 <span *ngIf="carritoService.getTotalItems() > 0" class="cart-badge">{{ carritoService.getTotalItems() }}</span>
+      </button>
+
+      <div class="navbar-auth" *ngIf="isLoggedIn; else loginButtons">
+        <span class="user-email">📧 {{ userEmail }}</span>
+        <button class="btn btn-outline" (click)="logout()">Cerrar sesión</button>
+      </div>
+
+      <ng-template #loginButtons>
+        <button class="btn btn-primary" routerLink="/login">Inicia sesión</button>
+        <button class="btn btn-primary" routerLink="/registro" style="margin-left: 8px;">Registro</button>
+      </ng-template>
+    </div>
+  </div>
+</nav>

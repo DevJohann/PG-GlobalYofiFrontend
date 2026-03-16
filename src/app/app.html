@@ -1,1 +1,7 @@
-<router-outlet></router-outlet>
+<app-navbar *ngIf="!isAdminRoute"></app-navbar>
+
+<main [style.padding-top]="isAdminRoute ? '0' : '80px'" style="min-height: 80vh;">
+    <router-outlet></router-outlet>
+</main>
+
+<app-footer *ngIf="!isAdminRoute"></app-footer>

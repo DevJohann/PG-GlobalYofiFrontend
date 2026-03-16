@@ -1,16 +1,4 @@
-<!-- 🌸 NAVBAR -->
-<nav class="navbar">
-    <div class="navbar-container">
-        <div class="navbar-logo" routerLink="/">🌸 Global Yofi</div>
-        <div class="navbar-links">
-            <li><a routerLink="/productos">Productos</a></li>
-            <li *ngIf="isLoggedIn" class="user-menu">
-                <span class="user-email">👤 {{ userEmail }}</span>
-                <button (click)="logout()" class="nav-btn logout-btn">Cerrar sesión</button>
-            </li>
-        </div>
-    </div>
-</nav>
+<!-- Payment Method content starts below -->
 
 <div class="pago-container fade-in">
     <header class="pago-header">

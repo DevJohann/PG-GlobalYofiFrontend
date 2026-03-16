@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink, NavigationEnd } from '@angular/router';
+import { Router, RouterLink, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subject, filter, takeUntil } from 'rxjs';
 import { ProductosService, Producto } from '../../services/productos';
 import { CategoriaService, Categoria } from '../../services/categoria-service';
@@ -23,6 +23,7 @@ export class ProductsPage implements OnInit, OnDestroy {
   filtroMin: number = 0;
   filtroMax: number = 1000000;
   cargando = false;
+  searchQuery: string | null = null;
   userEmail: string | null = null;
   isLoggedIn = false;
 
@@ -34,7 +35,8 @@ export class ProductsPage implements OnInit, OnDestroy {
     private authService: AuthService,
     public carritoService: CarritoService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   // =========================================================
@@ -46,15 +48,21 @@ export class ProductsPage implements OnInit, OnDestroy {
     this.cargarProductos();
     this.checkLoginStatus();
 
-    // ✅ Detectar cuando se navega nuevamente a esta ruta
+    // ✅ Detectar cuando se navega nuevamente a esta ruta o cambian params
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.searchQuery = params['search'] || null;
+        this.cargarProductos();
+      });
+
     this.router.events
       .pipe(
         takeUntil(this.destroy$),
         filter(event => event instanceof NavigationEnd)
       )
       .subscribe(() => {
-        if (this.router.url === '/productos') {
-          this.cargarProductos();
+        if (this.router.url.startsWith('/productos')) {
           this.checkLoginStatus();
         }
       });
@@ -85,7 +93,16 @@ export class ProductsPage implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: data => {
-          this.productos = data;
+          if (this.searchQuery) {
+            const query = this.searchQuery.toLowerCase();
+            this.productos = data.filter(p =>
+              p.nombre.toLowerCase().includes(query) ||
+              p.descripcion.toLowerCase().includes(query) ||
+              p.marca.toLowerCase().includes(query)
+            );
+          } else {
+            this.productos = data;
+          }
           this.cargando = false;
           this.cdr.detectChanges();
         },

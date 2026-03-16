@@ -1,24 +1,4 @@
-<!-- 🌸 NAVBAR -->
-<nav class="navbar">
-    <div class="navbar-container">
-        <div class="navbar-logo" routerLink="/">🌸 Global Yofi</div>
-        <div class="navbar-links">
-            <li><a routerLink="/productos">Productos</a></li>
-            <li class="cart-nav">
-                <a routerLink="/carrito" class="nav-icon">
-                    🛒 <span *ngIf="carritoService.getTotalItems() > 0"
-                        style="background: white; color: var(--pink-main); border-radius: 50%; padding: 2px 8px; font-size: 0.8rem; font-weight: bold; margin-left: 5px;">{{
-                        carritoService.getTotalItems() }}</span>
-                </a>
-            </li>
-            <li *ngIf="!isLoggedIn"><a routerLink="/login" class="nav-btn">Ingresar</a></li>
-            <li *ngIf="isLoggedIn" class="user-menu">
-                <span class="user-email">👤 {{ userEmail }}</span>
-                <button (click)="logout()" class="nav-btn logout-btn">Cerrar sesión</button>
-            </li>
-        </div>
-    </div>
-</nav>
+<!-- Cart content starts below -->
 
 <div class="carrito-container fade-in">
     <div class="carrito-header" *ngIf="carrito">

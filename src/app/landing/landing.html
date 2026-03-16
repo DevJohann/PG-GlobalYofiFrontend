@@ -1,34 +1,4 @@
-<!-- 🌸 NAVBAR -->
-<nav class="navbar">
-  <div class="navbar-container">
-    <div class="navbar-logo">🌸 Global Yofi</div>
-    <ul class="navbar-links">
-      <li><a (click)="scrollToSection('about')">Nosotros</a></li>
-      <li><a (click)="scrollToSection('values')">Valores</a></li>
-      <li><a (click)="scrollToSection('products')">Productos</a></li>
-      <li><a (click)="scrollToSection('cta')">Contacto</a></li>
-    </ul>
-
-    <div class="navbar-actions" style="display: flex; align-items: center; gap: 15px; margin-left: auto;">
-      <button class="btn btn-outline"
-        style="padding: 8px 15px; border-color: transparent; font-size: 1.1rem; background: rgba(255,255,255,0.2);"
-        routerLink="/carrito">
-        🛒 <span *ngIf="carritoService.getTotalItems() > 0"
-          style="background: white; color: var(--pink-main); border-radius: 50%; padding: 2px 8px; font-size: 0.8rem; font-weight: bold; margin-left: 5px;">{{
-          carritoService.getTotalItems() }}</span>
-      </button>
-      <div class="navbar-auth" *ngIf="isLoggedIn; else loginButtons">
-        <span class="user-email">📧 {{ userEmail }}</span>
-        <button class="btn btn-outline" (click)="logout()">Cerrar sesión</button>
-      </div>
-    </div>
-
-    <ng-template #loginButtons>
-      <button class="btn btn-primary" routerLink="/login">Inicia sesión</button>
-      <button class="btn btn-primary" routerLink="/registro">Registro</button>
-    </ng-template>
-  </div>
-</nav>
+<!-- Landing content starts below -->
 
 <!-- 🏠 HERO SECTION -->
 <section class="hero">
