@@ -1,0 +1,94 @@
+<section class="crear-container">
+  <div class="header-acciones">
+    <button class="btn-volver" (click)="cancelar()">⬅ Volver</button>
+    <h1 class="titulo">➕ Agregar Nuevo Producto</h1>
+  </div>
+
+  <div class="card-formulario">
+    <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()" class="formulario">
+      
+      <!-- Fila 1: Nombre y Marca -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre del Producto *</label>
+          <input type="text" formControlName="nombre" placeholder="Ej: Vestido Elegante">
+        </div>
+        <div class="form-group">
+          <label>Marca *</label>
+          <input type="text" formControlName="marca" placeholder="Ej: Chanel">
+        </div>
+      </div>
+
+      <!-- Fila 2: Descripción -->
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea formControlName="descripcion" rows="3" placeholder="Detalles del producto..."></textarea>
+      </div>
+
+      <!-- Fila 3: Precio y Stock -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Precio *</label>
+          <input type="number" formControlName="precio" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Stock Actual *</label>
+          <input type="number" formControlName="stockActual">
+        </div>
+        <div class="form-group">
+          <label>Stock Mínimo *</label>
+          <input type="number" formControlName="stockMinimo">
+        </div>
+      </div>
+
+      <!-- Fila 4: Categoría, Proveedor y Estado -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Categoría *</label>
+          <select formControlName="categoriaId">
+            <option [ngValue]="null" disabled>Seleccione una categoría</option>
+            <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.nombre }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Proveedor *</label>
+          <select formControlName="proveedorId">
+            <option [ngValue]="null" disabled>Seleccione un proveedor</option>
+            <option *ngFor="let prov of proveedores" [ngValue]="prov.id">{{ prov.nombre }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estado *</label>
+          <select formControlName="estado">
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Fila 5: Imagen -->
+      <div class="form-group">
+        <label>Imagen del Producto</label>
+        <div class="upload-area">
+          <input type="file" (change)="onFileSelected($event)" accept="image/*">
+          <div class="preview" *ngIf="vistaPrevia">
+            <img [src]="vistaPrevia" alt="Vista previa">
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensajes y Acciones -->
+      <div class="mensajes" *ngIf="mensaje">
+        <p [ngClass]="mensaje.includes('✅') ? 'exito' : 'error'">{{ mensaje }}</p>
+      </div>
+
+      <div class="form-acciones">
+        <button type="button" class="btn-secundario" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-primario" [disabled]="productoForm.invalid || cargando">
+          {{ cargando ? 'Guardando...' : 'Guardar Producto' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</section>

@@ -20,6 +20,47 @@
   margin-bottom: 2rem;
 }
 
+.acciones-inventario {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.btn-inventario {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-agregar {
+  background-color: #d63384;
+  color: white;
+}
+
+.btn-agregar:hover {
+  background-color: #b82a6e;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(214, 51, 132, 0.3);
+}
+
+.btn-retirar {
+  background-color: #ff69b4;
+  color: white;
+}
+
+.btn-retirar:hover {
+  background-color: #ff4da6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(255, 105, 180, 0.3);
+}
+
 /* 🎨 Grid general */
 .graficos-grid {
   display: grid;

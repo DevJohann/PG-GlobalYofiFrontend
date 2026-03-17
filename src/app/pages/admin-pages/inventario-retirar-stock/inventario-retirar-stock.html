@@ -1,0 +1,53 @@
+<section class="retirar-container">
+  <div class="header-acciones">
+    <button class="btn-volver" (click)="cancelar()">⬅ Volver</button>
+    <h1 class="titulo">➖ Retirar Stock de Inventario</h1>
+  </div>
+
+  <div class="card-busqueda">
+    <div class="busqueda-group">
+      <input 
+        type="text" 
+        [(ngModel)]="terminoBusqueda" 
+        (input)="buscar()" 
+        placeholder="Buscar producto por nombre o marca..."
+        class="input-busqueda"
+      >
+      <span class="icon-search">🔍</span>
+    </div>
+  </div>
+
+  <div class="mensajes" *ngIf="mensaje">
+    <p [ngClass]="mensaje.includes('✅') ? 'exito' : 'error'">{{ mensaje }}</p>
+  </div>
+
+  <div class="productos-grid">
+    <div class="producto-item card" *ngFor="let p of productosFiltrados">
+      <div class="producto-info">
+        <img [src]="productosService.getImagenUrl(p.imagenUrl)" alt="{{ p.nombre }}" class="img-preview">
+        <div class="detalles">
+          <h3>{{ p.nombre }}</h3>
+          <p class="marca">{{ p.marca }}</p>
+          <div class="stocks-info">
+            <p class="stock">Stock Actual: <span [ngClass]="(p.stockActual || 0) < (p.stockMinimo || 0) ? 'bajo-stock' : 'ok-stock'">{{ p.stockActual ?? 0 }}</span></p>
+            <p class="stock-min">Stock Mínimo: <span>{{ p.stockMinimo ?? 0 }}</span></p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="accion-retirar">
+        <label>Cantidad a retirar:</label>
+        <div class="input-retirar-group">
+          <input type="number" [(ngModel)]="cantidadARetirar[p.id]" min="1" [max]="p.stockActual || 0">
+          <button class="btn-retirar" (click)="retirarStock(p)" [disabled]="cargando">
+            Retirar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="productosFiltrados.length === 0 && !cargando" class="sin-resultados">
+    <p>📭 No se encontraron productos con ese nombre.</p>
+  </div>
+</section>

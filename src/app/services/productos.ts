@@ -12,6 +12,8 @@ export interface Producto {
   imagenUrl: string;
   categoria: string;
   proveedor: string;
+  categoriaId: number;
+  proveedorId: number;
   stockActual?: number;
   stockMinimo?: number;
   estado?: string;

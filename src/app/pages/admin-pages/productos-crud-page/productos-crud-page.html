@@ -6,105 +6,15 @@
     {{ mensaje }}
   </div>
 
-  <!-- Formulario de creación / edición -->
-  <form (ngSubmit)="guardarProducto()" class="formulario" enctype="multipart/form-data">
-    <h3>{{ productoSeleccionado ? '✏️ Editar Producto' : '➕ Nuevo Producto' }}</h3>
-
-    <div class="grid">
-      <!-- Nombre -->
-      <div class="campo">
-        <label>Nombre *</label>
-        <input [(ngModel)]="nuevoProducto.nombre" name="nombre" required />
-      </div>
-
-      <!-- Precio -->
-      <div class="campo">
-        <label>Precio *</label>
-        <input type="number" [(ngModel)]="nuevoProducto.precio" name="precio" required />
-      </div>
-
-      <!-- Marca -->
-      <div class="campo">
-        <label>Marca</label>
-        <input [(ngModel)]="nuevoProducto.marca" name="marca" />
-      </div>
-
-      <!-- Stock Actual -->
-      <div class="campo">
-        <label>Stock Actual *</label>
-        <input
-          type="number"
-          [(ngModel)]="nuevoProducto.stockActual"
-          name="stockActual"
-          required
-          min="0"
-        />
-      </div>
-
-      <!-- Stock Mínimo -->
-      <div class="campo">
-        <label>Stock Mínimo *</label>
-        <input
-          type="number"
-          [(ngModel)]="nuevoProducto.stockMinimo"
-          name="stockMinimo"
-          required
-          min="0"
-        />
-      </div>
-
-      <!-- Estado -->
-      <div class="campo">
-        <label>Estado *</label>
-        <select [(ngModel)]="nuevoProducto.estado" name="estado" required>
-          <option value="ACTIVO">Activo</option>
-          <option value="INACTIVO">Inactivo</option>
-        </select>
-      </div>
-
-      <!-- Categoría -->
-      <div class="campo">
-        <label>Categoría *</label>
-        <select [(ngModel)]="nuevoProducto.categoriaId" name="categoriaId" required>
-          <option value="">Seleccione una categoría</option>
-          <option *ngFor="let c of categorias" [value]="c.id">{{ c.nombre }}</option>
-        </select>
-      </div>
-
-      <!-- Proveedor -->
-      <div class="campo">
-        <label>Proveedor *</label>
-        <select [(ngModel)]="nuevoProducto.proveedorId" name="proveedorId" required>
-          <option value="">Seleccione un proveedor</option>
-          <option *ngFor="let p of proveedores" [value]="p.id">{{ p.nombre }}</option>
-        </select>
-      </div>
-
-      <!-- Descripción -->
-      <div class="campo full">
-        <label>Descripción</label>
-        <textarea [(ngModel)]="nuevoProducto.descripcion" name="descripcion"></textarea>
-      </div>
-
-      <!-- Imagen -->
-      <div class="campo full">
-        <label>Imagen del Producto</label>
-        <input type="file" (change)="onFileSelected($event)" accept="image/*" />
-        <div class="vista-previa" *ngIf="vistaPrevia">
-          <p>Vista previa:</p>
-          <img [src]="vistaPrevia" alt="Vista previa de imagen" />
-        </div>
-      </div>
-    </div>
-
-    <!-- Botones de acción -->
-    <div class="acciones">
-      <button type="submit" class="btn-guardar">
-        {{ productoSeleccionado ? 'Actualizar' : 'Guardar' }}
-      </button>
-      <button type="button" class="btn-cancelar" (click)="resetFormulario()">Cancelar</button>
-    </div>
-  </form>
+  <!-- Acciones principales -->
+  <div class="acciones-inventario">
+    <button class="btn-inventario btn-agregar" (click)="irAAgregarProducto()">
+      ➕ Agregar Producto
+    </button>
+    <button class="btn-inventario btn-retirar" (click)="irARetirarStock()">
+      ➖ Retirar del Inventario
+    </button>
+  </div>
 
   <hr />
 
@@ -166,7 +76,6 @@
 
           <!-- Acciones -->
           <td>
-            <button class="btn-editar" (click)="editar(p)">✏️</button>
             <button class="btn-eliminar" (click)="eliminar(p.id)">🗑️</button>
           </td>
         </tr>

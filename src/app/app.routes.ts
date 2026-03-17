@@ -14,6 +14,8 @@ import { CategoriasCrudPage } from './pages/admin-pages/categorias-crud-page/cat
 import { ProveedoresCrudPage } from './pages/admin-pages/proveedores-crud-page/proveedores-crud-page';
 import { ClientesCrudPage } from './pages/admin-pages/clientes-crud-page/clientes-crud-page';
 import { DashboardGraficosPage } from './pages/admin-pages/dashboard-graficos-page/dashboard-graficos-page';
+import { InventarioCrearProductoComponent } from './pages/admin-pages/inventario-crear-producto/inventario-crear-producto';
+import { InventarioRetirarStockComponent } from './pages/admin-pages/inventario-retirar-stock/inventario-retirar-stock';
 import { ProductDetail } from './pages/product-detail/product-detail';
 import { CarritoPageComponent } from './pages/carrito-page/carrito-page';
 import { PagoMetodoPageComponent } from './pages/pago-metodo-page/pago-metodo-page';
@@ -35,6 +37,8 @@ export const routes: Routes = [
             { path: 'reportes-ventas', component: VentasReportPageComponent },
             { path: 'reportes-clientes', component: ClientesReportPageComponent },
             { path: 'reportes-inventario', component: InventarioReportPageComponent },
+            { path: 'inventario-crear', component: InventarioCrearProductoComponent },
+            { path: 'inventario-retirar', component: InventarioRetirarStockComponent },
             { path: 'crud-productos', component: ProductosCrudPage },
             { path: 'pedidos-crud', component: PedidosCrudPage },
             { path: 'categorias', component: CategoriasCrudPage },

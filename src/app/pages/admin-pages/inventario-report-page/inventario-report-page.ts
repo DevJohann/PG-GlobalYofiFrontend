@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { ReportesService } from '../../../services/reportes-service';
-import { CommonModule } from '@angular/common'; // ✅ Incluye NgIf, NgFor, pipes, etc.
+import { CommonModule } from '@angular/common'; 
 
 Chart.register(...registerables);
 
@@ -22,6 +22,7 @@ export class InventarioReportPageComponent implements OnInit, AfterViewInit {
     private reportesService: ReportesService,
     private cdr: ChangeDetectorRef
   ) {}
+
 
   ngOnInit(): void {
     const token = localStorage?.getItem('token');
