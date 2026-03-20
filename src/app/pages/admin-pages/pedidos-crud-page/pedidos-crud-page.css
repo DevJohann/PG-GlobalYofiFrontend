@@ -166,3 +166,124 @@
   color: #2e7d32;
   font-weight: 700;
 }
+
+/* ✨ Mejoras en el Modal */
+.header-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.fecha-badge {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.2rem;
+}
+
+.status-banner {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-banner.pendiente { background-color: #fff3e0; color: #ef6c00; border-left: 5px solid #ef6c00; }
+.status-banner.procesando { background-color: #e3f2fd; color: #1565c0; border-left: 5px solid #1565c0; }
+.status-banner.enviado { background-color: #f3e5f5; color: #7b1fa2; border-left: 5px solid #7b1fa2; }
+.status-banner.entregado { background-color: #e8f5e9; color: #2e7d32; border-left: 5px solid #2e7d32; }
+.status-banner.cancelado { background-color: #ffebee; color: #c62828; border-left: 5px solid #c62828; }
+
+.info-card {
+  background: white;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.info-card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+  color: #b71c5a;
+  border-bottom: 1px solid #ffeef8;
+  padding-bottom: 0.5rem;
+}
+
+.info-card p {
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.info-card label {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.info-card select {
+  font-size: 0.9rem;
+}
+
+.products-section {
+  margin-top: 2rem;
+}
+
+.products-section h3 {
+  margin-bottom: 1rem;
+  color: #b71c5a;
+}
+
+.text-center { text-align: center !important; }
+.text-right { text-align: right !important; }
+
+.item-name {
+  font-weight: 600;
+}
+
+.total-row td {
+  padding-top: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-primary {
+  background: #b71c5a;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.loading-modal {
+  padding: 3rem;
+  text-align: center;
+  max-width: 300px !important;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #b71c5a;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
