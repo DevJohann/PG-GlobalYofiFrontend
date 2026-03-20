@@ -1,0 +1,124 @@
+<div class="crud-container">
+  <div class="header">
+    <div class="title-section">
+      <h1>🚛 Gestión de Proveedores</h1>
+      <p>Administra la red de proveedores y sus datos de contacto.</p>
+    </div>
+    <button class="btn-primary" (click)="abrirModal()">+ Nuevo Proveedor</button>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>Cargando proveedores...</p>
+  </div>
+
+  <div *ngIf="!cargando && proveedores.length === 0" class="empty-state">
+    <p>No hay proveedores registrados.</p>
+    <button class="btn-outline" (click)="abrirModal()">Registrar el primer proveedor</button>
+  </div>
+
+  <div class="table-container" *ngIf="!cargando && proveedores.length > 0">
+    <table class="crud-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre / Empresa</th>
+          <th>NIT</th>
+          <th>Contacto</th>
+          <th>Ciudad</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prov of proveedores">
+          <td>#{{ prov.id }}</td>
+          <td>
+            <div class="name-cell">{{ prov.nombre }}</div>
+            <div class="email-sub">{{ prov.email }}</div>
+          </td>
+          <td>{{ prov.nit }}</td>
+          <td>
+            <div class="contact-name">{{ prov.contactoPrincipal }}</div>
+            <div class="phone-sub">{{ prov.telefono }}</div>
+          </td>
+          <td>{{ prov.ciudad }}</td>
+          <td>
+            <span class="badge" [ngClass]="prov.estado.toLowerCase()">
+              {{ prov.estado }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button class="btn-icon edit" (click)="editarProveedor(prov)" title="Editar">✏️</button>
+            <button class="btn-icon delete" (click)="eliminarProveedor(prov.id!)" title="Eliminar">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal Formulario -->
+  <div class="modal" *ngIf="mostrarModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>{{ modoEdicion ? 'Editar Proveedor' : 'Nuevo Proveedor' }}</h2>
+        <button class="btn-close" (click)="cerrarModal()">×</button>
+      </div>
+      
+      <form (submit)="guardarProveedor($event)" class="modal-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="nombre">Nombre / Razón Social</label>
+            <input type="text" id="nombre" name="nombre" [(ngModel)]="proveedorForm.nombre" required placeholder="Ej: Distribuidora Global">
+          </div>
+
+          <div class="form-group">
+            <label for="nit">NIT</label>
+            <input type="text" id="nit" name="nit" [(ngModel)]="proveedorForm.nit" required placeholder="900.000.000-1">
+          </div>
+
+          <div class="form-group">
+            <label for="contacto">Contacto Principal</label>
+            <input type="text" id="contacto" name="contactoPrincipal" [(ngModel)]="proveedorForm.contactoPrincipal" required placeholder="Nombre de la persona">
+          </div>
+
+          <div class="form-group">
+            <label for="telefono">Teléfono</label>
+            <input type="text" id="telefono" name="telefono" [(ngModel)]="proveedorForm.telefono" placeholder="300 000 0000">
+          </div>
+
+          <div class="form-group full-width">
+            <label for="email">Correo Electrónico</label>
+            <input type="email" id="email" name="email" [(ngModel)]="proveedorForm.email" required placeholder="correo@proveedor.com">
+          </div>
+
+          <div class="form-group">
+            <label for="direccion">Dirección</label>
+            <input type="text" id="direccion" name="direccion" [(ngModel)]="proveedorForm.direccion" placeholder="Calle 123 #45-67">
+          </div>
+
+          <div class="form-group">
+            <label for="ciudad">Ciudad</label>
+            <input type="text" id="ciudad" name="ciudad" [(ngModel)]="proveedorForm.ciudad" placeholder="Bogotá">
+          </div>
+
+          <div class="form-group full-width">
+            <label for="estado">Estado del Proveedor</label>
+            <select id="estado" name="estado" [(ngModel)]="proveedorForm.estado">
+              <option value="ACTIVO">ACTIVO</option>
+              <option value="INACTIVO">INACTIVO</option>
+              <option value="SUSPENDIDO">SUSPENDIDO</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-outline" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="!proveedorForm.nombre || !proveedorForm.nit">
+            {{ modoEdicion ? 'Actualizar' : 'Registrar Proveedor' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
