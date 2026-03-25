@@ -1,0 +1,97 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1>📊 Panel de Control Administrativo</h1>
+      <p>Resumen detallado del estado actual de Global Yofi</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-refresh" (click)="cargarDatos()" [disabled]="cargando">
+        <span *ngIf="!cargando">🔄 Actualizar Datos</span>
+        <span *ngIf="cargando">⌛ Cargando...</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- KPI Cards Section -->
+  <section class="kpi-grid">
+    <div class="kpi-card sales">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-info">
+        <h3>Ventas Totales</h3>
+        <p class="kpi-value">{{ totalVentas | currency }}</p>
+        <span class="kpi-label">Suma acumulada</span>
+      </div>
+    </div>
+
+    <div class="kpi-card orders">
+      <div class="kpi-icon">📦</div>
+      <div class="kpi-info">
+        <h3>Pedidos</h3>
+        <p class="kpi-value">{{ totalPedidos }}</p>
+        <span class="kpi-label">Registrados en total</span>
+      </div>
+    </div>
+
+    <div class="kpi-card customers">
+      <div class="kpi-icon">👥</div>
+      <div class="kpi-info">
+        <h3>Clientes</h3>
+        <p class="kpi-value">{{ totalClientes }}</p>
+        <span class="kpi-label">Registrados</span>
+      </div>
+    </div>
+
+    <div class="kpi-card inventory">
+      <div class="kpi-icon">🧱</div>
+      <div class="kpi-info">
+        <h3>Stock Bajo</h3>
+        <p class="kpi-value text-danger">{{ productosBajoStock }}</p>
+        <span class="kpi-label">Productos por agotar</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Charts Section -->
+  <section class="charts-grid">
+    <div class="chart-card main-chart">
+      <div class="chart-header">
+        <h3>📈 Tendencia de Ventas</h3>
+        <p>Ventas mensuales durante el último año</p>
+      </div>
+      <div class="chart-container">
+        <canvas id="ventasChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card side-chart">
+      <div class="chart-header">
+        <h3>🏷️ Productos por Categoría</h3>
+        <p>Distribución del inventario actual</p>
+      </div>
+      <div class="chart-container">
+        <canvas id="categoriasChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card side-chart">
+      <div class="chart-header">
+        <h3>📊 Pedidos por Estado</h3>
+        <p>Estado operacional de las órdenes</p>
+      </div>
+      <div class="chart-container">
+        <canvas id="estadosChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Backend Recommendation Section (Hidden if everything works) -->
+  <footer class="dashboard-footer" *ngIf="serviciosNoImplementados.length > 0">
+    <div class="warning-box">
+      <h4>⚠️ Servicios no detectados</h4>
+      <p>Algunos reportes no pudieron cargarse. Asegúrate de que el backend tenga los siguientes endpoints implementados:</p>
+      <ul>
+        <li *ngFor="let s of serviciosNoImplementados">{{ s }}</li>
+      </ul>
+    </div>
+  </footer>
+</div>

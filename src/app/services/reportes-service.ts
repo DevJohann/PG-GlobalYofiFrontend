@@ -126,4 +126,18 @@ export class ReportesService {
       { headers: this.getAuthHeaders() }
     );
   }
+
+  getProductosBajoStock(): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/productos-bajo-stock`,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  getClientesTotal(): Observable<number> {
+    return this.http.get<number>(
+      `${this.baseUrl}/clientes-total`,
+      { headers: this.getAuthHeaders() }
+    );
+  }
 }
