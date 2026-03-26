@@ -1,6 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { Subject, takeUntil, forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { CarritoService, CarritoDTO, ItemCarritoDTO } from '../../services/carrito.service';
 import { ProductosService } from '../../services/productos';
 import { AuthService } from '../../services/auth';
@@ -17,6 +19,7 @@ export class CarritoPageComponent implements OnInit {
     carrito: CarritoDTO | null = null;
     isLoggedIn = false;
     userEmail: string | null = null;
+    private destroy$ = new Subject<void>();
 
     constructor(
         public carritoService: CarritoService,
@@ -30,10 +33,15 @@ export class CarritoPageComponent implements OnInit {
     ngOnInit(): void {
         this.checkLoginStatus();
         // Suscribirse al estado global del carrito
-        this.carritoService.cart$.subscribe(cart => {
-            this.carrito = cart;
-            this.cdr.detectChanges();
-        });
+        this.carritoService.cart$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(cart => {
+                this.carrito = cart;
+                if (this.carrito && this.carrito.items.length > 0) {
+                    this.enriquecerCarritoConImagenes();
+                }
+                this.cdr.detectChanges();
+            });
 
         // Cargar el carrito si no está presente
         const user = this.authService.getUser();
@@ -87,5 +95,34 @@ export class CarritoPageComponent implements OnInit {
     procederAlPago(): void {
         if (!this.carrito || this.carrito.items.length === 0) return;
         this.router.navigate(['/pago-metodo']);
+    }
+
+    private enriquecerCarritoConImagenes(): void {
+        if (!this.carrito) return;
+
+        const observables = this.carrito.items.map(item => {
+            // Si ya tiene imagen, no hacemos nada (por si acaso el backend la envía)
+            if (item.imagenUrl) return of(null);
+
+            return this.productosService.getProductoById(item.productoId).pipe(
+                catchError(() => of(null)) // Ignorar errores de un producto específico
+            );
+        });
+
+        forkJoin(observables).subscribe(productos => {
+            if (!this.carrito) return;
+
+            productos.forEach((producto, index) => {
+                if (producto && this.carrito) {
+                    this.carrito.items[index].imagenUrl = producto.imagenUrl;
+                }
+            });
+            this.cdr.detectChanges();
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

@@ -16,6 +16,7 @@ export interface ItemCarritoDTO {
     precio: number;
     cantidad: number;
     subtotal: number;
+    imagenUrl?: string;
 }
 
 @Injectable({

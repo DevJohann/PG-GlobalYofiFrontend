@@ -38,6 +38,7 @@ export const routes: Routes = [
             { path: 'reportes-clientes', component: ClientesReportPageComponent },
             { path: 'reportes-inventario', component: InventarioReportPageComponent },
             { path: 'inventario-crear', component: InventarioCrearProductoComponent },
+            { path: 'inventario-editar/:id', component: InventarioCrearProductoComponent },
             { path: 'inventario-retirar', component: InventarioRetirarStockComponent },
             { path: 'crud-productos', component: ProductosCrudPage },
             { path: 'pedidos-crud', component: PedidosCrudPage },

@@ -36,22 +36,31 @@ export class ProductosService {
 
   /** 🖼️ Obtener la URL completa de la imagen */
   getImagenUrl(path: string | null | undefined): string {
-    if (!path) return 'assets/img/placeholder.png';
+    if (!path || path.trim() === '') {
+      return 'assets/img/yofi/MascotaGlobalYofi.png'; 
+    }
 
-    // Si la ruta ya es completa, la retornamos
-    if (path.startsWith('http')) return path;
+    // Si la ruta ya es completa (http/https), la retornamos
+    if (path.startsWith('http')) {
+      return path;
+    }
 
-    // Si empieza con /img/, reemplazamos por /uploads/
-    const normalizedPath = path.startsWith('/img/')
-      ? path.replace('/img/', '/uploads/')
-      : (path.startsWith('/') ? path : '/uploads/' + path);
+    // Normalizar el path: asegurar que empiece con /uploads/ si viene del backend
+    // Si viene como /img/ se cambia a /uploads/ (asumiendo patrón del backend)
+    let normalizedPath = path.startsWith('/img/') 
+      ? path.replace('/img/', '/uploads/') 
+      : path;
 
-    // Aseguramos que empiece con /uploads/ si no es así
-    const finalPath = normalizedPath.startsWith('/uploads/')
-      ? normalizedPath
-      : '/uploads/' + normalizedPath.replace(/^\/+/, '');
+    if (!normalizedPath.startsWith('/uploads/') && !normalizedPath.startsWith('assets/')) {
+       normalizedPath = '/uploads/' + (normalizedPath.startsWith('/') ? normalizedPath.substring(1) : normalizedPath);
+    }
 
-    return `${this.baseUrl}${finalPath}`;
+    // Si es un asset local, no le ponemos el baseUrl
+    if (normalizedPath.startsWith('assets/')) {
+      return normalizedPath;
+    }
+
+    return `${this.baseUrl}${normalizedPath}`;
   }
 
   // ==============================================================

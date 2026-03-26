@@ -19,7 +19,7 @@ export class ProductosCrudPage implements OnInit, AfterViewInit {
   cargando: boolean = false;
 
   constructor(
-    private productosService: ProductosService,
+    public productosService: ProductosService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private notificationService: NotificationService
@@ -27,6 +27,10 @@ export class ProductosCrudPage implements OnInit, AfterViewInit {
   
   irAAgregarProducto(): void {
     this.router.navigate(['/admin/inventario-crear']);
+  }
+
+  editar(id: number): void {
+    this.router.navigate(['/admin/inventario-editar', id]);
   }
   
   irARetirarStock(): void {

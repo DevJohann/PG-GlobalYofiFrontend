@@ -13,7 +13,7 @@
         <div class="carrito-items">
             <div class="cart-item-card" *ngFor="let item of carrito.items">
                 <div class="item-img-container">
-                    <img src="../../assets/img/yofi/placeholder-beauty.png" [alt]="item.nombreProducto"
+                    <img [src]="productosService.getImagenUrl(item.imagenUrl)" [alt]="item.nombreProducto"
                         class="item-img" />
                 </div>
 

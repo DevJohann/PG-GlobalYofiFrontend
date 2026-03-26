@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ProductosService } from '../../../services/productos';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ProductosService, Producto } from '../../../services/productos';
 import { CategoriaService, Categoria } from '../../../services/categoria-service';
 import { ProveedorService, Proveedor } from '../../../services/proveedor-service';
 
@@ -21,6 +21,8 @@ export class InventarioCrearProductoComponent implements OnInit {
   cargando: boolean = false;
   imagenSeleccionada: File | null = null;
   vistaPrevia: string | null = null;
+  esEdicion: boolean = false;
+  productoId: number | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +30,7 @@ export class InventarioCrearProductoComponent implements OnInit {
     private categoriaService: CategoriaService,
     private proveedorService: ProveedorService,
     private router: Router,
+    private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) {
     this.productoForm = this.fb.group({
@@ -46,6 +49,47 @@ export class InventarioCrearProductoComponent implements OnInit {
   ngOnInit(): void {
     this.cargarCategorias();
     this.cargarProveedores();
+
+    this.route.paramMap.subscribe(params => {
+      const idStr = params.get('id');
+      if (idStr) {
+        this.productoId = +idStr;
+        this.esEdicion = true;
+        this.cargarProducto(this.productoId);
+      }
+    });
+  }
+
+  cargarProducto(id: number): void {
+    this.cargando = true;
+    this.productosService.getProductoById(id).subscribe({
+      next: (producto) => {
+        this.productoForm.patchValue({
+          nombre: producto.nombre,
+          descripcion: producto.descripcion,
+          precio: producto.precio,
+          marca: producto.marca,
+          stockActual: producto.stockActual,
+          stockMinimo: producto.stockMinimo,
+          estado: producto.estado || 'activo',
+          categoriaId: producto.categoriaId,
+          proveedorId: producto.proveedorId
+        });
+        
+        if (producto.imagenUrl) {
+          this.vistaPrevia = this.productosService.getImagenUrl(producto.imagenUrl);
+        }
+        
+        this.cargando = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar producto:', err);
+        this.mensaje = '❌ Error al cargar los datos del producto.';
+        this.cargando = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   cargarCategorias(): void {
@@ -95,11 +139,15 @@ export class InventarioCrearProductoComponent implements OnInit {
       formData.append('imagen', this.imagenSeleccionada);
     }
 
-    this.productosService.crearProducto(formData).subscribe({
+    const obs = this.esEdicion && this.productoId
+      ? this.productosService.editarProducto(this.productoId, formData)
+      : this.productosService.crearProducto(formData);
+
+    obs.subscribe({
       next: () => {
-        this.mensaje = '✅ Producto creado correctamente.';
+        this.mensaje = this.esEdicion ? '✅ Producto actualizado correctamente.' : '✅ Producto creado correctamente.';
         setTimeout(() => {
-          this.router.navigate(['/admin/reportes-inventario']);
+          this.router.navigate(['/admin/crud-productos']);
         }, 2000);
       },
       error: (err) => {
@@ -112,6 +160,6 @@ export class InventarioCrearProductoComponent implements OnInit {
   }
 
   cancelar(): void {
-    this.router.navigate(['/admin/reportes-inventario']);
+    this.router.navigate(['/admin/crud-productos']);
   }
 }

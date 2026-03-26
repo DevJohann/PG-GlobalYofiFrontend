@@ -1,7 +1,9 @@
 <section class="crear-container">
   <div class="header-acciones">
     <button class="btn-volver" (click)="cancelar()">⬅ Volver</button>
-    <h1 class="titulo">➕ Agregar Nuevo Producto</h1>
+    <h1 class="titulo">
+      {{ esEdicion ? '✏️ Editar Producto' : '➕ Agregar Nuevo Producto' }}
+    </h1>
   </div>
 
   <div class="card-formulario">

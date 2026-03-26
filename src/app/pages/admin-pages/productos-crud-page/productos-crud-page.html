@@ -65,8 +65,7 @@
           <!-- Imagen -->
           <td>
             <img
-              *ngIf="p.imagenUrl"
-              [src]="'http://localhost:8080' + p.imagenUrl"
+              [src]="productosService.getImagenUrl(p.imagenUrl)"
               alt="Imagen del producto"
               width="70"
               height="70"
@@ -76,6 +75,7 @@
 
           <!-- Acciones -->
           <td>
+            <button class="btn-editar" (click)="editar(p.id)" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; margin-right: 10px;">✏️</button>
             <button class="btn-eliminar" (click)="eliminar(p.id)">🗑️</button>
           </td>
         </tr>
