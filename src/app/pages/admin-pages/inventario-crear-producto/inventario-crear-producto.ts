@@ -95,7 +95,8 @@ export class InventarioCrearProductoComponent implements OnInit {
   cargarCategorias(): void {
     this.categoriaService.getCategorias().subscribe({
       next: (data) => {
-        this.categorias = data;
+        // Solo mostrar categorías activas
+        this.categorias = data.filter(cat => cat.activa === true);
         this.cdr.detectChanges();
       },
       error: (err) => console.error('❌ Error al cargar categorías:', err)
@@ -105,7 +106,8 @@ export class InventarioCrearProductoComponent implements OnInit {
   cargarProveedores(): void {
     this.proveedorService.getProveedores().subscribe({
       next: (data) => {
-        this.proveedores = data;
+        // Solo mostrar proveedores activos (case-insensitive para mayor robustez)
+        this.proveedores = data.filter(prov => prov.estado?.toUpperCase() === 'ACTIVO');
         this.cdr.detectChanges();
       },
       error: (err) => console.error('❌ Error al cargar proveedores:', err)
