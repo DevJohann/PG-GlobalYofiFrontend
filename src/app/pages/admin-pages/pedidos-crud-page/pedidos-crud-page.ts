@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PedidoService, PedidoAdminDTO } from '../../../services/pedido.service';
 import { FormsModule } from '@angular/forms';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-pedidos-crud-page',
@@ -18,7 +19,8 @@ export class PedidosCrudPage implements OnInit {
 
   constructor(
     private pedidoService: PedidoService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -75,7 +77,7 @@ export class PedidosCrudPage implements OnInit {
     this.pedidoService.actualizarEstado(pedidoId, nuevoEstado).subscribe({
       next: (pedidoActualizado) => {
         console.log('DEBUG [Pedido]: Estado actualizado con éxito', pedidoActualizado);
-        alert(`✅ El estado del pedido #${pedidoId} ha sido actualizado a ${nuevoEstado}`);
+        this.notificationService.success(`✅ El estado del pedido #${pedidoId} ha sido actualizado a ${nuevoEstado}`);
         this.cargarPedidos();
         if (this.pedidoSeleccionado && this.extraerId(this.pedidoSeleccionado) === pedidoId) {
           this.pedidoSeleccionado.estado = nuevoEstado;
@@ -85,7 +87,7 @@ export class PedidosCrudPage implements OnInit {
       error: (err) => {
         console.error('DEBUG [Pedido]: Error al cambiar estado', err);
         const errorMsg = err.error?.message || 'Hubo un problema al conectar con el servidor.';
-        alert(`🚨 Error: No se pudo actualizar el estado. ${errorMsg}`);
+        this.notificationService.error(`🚨 Error: No se pudo actualizar el estado. ${errorMsg}`);
         this.cdr.detectChanges();
       }
     });

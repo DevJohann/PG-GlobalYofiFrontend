@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { CarritoService, CarritoDTO, ItemCarritoDTO } from '../../services/carrito.service';
 import { ProductosService } from '../../services/productos';
 import { AuthService } from '../../services/auth';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
     selector: 'app-carrito-page',
@@ -22,7 +23,8 @@ export class CarritoPageComponent implements OnInit {
         public productosService: ProductosService,
         private authService: AuthService,
         private router: Router,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private notificationService: NotificationService
     ) { }
 
     ngOnInit(): void {
@@ -70,9 +72,15 @@ export class CarritoPageComponent implements OnInit {
         this.carritoService.eliminar(item.itemId).subscribe();
     }
 
-    vaciarCarrito(): void {
-        if (this.carrito && confirm('¿Estás seguro de que deseas vaciar tu carrito?')) {
-            this.carritoService.vaciar(this.carrito.carritoId).subscribe();
+    async vaciarCarrito(): Promise<void> {
+        if (this.carrito) {
+            const confirmada = await this.notificationService.confirm('¿Estás seguro de que deseas vaciar tu carrito? Esta acción eliminará todos los productos.');
+            if (confirmada) {
+                this.carritoService.vaciar(this.carrito.carritoId).subscribe({
+                    next: () => this.notificationService.success('Carrito vaciado con éxito.'),
+                    error: () => this.notificationService.error('No se pudo vaciar el carrito.')
+                });
+            }
         }
     }
 

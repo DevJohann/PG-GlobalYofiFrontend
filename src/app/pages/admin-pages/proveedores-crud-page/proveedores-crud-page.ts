@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProveedorService, Proveedor } from '../../../services/proveedor-service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-proveedores-crud-page',
@@ -21,7 +22,8 @@ export class ProveedoresCrudPage implements OnInit {
 
   constructor(
     private proveedorService: ProveedorService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -84,34 +86,41 @@ export class ProveedoresCrudPage implements OnInit {
     if (this.modoEdicion && this.proveedorForm.id) {
       this.proveedorService.actualizarProveedor(this.proveedorForm.id, this.proveedorForm).subscribe({
         next: () => {
-          alert('✅ Proveedor actualizado con éxito');
+          this.notificationService.success('✅ Proveedor actualizado con éxito');
           this.cerrarModal();
           this.cargarProveedores();
         },
-        error: (err) => console.error('Error al actualizar', err)
+        error: (err) => {
+          console.error('Error al actualizar', err);
+          this.notificationService.error('No se pudo actualizar el proveedor.');
+        }
       });
     } else {
       this.proveedorService.crearProveedor(this.proveedorForm).subscribe({
         next: () => {
-          alert('✅ Proveedor registrado con éxito');
+          this.notificationService.success('✅ Proveedor registrado con éxito');
           this.cerrarModal();
           this.cargarProveedores();
         },
-        error: (err) => console.error('Error al registrar', err)
+        error: (err) => {
+          console.error('Error al registrar', err);
+          this.notificationService.error('No se pudo registrar el proveedor.');
+        }
       });
     }
   }
 
-  eliminarProveedor(id: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este proveedor?')) {
+  async eliminarProveedor(id: number): Promise<void> {
+    const confirmada = await this.notificationService.confirm('¿Estás seguro de que deseas eliminar este proveedor?');
+    if (confirmada) {
       this.proveedorService.eliminarProveedor(id).subscribe({
         next: () => {
-          alert('🗑️ Proveedor eliminado');
+          this.notificationService.success('🗑️ Proveedor eliminado');
           this.cargarProveedores();
         },
         error: (err) => {
           console.error('Error al eliminar', err);
-          alert('🚨 No se pudo eliminar el proveedor. Verifique si tiene productos o compras asociadas.');
+          this.notificationService.error('🚨 No se pudo eliminar el proveedor. Verifique si tiene productos o compras asociadas.');
         }
       });
     }

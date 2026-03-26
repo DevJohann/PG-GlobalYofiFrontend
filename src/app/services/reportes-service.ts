@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { Observable } from 'rxjs';
 export class ReportesService {
   private readonly baseUrl = 'http://localhost:8080/api/reportes';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private notificationService: NotificationService) {}
 
   // =====================================================
   // 🔐 Encabezado con token + manejo de sesión seguro
@@ -26,7 +27,7 @@ export class ReportesService {
       console.log('🔑 Token leído del localStorage:', token);
 
       if (!token) {
-        alert('⚠️ Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+        this.notificationService.error('⚠️ Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
         window.location.href = '/login';
         return new HttpHeaders();
       }

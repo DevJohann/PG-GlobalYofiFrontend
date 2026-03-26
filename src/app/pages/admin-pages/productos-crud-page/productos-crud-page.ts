@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductosService, Producto } from '../../../services/productos';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-productos-crud-page',
@@ -20,7 +21,8 @@ export class ProductosCrudPage implements OnInit, AfterViewInit {
   constructor(
     private productosService: ProductosService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private notificationService: NotificationService
   ) {}
   
   irAAgregarProducto(): void {
@@ -80,25 +82,26 @@ export class ProductosCrudPage implements OnInit, AfterViewInit {
   // Eliminar producto
   // ============================
 
-  eliminar(id: number): void {
-    if (!confirm('¿Seguro que deseas eliminar este producto?')) return;
+  async eliminar(id: number): Promise<void> {
+    const confirmada = await this.notificationService.confirm('¿Seguro que deseas eliminar este producto? Esta acción no se puede deshacer.');
+    if (!confirmada) return;
 
     this.productosService.eliminarProducto(id).subscribe({
       next: () => {
-        this.mensaje = '🗑️ Producto eliminado correctamente';
+        this.notificationService.success('🗑️ Producto eliminado correctamente');
         this.cargarProductos();
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('❌ Error al eliminar producto:', err);
         if (err.status === 403) {
-          this.mensaje = '🚫 No tienes permisos para eliminar este producto.';
+          this.notificationService.error('🚫 No tienes permisos para eliminar este producto.');
         } else if (err.status === 401) {
-          this.mensaje = '🔒 Sesión expirada. Inicia sesión nuevamente.';
+          this.notificationService.error('🔒 Sesión expirada. Inicia sesión nuevamente.');
           localStorage.removeItem('token');
           setTimeout(() => window.location.href = '/login', 2000);
         } else {
-          this.mensaje = '❌ Error al eliminar el producto.';
+          this.notificationService.error('❌ Error al eliminar el producto.');
         }
         this.cdr.detectChanges();
       }

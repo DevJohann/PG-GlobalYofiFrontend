@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductosService, Producto } from '../../services/productos';
 import { AuthService } from '../../services/auth';
 import { CarritoService } from '../../services/carrito.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
     selector: 'app-product-detail',
@@ -27,6 +28,7 @@ export class ProductDetail implements OnInit {
         private authService: AuthService,
         public carritoService: CarritoService,
         private cdr: ChangeDetectorRef,
+        private notificationService: NotificationService,
         @Inject(PLATFORM_ID) private platformId: Object
     ) {
         this.isBrowser = isPlatformBrowser(this.platformId);
@@ -79,7 +81,7 @@ export class ProductDetail implements OnInit {
         if (nuevaCantidad >= 1 && nuevaCantidad <= maxStock) {
             this.cantidad = nuevaCantidad;
         } else if (nuevaCantidad > maxStock) {
-            alert(`Solo hay ${maxStock} unidades disponibles en stock.`);
+            this.notificationService.info(`Lo sentimos, solo hay ${maxStock} unidades disponibles en stock.`);
         }
     }
 
@@ -101,8 +103,7 @@ export class ProductDetail implements OnInit {
         console.log('DEBUG [Cart]: User session detected:', user, 'Resolved ID:', userId);
         
         if (!this.isLoggedIn || !userId) {
-            const dataFound = user ? JSON.stringify(user) : 'null';
-            alert(`⚠️ Error de sesión: No se encontró un ID de cliente válido. \nDatos detectados: ${dataFound}\n\nPor favor, intenta cerrar sesión e iniciar sesión de nuevo.`);
+            this.notificationService.error('Debes iniciar sesión para añadir productos al carrito.');
             return;
         }
 
@@ -110,13 +111,12 @@ export class ProductDetail implements OnInit {
 
         this.carritoService.agregar(userId, this.producto.id, this.cantidad).subscribe({
             next: (cart) => {
-                alert('✨ ¡Producto añadido al carrito correctamente!');
+                this.notificationService.success('✨ ¡Producto añadido al carrito correctamente!');
                 this.cdr.detectChanges();
             },
             error: (err) => {
                 console.error('Error al añadir al carrito:', err);
-                const errorDetail = err.error?.message || err.statusText || 'Error desconocido';
-                alert(`❌ No se pudo añadir el producto al carrito.\n\nDetalles:\n- ID Cliente enviado: ${userId}\n- Error del Servidor: ${errorDetail}\n- Estado: ${err.status}`);
+                this.notificationService.error('No se pudo añadir el producto al carrito. Por favor intenta de nuevo.');
             }
         });
     }

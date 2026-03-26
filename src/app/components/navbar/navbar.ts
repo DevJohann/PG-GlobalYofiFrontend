@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -20,13 +20,20 @@ export class NavbarComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    public carritoService: CarritoService
+    public carritoService: CarritoService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
     this.authService.currentUser$.subscribe(user => {
       this.isLoggedIn = !!user;
       this.userEmail = user ? user.email : null;
+      this.cdr.detectChanges();
+    });
+
+    // 🛒 Escuchar cambios en el carrito para actualizar el badge de la navbar en tiempo real
+    this.carritoService.cart$.subscribe(() => {
+      this.cdr.detectChanges();
     });
   }
 

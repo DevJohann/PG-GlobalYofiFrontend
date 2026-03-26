@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoriaService, Categoria } from '../../../services/categoria-service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-categorias-crud-page',
@@ -21,7 +22,8 @@ export class CategoriasCrudPage implements OnInit {
 
   constructor(
     private categoriaService: CategoriaService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -79,34 +81,41 @@ export class CategoriasCrudPage implements OnInit {
     if (this.modoEdicion && this.categoriaForm.id) {
       this.categoriaService.actualizarCategoria(this.categoriaForm.id, this.categoriaForm).subscribe({
         next: () => {
-          alert('✅ Categoría actualizada con éxito');
+          this.notificationService.success('✅ Categoría actualizada con éxito');
           this.cerrarModal();
           this.cargarCategorias();
         },
-        error: (err) => console.error('Error al actualizar', err)
+        error: (err) => {
+          console.error('Error al actualizar', err);
+          this.notificationService.error('No se pudo actualizar la categoría.');
+        }
       });
     } else {
       this.categoriaService.crearCategoria(this.categoriaForm).subscribe({
         next: () => {
-          alert('✅ Categoría creada con éxito');
+          this.notificationService.success('✅ Categoría creada con éxito');
           this.cerrarModal();
           this.cargarCategorias();
         },
-        error: (err) => console.error('Error al crear', err)
+        error: (err) => {
+          console.error('Error al crear', err);
+          this.notificationService.error('No se pudo crear la categoría.');
+        }
       });
     }
   }
 
-  eliminarCategoria(id: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar esta categoría?')) {
+  async eliminarCategoria(id: number): Promise<void> {
+    const confirmada = await this.notificationService.confirm('¿Estás seguro de que deseas eliminar esta categoría?');
+    if (confirmada) {
       this.categoriaService.eliminarCategoria(id).subscribe({
         next: () => {
-          alert('🗑️ Categoría eliminada');
+          this.notificationService.success('🗑️ Categoría eliminada');
           this.cargarCategorias();
         },
         error: (err) => {
           console.error('Error al eliminar', err);
-          alert('🚨 No se pudo eliminar la categoría. Verifique si tiene productos asociados.');
+          this.notificationService.error('🚨 No se pudo eliminar la categoría. Verifique si tiene productos asociados.');
         }
       });
     }

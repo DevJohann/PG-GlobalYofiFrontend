@@ -3,6 +3,7 @@ import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './components/navbar/navbar';
 import { FooterComponent } from './components/footer/footer';
+import { NotificationComponent } from './components/shared/notification/notification';
 import { AuthService } from './services/auth';
 import { CarritoService } from './services/carrito.service';
 import { filter } from 'rxjs';
@@ -10,7 +11,7 @@ import { filter } from 'rxjs';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavbarComponent, FooterComponent],
+  imports: [CommonModule, RouterOutlet, NavbarComponent, FooterComponent, NotificationComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })

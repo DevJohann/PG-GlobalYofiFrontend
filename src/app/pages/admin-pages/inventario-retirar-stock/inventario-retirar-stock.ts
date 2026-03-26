@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductosService, Producto } from '../../../services/productos';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-inventario-retirar-stock',
@@ -23,7 +24,8 @@ export class InventarioRetirarStockComponent implements OnInit {
   constructor(
     public productosService: ProductosService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -70,11 +72,16 @@ export class InventarioRetirarStockComponent implements OnInit {
     }
 
     if (cantidad > (producto.stockActual || 0)) {
-      this.mensaje = `⚠️ No hay suficiente stock. (Disponible: ${producto.stockActual})`;
+      this.notificationService.error(`⚠️ No hay suficiente stock. (Disponible: ${producto.stockActual})`);
       return;
     }
 
-    if (!confirm(`¿Seguro que deseas retirar ${cantidad} unidades de ${producto.nombre}?`)) return;
+    this.procederRetiro(producto, cantidad);
+  }
+
+  async procederRetiro(producto: Producto, cantidad: number): Promise<void> {
+    const confirmada = await this.notificationService.confirm(`¿Seguro que deseas retirar ${cantidad} unidades de ${producto.nombre}?`);
+    if (!confirmada) return;
 
     this.cargando = true;
     
@@ -108,13 +115,13 @@ export class InventarioRetirarStockComponent implements OnInit {
 
     this.productosService.editarProducto(producto.id, formData).subscribe({
       next: () => {
-        this.mensaje = `✅ Stock actualizado para ${producto.nombre}.`;
+        this.notificationService.success(`✅ Stock actualizado para ${producto.nombre}.`);
         this.cantidadARetirar[producto.id] = 0;
         this.cargarProductos(); // Recargar lista
       },
       error: (err) => {
         console.error('❌ Error al actualizar stock:', err);
-        this.mensaje = '❌ Error al actualizar stock.';
+        this.notificationService.error('❌ Error al actualizar el stock.');
         this.cargando = false;
         this.cdr.detectChanges();
       }

@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CarritoService } from '../../services/carrito.service';
 import { AuthService } from '../../services/auth';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
     selector: 'app-pago-metodo-page',
@@ -32,7 +33,8 @@ export class PagoMetodoPageComponent implements OnInit {
         private carritoService: CarritoService,
         private authService: AuthService,
         private router: Router,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private notificationService: NotificationService
     ) { }
 
     ngOnInit(): void {
@@ -75,7 +77,7 @@ export class PagoMetodoPageComponent implements OnInit {
 
     finalizarPedido(): void {
         if (!this.metodoSeleccionado) {
-            alert('Por favor selecciona un método de pago.');
+            this.notificationService.info('Por favor selecciona un método de pago.');
             return;
         }
 
@@ -85,13 +87,13 @@ export class PagoMetodoPageComponent implements OnInit {
         if (userId) {
             this.carritoService.realizarPedido(userId, this.metodoSeleccionado, this.direccion, this.ciudad).subscribe({
                 next: (res: any) => {
-                    alert('✨ ¡Pedido realizado con éxito! Gracias por confiar en Global Yofi.');
+                    this.notificationService.success('✨ ¡Pedido realizado con éxito! Gracias por confiar en Global Yofi.');
                     this.router.navigate(['/productos']);
                 },
                 error: (err: any) => {
                     console.error('Error al realizar pedido', err);
                     const msg = err.error?.message || 'Hubo un error al procesar tu pedido. Por favor intenta de nuevo.';
-                    alert(msg);
+                    this.notificationService.error(msg);
                 }
             });
         }

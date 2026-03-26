@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClienteService, Cliente } from '../../../services/cliente-service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-clientes-crud-page',
@@ -21,7 +22,8 @@ export class ClientesCrudPage implements OnInit {
 
   constructor(
     private clienteService: ClienteService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -117,40 +119,41 @@ export class ClientesCrudPage implements OnInit {
     if (this.modoEdicion && this.clienteForm.id) {
       this.clienteService.actualizarCliente(this.clienteForm.id, payload).subscribe({
         next: () => {
-          alert('✅ Perfil de cliente actualizado');
+          this.notificationService.success('✅ Perfil de cliente actualizado');
           this.cerrarModal();
           this.cargarClientes();
         },
         error: (err) => {
           console.error('Error al actualizar', err);
-          alert('🚨 Error al actualizar. Revisa la consola para más detalles.');
+          this.notificationService.error('🚨 Error al actualizar el cliente.');
         }
       });
     } else {
       this.clienteService.crearCliente(payload).subscribe({
         next: () => {
-          alert('✅ Nuevo cliente registrado');
+          this.notificationService.success('✅ Nuevo cliente registrado');
           this.cerrarModal();
           this.cargarClientes();
         },
         error: (err) => {
           console.error('Error al registrar', err);
-          alert('🚨 Error al registrar. Revisa si el email ya existe.');
+          this.notificationService.error('🚨 Error al registrar. Revisa si el email ya existe.');
         }
       });
     }
   }
 
-  eliminarCliente(id: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
+  async eliminarCliente(id: number): Promise<void> {
+    const confirmada = await this.notificationService.confirm('¿Estás seguro de que deseas eliminar este cliente? Esta acción es irreversible.');
+    if (confirmada) {
       this.clienteService.eliminarCliente(id).subscribe({
         next: () => {
-          alert('🗑️ Cliente eliminado');
+          this.notificationService.success('🗑️ Cliente eliminado');
           this.cargarClientes();
         },
         error: (err) => {
           console.error('Error al eliminar', err);
-          alert('🚨 Error: Asegúrate de que el backend tenga implementado el método DELETE en /api/clientes/{id}');
+          this.notificationService.error('🚨 No se pudo eliminar el cliente.');
         }
       });
     }

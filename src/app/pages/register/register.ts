@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -25,7 +26,8 @@ export class Register {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private notificationService: NotificationService
   ) { }
 
   // Filtro para solo letras (incluye acentos y espacios)
@@ -112,7 +114,7 @@ export class Register {
         this.cargando = false;
         this.mensaje = '✅ Registro exitoso, redirigiendo...';
         this.cdr.detectChanges();
-        alert('Registro exitoso');
+        this.notificationService.success('¡Registro exitoso! Ya puedes iniciar sesión.');
         setTimeout(() => this.router.navigate(['/login']), 2000);
       },
       error: (err) => {

@@ -1,0 +1,30 @@
+<!-- 🍞 TOAST CONTAINER -->
+<div class="toast-container">
+  <div *ngFor="let n of notifications" class="toast" [ngClass]="n.type" (click)="removeNotification(n.id)">
+    <div class="toast-icon">
+      <span *ngIf="n.type === 'success'">✅</span>
+      <span *ngIf="n.type === 'error'">❌</span>
+      <span *ngIf="n.type === 'info'">ℹ️</span>
+    </div>
+    <div class="toast-content">
+      <p>{{ n.message }}</p>
+    </div>
+    <button class="toast-close">✕</button>
+  </div>
+</div>
+
+<!-- 🛡️ CONFIRM MODAL OVERLAY -->
+<div class="modal-overlay" *ngIf="currentConfirm">
+  <div class="modal-card bounce-in">
+    <div class="modal-header">
+      <h3>Atención Global Yofi 🌸</h3>
+    </div>
+    <div class="modal-body">
+      <p>{{ currentConfirm.message }}</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="handleConfirm(false)">Cancelar</button>
+      <button class="btn-confirm" (click)="handleConfirm(true)">Aceptar</button>
+    </div>
+  </div>
+</div>
