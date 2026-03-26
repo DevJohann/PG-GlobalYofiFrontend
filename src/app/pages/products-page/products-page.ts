@@ -118,7 +118,8 @@ export class ProductsPage implements OnInit, OnDestroy {
       this.filtroMin,
       this.filtroMax,
       query,
-      this.sortBy
+      this.sortBy,
+      'ACTIVO' // 👈 Solo ver activos en el catálogo de clientes
     )
       .pipe(takeUntil(this.destroy$))
       .subscribe({

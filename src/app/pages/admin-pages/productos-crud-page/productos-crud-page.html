@@ -30,8 +30,8 @@
           <th>Precio</th>
           <th>Categoría</th>
           <th>Proveedor</th>
-          <!-- <th>Stock (Actual / Mínimo)</th> -->
-          <!-- <th>Estado</th> -->
+          <th>Stock (Actual / Mínimo)</th>
+          <th>Estado</th>
           <th>Imagen</th>
           <th>Acciones</th>
         </tr>
@@ -48,19 +48,19 @@
           <td>{{ p.proveedor }}</td>
 
           <!-- Stock -->
-          <!-- <td>
+          <td>
             {{ p.stockActual || 0 }}
             <span class="min-stock">/ min: {{ p.stockMinimo || 0 }}</span>
-          </td> -->
+          </td>
 
           <!-- Estado -->
-          <!-- <td>
+          <td>
             <span
-              [ngClass]="p.estado === 'activo' ? 'estado-activo' : 'estado-inactivo'"
+              [ngClass]="p.estado?.toUpperCase() === 'ACTIVO' ? 'estado-activo' : 'estado-inactivo'"
             >
-              {{ p.estado | titlecase }}
+              {{ p.estado || 'INACTIVO' | titlecase }}
             </span>
-          </td> -->
+          </td>
 
           <!-- Imagen -->
           <td>
