@@ -82,9 +82,36 @@ h1 span {
   background: #d81b60;
 }
 
-.msg {
-  margin-top: 10px;
-  color: #4caf50;
+.hint-text {
+  font-size: 11px;
+  color: #e91e63;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.mensaje-container {
+  margin-top: 20px;
+  min-height: 24px;
+}
+
+.msg-error {
+  color: #c62828;
+  background-color: #ffebee;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  border: 1px solid #ffcdd2;
+  text-align: center;
+}
+
+.msg-success {
+  color: #2e7d32;
+  background-color: #e8f5e9;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  border: 1px solid #c8e6c9;
+  text-align: center;
 }
 
 .login-text {

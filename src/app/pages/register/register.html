@@ -7,12 +7,30 @@
       <div class="form-row">
         <div class="form-group">
           <label for="nombre">Nombre</label>
-          <input id="nombre" [(ngModel)]="nombre" name="nombre" required />
+          <input 
+            id="nombre" 
+            [(ngModel)]="nombre" 
+            name="nombre" 
+            required 
+            maxlength="50"
+            (keypress)="soloLetras($event)"
+            (input)="sanitizarLetras('nombre')"
+            placeholder="Ej: María"
+          />
         </div>
 
         <div class="form-group">
           <label for="apellido">Apellido</label>
-          <input id="apellido" [(ngModel)]="apellido" name="apellido" required />
+          <input 
+            id="apellido" 
+            [(ngModel)]="apellido" 
+            name="apellido" 
+            required 
+            maxlength="50"
+            (keypress)="soloLetras($event)"
+            (input)="sanitizarLetras('apellido')"
+            placeholder="Ej: Pérez"
+          />
         </div>
       </div>
 
@@ -25,7 +43,9 @@
           name="email"
           placeholder="ejemplo@yofi.com"
           required
+          maxlength="100"
         />
+        <small class="hint-text" *ngIf="email && !esEmailValido(email)">⚠️ Correo inválido</small>
       </div>
 
       <div class="form-group">
@@ -37,26 +57,55 @@
           name="telefono"
           placeholder="+57 300 000 0000"
           required
+          maxlength="15"
+          (keypress)="soloNumeros($event)"
+          (input)="sanitizarNumeros()"
         />
       </div>
 
-      <div class="form-group">
-        <label for="contrasena">Contraseña</label>
-        <input
-          type="password"
-          id="contrasena"
-          [(ngModel)]="contrasena"
-          name="contrasena"
-          placeholder="••••••••"
-          required
-        />
+      <div class="form-row">
+        <div class="form-group">
+          <label for="contrasena">Contraseña</label>
+          <input
+            type="password"
+            id="contrasena"
+            [(ngModel)]="contrasena"
+            name="contrasena"
+            placeholder="••••••••"
+            required
+            maxlength="30"
+          />
+          <small class="hint-text" *ngIf="contrasena && !esContrasenaSegura(contrasena)">
+            ⚠️ Debe ser segura (8+ caracteres, A, a, 1, *)
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="repetirContrasena">Confirmar Contraseña</label>
+          <input
+            type="password"
+            id="repetirContrasena"
+            [(ngModel)]="repetirContrasena"
+            name="repetirContrasena"
+            placeholder="••••••••"
+            required
+            maxlength="30"
+          />
+          <small class="hint-text" *ngIf="repetirContrasena && contrasena !== repetirContrasena">
+            ⚠️ No coinciden
+          </small>
+        </div>
       </div>
 
       <button type="submit" class="btn-register" [disabled]="cargando">
         {{ cargando ? 'Registrando...' : 'Crear cuenta' }}
       </button>
 
-      <p *ngIf="mensaje" class="msg">{{ mensaje }}</p>
+      <div class="mensaje-container">
+        <p *ngIf="mensaje" [class.msg-error]="mensaje.includes('⚠️') || mensaje.includes('❌')" [class.msg-success]="mensaje.includes('✅')">
+          {{ mensaje }}
+        </p>
+      </div>
     </form>
 
     <p class="login-text">
