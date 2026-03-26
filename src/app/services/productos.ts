@@ -81,12 +81,18 @@ export class ProductosService {
     return this.http.get<Producto[]>(`${this.apiUrl}/precio`, { params });
   }
 
-  /** 🧩 Obtener productos por categoría y precio */
-  getByCategoriaYPrecio(categoriaId: number, min: number, max: number): Observable<Producto[]> {
-    const params = new HttpParams()
-      .set('categoriaId', categoriaId)
-      .set('minPrecio', min)
-      .set('maxPrecio', max);
+  /** 🧩 Obtener productos por filtros combinados (categorías, precio, búsqueda) */
+  getFilterProductos(categoriaIds: number[] | null, min: number | null, max: number | null, search: string | null, sortBy: string | null): Observable<Producto[]> {
+    let params = new HttpParams();
+    
+    if (categoriaIds && categoriaIds.length > 0) {
+      params = params.set('categoriaIds', categoriaIds.join(','));
+    }
+    if (min !== null) params = params.set('minPrecio', min.toString());
+    if (max !== null) params = params.set('maxPrecio', max.toString());
+    if (search) params = params.set('search', search);
+    if (sortBy) params = params.set('sortBy', sortBy);
+
     return this.http.get<Producto[]>(this.apiUrl, { params });
   }
 

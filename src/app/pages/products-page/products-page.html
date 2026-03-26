@@ -1,36 +1,104 @@
-<!-- Products content starts below -->
-
-<!-- 🧴 SECCIÓN DE PRODUCTOS -->
+<!-- 🧴 SECCIÓN DE PRODUCTOS PROFESIONAL -->
 <section class="productos-page">
-  <h1>Nuestros Productos 🌸</h1>
-
-  <!-- 🔎 FILTROS -->
-  <div class="filtros">
-    <select [(ngModel)]="filtroCategoria">
-      <option [ngValue]="null">Todas las categorías</option>
-      <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
-    </select>
-
-    <input type="number" [(ngModel)]="filtroMin" placeholder="Precio mínimo" min="0">
-    <input type="number" [(ngModel)]="filtroMax" placeholder="Precio máximo" min="0">
-
-    <button (click)="aplicarFiltro()">Filtrar</button>
-    <button class="btn-reset" (click)="cargarProductos()">Reiniciar</button>
+  <div class="page-header">
+    <h1>Nuestros Productos 🌸</h1>
+    <p class="results-count" *ngIf="!cargando">{{ productos.length }} productos encontrados</p>
   </div>
 
-  <!-- 💄 GRID DE PRODUCTOS -->
-  <div class="productos-grid">
-    <div *ngFor="let p of productos" class="producto-card" [routerLink]="['/productos', p.id]">
-      <img *ngIf="p.imagenUrl" [src]="productoService.getImagenUrl(p.imagenUrl)" [alt]="p.nombre"
-        class="producto-img" />
-
-
-      <div class="producto-info">
-        <h3>{{ p.nombre }}</h3>
-        <p>{{ p.descripcion }}</p>
-        <p class="precio">💰 {{ p.precio | currency:'COP':'symbol-narrow' }}</p>
-        <small>{{ p.marca }} — {{ p.categoria }}</small>
+  <div class="catalog-container">
+    <!-- 🔎 SIDEBAR DE FILTROS -->
+    <aside class="filters-sidebar" [class.active]="showFilters">
+      <div class="sidebar-header">
+        <h3>Filtros</h3>
+        <button class="btn-close-filters" (click)="showFilters = false">✕</button>
       </div>
-    </div>
+
+      <!-- Filtro por Categorías (Single Select per user request) -->
+      <div class="filter-group">
+        <h4>Categoría</h4>
+        <div class="checkbox-list">
+          <label *ngFor="let cat of categorias" class="checkbox-item">
+            <input 
+              type="checkbox" 
+              [checked]="selectedCategories.includes(cat.id!)"
+              (change)="toggleCategoria(cat.id!)"
+            >
+            <span class="checkmark"></span>
+            {{ cat.nombre }}
+          </label>
+        </div>
+      </div>
+
+      <!-- Filtro por Precio -->
+      <div class="filter-group">
+        <h4>Rango de Precio</h4>
+        <div class="price-inputs">
+          <div class="input-wrapper">
+            <span>$</span>
+            <input type="number" [(ngModel)]="filtroMin" placeholder="Mín" (change)="aplicarFiltro()">
+          </div>
+          <div class="input-wrapper">
+            <span>$</span>
+            <input type="number" [(ngModel)]="filtroMax" placeholder="Máx" (change)="aplicarFiltro()">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-clear-all" (click)="reiniciarFiltros()">Limpiar todo</button>
+    </aside>
+
+    <!-- 💄 CONTENIDO PRINCIPAL -->
+    <main class="products-content">
+      <!-- Barra Superior de Herramientas -->
+      <div class="toolbar">
+        <button class="btn-toggle-filters" (click)="showFilters = !showFilters">
+          <i class="filter-icon"></i> Filtros
+        </button>
+
+        <div class="sort-wrapper">
+          <label for="sort">Ordenar por:</label>
+          <select id="sort" [(ngModel)]="sortBy" (change)="ordenarProductos()">
+            <option value="default">Relevancia</option>
+            <option value="price-asc">Precio: Menor a Mayor</option>
+            <option value="price-desc">Precio: Mayor a Menor</option>
+            <option value="name-asc">Nombre: A-Z</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Estado de Carga -->
+      <div *ngIf="cargando" class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando productos...</p>
+      </div>
+
+      <!-- Grid de Productos -->
+      <div *ngIf="!cargando && productos.length > 0" class="productos-grid">
+        <div *ngFor="let p of productos" class="producto-card" [routerLink]="['/productos', p.id!]">
+          <div class="card-img-wrapper">
+            <img [src]="productoService.getImagenUrl(p.imagenUrl)" [alt]="p.nombre" class="producto-img" />
+            <div class="card-badge" *ngIf="p.stockActual && p.stockActual < 5">¡Últimas unidades!</div>
+          </div>
+
+          <div class="producto-info">
+            <small class="brand-tag">{{ p.marca }}</small>
+            <h3>{{ p.nombre }}</h3>
+            <p class="description">{{ p.descripcion | slice:0:60 }}{{ p.descripcion.length > 60 ? '...' : '' }}</p>
+            <div class="card-footer">
+              <p class="precio">{{ p.precio | currency:'COP':'symbol-narrow':'1.0-0' }}</p>
+              <button class="btn-view">Ver más</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sin Resultados -->
+      <div *ngIf="!cargando && productos.length === 0" class="no-results">
+        <img src="assets/img/no-results.png" alt="No hay resultados" *ngIf="false" />
+        <h3>No encontramos lo que buscas 🌸</h3>
+        <p>Intenta ajustando los filtros o la búsqueda.</p>
+        <button class="btn-primary" (click)="reiniciarFiltros()">Ver todo el catálogo</button>
+      </div>
+    </main>
   </div>
 </section>

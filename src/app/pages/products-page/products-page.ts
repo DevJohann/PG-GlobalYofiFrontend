@@ -19,13 +19,15 @@ export class ProductsPage implements OnInit, OnDestroy {
 
   productos: Producto[] = [];
   categorias: Categoria[] = [];
-  filtroCategoria: number | null = null;
-  filtroMin: number = 0;
-  filtroMax: number = 1000000;
+  selectedCategories: number[] = [];
+  filtroMin: number | null = null;
+  filtroMax: number | null = null;
+  sortBy: string = 'default';
   cargando = false;
   searchQuery: string | null = null;
   userEmail: string | null = null;
   isLoggedIn = false;
+  showFilters = true; // Para colapsar en móvil
 
   private destroy$ = new Subject<void>();
 
@@ -43,17 +45,14 @@ export class ProductsPage implements OnInit, OnDestroy {
   // 🚀 Inicialización
   // =========================================================
   ngOnInit(): void {
-    // ✅ Cargar datos al inicio
     this.cargarCategorias();
-    this.cargarProductos();
     this.checkLoginStatus();
 
-    // ✅ Detectar cuando se navega nuevamente a esta ruta o cambian params
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
       .subscribe(params => {
         this.searchQuery = params['search'] || null;
-        this.cargarProductos();
+        this.aplicarFiltro();
       });
 
     this.router.events
@@ -85,35 +84,6 @@ export class ProductsPage implements OnInit, OnDestroy {
   }
 
   // =========================================================
-  // 📦 Cargar productos
-  // =========================================================
-  cargarProductos(): void {
-    this.cargando = true;
-    this.productoService.getProductos()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: data => {
-          if (this.searchQuery) {
-            const query = this.searchQuery.toLowerCase();
-            this.productos = data.filter(p =>
-              p.nombre.toLowerCase().includes(query) ||
-              p.descripcion.toLowerCase().includes(query) ||
-              p.marca.toLowerCase().includes(query)
-            );
-          } else {
-            this.productos = data;
-          }
-          this.cargando = false;
-          this.cdr.detectChanges();
-        },
-        error: err => {
-          console.error('❌ Error al cargar productos:', err);
-          this.cargando = false;
-        }
-      });
-  }
-
-  // =========================================================
   // 🏷️ Cargar categorías
   // =========================================================
   cargarCategorias(): void {
@@ -131,25 +101,31 @@ export class ProductsPage implements OnInit, OnDestroy {
   // =========================================================
   // 🔍 Filtros de productos
   // =========================================================
+  toggleCategoria(id: number): void {
+    const wasSelected = this.selectedCategories.includes(id);
+    this.selectedCategories = wasSelected ? [] : [id];
+    this.aplicarFiltro();
+  }
+
   aplicarFiltro(): void {
     this.cargando = true;
-    let request$;
+    
+    // Si la búsqueda es solo espacios, tratamos como nula
+    const query = (this.searchQuery && this.searchQuery.trim() !== '') ? this.searchQuery.trim() : null;
 
-    if (this.filtroCategoria && (this.filtroMin || this.filtroMax)) {
-      request$ = this.productoService.getByCategoriaYPrecio(this.filtroCategoria, this.filtroMin, this.filtroMax);
-    } else if (this.filtroCategoria) {
-      request$ = this.productoService.getByCategoria(this.filtroCategoria);
-    } else if (this.filtroMin || this.filtroMax) {
-      request$ = this.productoService.getByPrecio(this.filtroMin, this.filtroMax);
-    } else {
-      request$ = this.productoService.getProductos();
-    }
-
-    request$
+    this.productoService.getFilterProductos(
+      this.selectedCategories.length > 0 ? this.selectedCategories : null,
+      this.filtroMin,
+      this.filtroMax,
+      query,
+      this.sortBy
+    )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: data => {
           this.productos = data;
+          // El backend ya ordena, pero podemos mantener una validación extra
+          this.ordenarProductos();
           this.cargando = false;
           this.cdr.detectChanges();
         },
@@ -158,6 +134,25 @@ export class ProductsPage implements OnInit, OnDestroy {
           this.cargando = false;
         }
       });
+  }
+
+  ordenarProductos(): void {
+    if (this.sortBy === 'price-asc') {
+      this.productos.sort((a, b) => a.precio - b.precio);
+    } else if (this.sortBy === 'price-desc') {
+      this.productos.sort((a, b) => b.precio - a.precio);
+    } else if (this.sortBy === 'name-asc') {
+      this.productos.sort((a, b) => a.nombre.localeCompare(b.nombre));
+    }
+  }
+
+  reiniciarFiltros(): void {
+    this.selectedCategories = [];
+    this.filtroMin = null;
+    this.filtroMax = null;
+    this.sortBy = 'default';
+    this.searchQuery = null;
+    this.aplicarFiltro();
   }
 
   // =========================================================
