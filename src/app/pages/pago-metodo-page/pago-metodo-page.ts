@@ -19,9 +19,20 @@ export class PagoMetodoPageComponent implements OnInit {
     userEmail: string | null = null;
     carrito: any = null;
     
-    // Información de envío
+    // Información de envío y facturación
     direccion: string = '';
     ciudad: string = '';
+    tipoDocumento: string = '';
+    numeroDocumento: string = '';
+    observaciones: string = '';
+
+    tiposDocumento = [
+        { id: 'CC', nombre: 'Cédula de Ciudadanía' },
+        { id: 'CE', nombre: 'Cédula de Extranjería' },
+        { id: 'TI', nombre: 'Tarjeta de Identidad' },
+        { id: 'NIT', nombre: 'NIT (Empresas)' },
+        { id: 'PASAPORTE', nombre: 'Pasaporte' }
+    ];
 
     metodos = [
         { id: 'RECIBO_PAGO', nombre: 'Pago al recibir', descripcion: 'Paga en efectivo cuando recibas tu pedido en la puerta de tu casa.', icono: '🏠' },
@@ -60,6 +71,8 @@ export class PagoMetodoPageComponent implements OnInit {
                     next: (profile) => {
                         if (profile.direccion) this.direccion = profile.direccion;
                         if (profile.ciudad) this.ciudad = profile.ciudad;
+                        if (profile.tipoDocumento) this.tipoDocumento = profile.tipoDocumento;
+                        if (profile.numeroDocumento) this.numeroDocumento = profile.numeroDocumento;
                         this.cdr.detectChanges();
                     }
                 });
@@ -85,7 +98,15 @@ export class PagoMetodoPageComponent implements OnInit {
         const userId = user?.id || user?.clienteId;
 
         if (userId) {
-            this.carritoService.realizarPedido(userId, this.metodoSeleccionado, this.direccion, this.ciudad).subscribe({
+            this.carritoService.realizarPedido(
+                userId, 
+                this.metodoSeleccionado, 
+                this.direccion, 
+                this.ciudad,
+                this.tipoDocumento,
+                this.numeroDocumento,
+                this.observaciones
+            ).subscribe({
                 next: (res: any) => {
                     this.notificationService.success('✨ ¡Pedido realizado con éxito! Gracias por confiar en Global Yofi.');
                     this.router.navigate(['/productos']);

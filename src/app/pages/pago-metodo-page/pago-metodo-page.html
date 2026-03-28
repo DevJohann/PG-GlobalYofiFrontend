@@ -16,12 +16,27 @@
                 
                 <div class="form-grid">
                     <div class="form-group">
+                        <label for="tipoDocumento">Tipo de Documento</label>
+                        <select id="tipoDocumento" [(ngModel)]="tipoDocumento" name="tipoDocumento" required>
+                            <option value="" disabled selected>Seleccione uno...</option>
+                            <option *ngFor="let tipo of tiposDocumento" [value]="tipo.id">{{ tipo.nombre }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="numeroDocumento">Número de Documento</label>
+                        <input type="text" id="numeroDocumento" [(ngModel)]="numeroDocumento" name="numeroDocumento" placeholder="Ej: 1020304050" required>
+                    </div>
+                    <div class="form-group">
                         <label for="ciudad">Ciudad</label>
                         <input type="text" id="ciudad" [(ngModel)]="ciudad" name="ciudad" placeholder="Ej: Bogotá" required>
                     </div>
                     <div class="form-group">
-                        <label for="direccion">Dirección completa</label>
+                        <label for="direccion">Dirección</label>
                         <input type="text" id="direccion" [(ngModel)]="direccion" name="direccion" placeholder="Ej: Calle 123 #45-67" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="observaciones">Detalle de la dirección / Observaciones</label>
+                        <textarea id="observaciones" [(ngModel)]="observaciones" name="observaciones" placeholder="Ej: Apartamento 501, Conjunto Residencial, indicaciones adicionales..." rows="3"></textarea>
                     </div>
                 </div>
             </section>
@@ -69,7 +84,7 @@
 
                 <div class="pago-actions">
                     <button class="btn btn-primary btn-block" 
-                            [disabled]="!metodoSeleccionado || !direccion || !ciudad" 
+                            [disabled]="!metodoSeleccionado || !direccion || !ciudad || !tipoDocumento || !numeroDocumento" 
                             (click)="finalizarPedido()">
                         Finalizar Pedido ✨
                     </button>

@@ -96,12 +96,15 @@ export class CarritoService {
     }
 
     // Realizar pedido (Checkout)
-    realizarPedido(clientId: number, paymentMethod: string, address: string, city: string): Observable<any> {
+    realizarPedido(clientId: number, paymentMethod: string, address: string, city: string, docType: string, docNumber: string, obs: string): Observable<any> {
         return this.http.post<any>(`${this.orderApiUrl}/realizar`, {
             clienteId: clientId,
             metodoPago: paymentMethod,
             direccion: address,
-            ciudad: city
+            ciudad: city,
+            tipoDocumento: docType,
+            numeroDocumento: docNumber,
+            observaciones: obs
         }).pipe(
             tap(() => this.vaciarEstado())
         );

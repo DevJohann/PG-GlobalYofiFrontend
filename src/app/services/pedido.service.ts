@@ -15,6 +15,9 @@ export interface PedidoAdminDTO {
   estado: string;
   direccion: string;
   ciudad: string;
+  tipoDocumento?: string;
+  numeroDocumento?: string;
+  observaciones?: string;
   items: LineaPedidoDTO[];
 }
 

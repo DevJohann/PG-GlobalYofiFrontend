@@ -67,12 +67,14 @@
             <h3>👤 Información del Cliente</h3>
             <p><strong>Nombre:</strong> {{ pedidoSeleccionado.nombreCliente }}</p>
             <p><strong>Email:</strong> {{ pedidoSeleccionado.emailCliente }}</p>
+            <p *ngIf="pedidoSeleccionado.tipoDocumento"><strong>Documento:</strong> {{ pedidoSeleccionado.tipoDocumento }} - {{ pedidoSeleccionado.numeroDocumento }}</p>
           </div>
           
           <div class="info-card">
             <h3>📍 Dirección de Envío</h3>
             <p><strong>Dirección:</strong> {{ pedidoSeleccionado.direccion }}</p>
             <p><strong>Ciudad:</strong> {{ pedidoSeleccionado.ciudad }}</p>
+            <p *ngIf="pedidoSeleccionado.observaciones"><strong>Indicaciones:</strong> {{ pedidoSeleccionado.observaciones }}</p>
           </div>
 
           <div class="info-card">
