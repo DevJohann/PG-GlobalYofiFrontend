@@ -67,6 +67,7 @@
 .badge.pendiente { background: #fff3e0; color: #ef6c00; }
 .badge.procesando { background: #e3f2fd; color: #1565c0; }
 .badge.enviado { background: #f3e5f5; color: #7b1fa2; }
+.badge.reparto { background: #e1f5fe; color: #0288d1; }
 .badge.entregado { background: #e8f5e9; color: #2e7d32; }
 .badge.cancelado { background: #ffebee; color: #c62828; }
 

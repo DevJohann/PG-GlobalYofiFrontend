@@ -96,4 +96,16 @@ export class PedidosCrudPage implements OnInit {
   extraerId(pedido: PedidoAdminDTO): number {
     return pedido.id || pedido.idPedido || pedido.pedidoId || 0;
   }
+
+  getStatusClass(estado: string): string {
+    if (!estado) return 'pendiente';
+    const e = estado.toLowerCase();
+    if (e.includes('pendiente')) return 'pendiente';
+    if (e.includes('preparando')) return 'procesando';
+    if (e.includes('enviado')) return 'enviado';
+    if (e.includes('reparto')) return 'reparto';
+    if (e.includes('entregado')) return 'entregado';
+    if (e.includes('cancelado')) return 'cancelado';
+    return 'pendiente';
+  }
 }

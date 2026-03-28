@@ -16,6 +16,7 @@ export class NavbarComponent implements OnInit {
   userEmail: string | null = null;
   isLoggedIn = false;
   searchQuery = '';
+  showUserMenu = false;
 
   constructor(
     private authService: AuthService,

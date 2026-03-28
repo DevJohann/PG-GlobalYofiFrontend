@@ -15,13 +15,42 @@
     </ul>
 
     <div class="navbar-actions">
-      <button class="btn-cart" routerLink="/carrito">
+      <!-- 🛒 CARRITO (Solo fuera del dropdown cuando NO ha iniciado sesión) -->
+      <button class="btn-cart" routerLink="/carrito" *ngIf="!isLoggedIn">
         🛒 <span *ngIf="carritoService.getTotalItems() > 0" class="cart-badge">{{ carritoService.getTotalItems() }}</span>
       </button>
 
       <div class="navbar-auth" *ngIf="isLoggedIn; else loginButtons">
-        <span class="user-email">📧 {{ userEmail }}</span>
-        <button class="btn btn-outline" (click)="logout()">Cerrar sesión</button>
+        <div class="user-dropdown">
+          <button class="btn-user" (click)="showUserMenu = !showUserMenu">
+            <span class="material-icons">account_circle</span>
+            <span class="user-email-text">{{ userEmail }}</span>
+            <span class="material-icons dropdown-arrow">expand_more</span>
+          </button>
+          
+          <div class="dropdown-menu" [class.show]="showUserMenu">
+            <!-- 🛒 Carrito dentro del menú -->
+            <a routerLink="/carrito" class="dropdown-item" (click)="showUserMenu = false">
+              <div class="cart-icon-wrapper">
+                <span class="material-icons">shopping_cart</span>
+                <span *ngIf="carritoService.getTotalItems() > 0" class="cart-dot"></span>
+              </div>
+              Mi Carrito ({{ carritoService.getTotalItems() }})
+            </a>
+            
+            <a routerLink="/mis-pedidos" class="dropdown-item" (click)="showUserMenu = false">
+              <span class="material-icons">inventory_2</span>
+              Mis Pedidos
+            </a>
+            
+            <div class="dropdown-divider"></div>
+            
+            <button class="dropdown-item logout" (click)="logout(); showUserMenu = false">
+              <span class="material-icons">logout</span>
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
       </div>
 
       <ng-template #loginButtons>

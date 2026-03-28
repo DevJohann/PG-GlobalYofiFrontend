@@ -43,31 +43,26 @@ export class PedidoService {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
-  private getAuthHeaders(): HttpHeaders {
-    if (!this.isBrowser) return new HttpHeaders();
-    
-    const token = localStorage.getItem('token');
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
-
   // Obtener todos los pedidos (Vista Admin)
   getAllPedidos(): Observable<PedidoAdminDTO[]> {
-    return this.http.get<PedidoAdminDTO[]>(this.apiUrl, { headers: this.getAuthHeaders() });
+    return this.http.get<PedidoAdminDTO[]>(this.apiUrl);
   }
 
   // Obtener detalle de un pedido
   getPedidoById(id: number): Observable<PedidoAdminDTO> {
-    return this.http.get<PedidoAdminDTO>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
+    return this.http.get<PedidoAdminDTO>(`${this.apiUrl}/${id}`);
+  }
+
+  // Obtener pedidos del cliente autenticado
+  getMisPedidos(): Observable<PedidoAdminDTO[]> {
+    return this.http.get<PedidoAdminDTO[]>(`${this.apiUrl}/mis-pedidos`);
   }
 
   // Actualizar estado del pedido (Ej: PENDIENTE -> ENVIADO)
   actualizarEstado(id: number, nuevoEstado: string): Observable<PedidoAdminDTO> {
     return this.http.put<PedidoAdminDTO>(
       `${this.apiUrl}/${id}/estado`, 
-      { estado: nuevoEstado },
-      { headers: this.getAuthHeaders() }
+      { estado: nuevoEstado }
     );
   }
 }

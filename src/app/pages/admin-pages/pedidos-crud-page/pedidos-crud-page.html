@@ -35,7 +35,7 @@
         <td class="total">{{ pedido.total | currency }}</td>
         <td>{{ pedido.metodoPago }}</td>
         <td>
-          <span class="badge" [ngClass]="pedido.estado.toLowerCase()">
+          <span class="badge" [ngClass]="getStatusClass(pedido.estado)">
             {{ pedido.estado }}
           </span>
         </td>
@@ -58,7 +58,7 @@
       </div>
 
       <div class="modal-body">
-        <div class="status-banner" [ngClass]="pedidoSeleccionado.estado.toLowerCase()">
+        <div class="status-banner" [ngClass]="getStatusClass(pedidoSeleccionado.estado)">
           Estado Actual: <strong>{{ pedidoSeleccionado.estado }}</strong>
         </div>
 
@@ -82,11 +82,12 @@
             <p><strong>Método:</strong> {{ pedidoSeleccionado.metodoPago }}</p>
             <label for="cambiarEstado"><strong>Cambiar Estado:</strong></label>
             <select id="cambiarEstado" #estadoSelect [value]="pedidoSeleccionado.estado" (change)="cambiarEstado(extraerId(pedidoSeleccionado), estadoSelect.value)">
-              <option value="PENDIENTE">PENDIENTE</option>
-              <option value="PROCESANDO">PROCESANDO</option>
-              <option value="ENVIADO">ENVIADO</option>
-              <option value="ENTREGADO">ENTREGADO</option>
-              <option value="CANCELADO">CANCELADO</option>
+              <option value="Pendiente de envío">Pendiente de envío</option>
+              <option value="Preparando envío">Preparando envío</option>
+              <option value="Enviado">Enviado</option>
+              <option value="En reparto">En reparto</option>
+              <option value="Entregado">Entregado</option>
+              <option value="Cancelado">Cancelado</option>
             </select>
           </div>
         </div>

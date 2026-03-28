@@ -1,0 +1,123 @@
+.tracking-container {
+  padding: 30px 0;
+  width: 100%;
+}
+
+.tracking-timeline {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  padding: 0 10px;
+}
+
+.tracking-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.step-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 4px solid #fff;
+  box-shadow: 0 0 0 1px #ddd;
+  z-index: 2;
+}
+
+.step-icon span {
+  font-size: 16px;
+  color: #fff;
+}
+
+.step-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #999;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.step-line {
+  position: absolute;
+  top: 16px;
+  right: 50%;
+  width: 100%;
+  height: 3px;
+  background-color: #eee;
+  z-index: 1;
+}
+
+/* 🟢 Estados: COMPLETADO */
+.tracking-step.completed .step-icon {
+  background-color: #8bc34a; /* Verde Amazon / Eco */
+  box-shadow: 0 0 0 1px #8bc34a;
+}
+
+.tracking-step.completed .step-line {
+  background-color: #8bc34a;
+}
+
+.tracking-step.completed .step-label {
+  color: #666;
+}
+
+/* 💖 Estado: ACTIVO (Punto actual) */
+.tracking-step.active .step-icon {
+  background-color: #e91e63 !important;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #e91e63;
+  transform: scale(1.1);
+}
+
+.tracking-step.active .step-line {
+  background-color: #8bc34a; /* La línea que llega a él es verde */
+}
+
+.tracking-step.active .step-label {
+  color: #e91e63;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* Ocultar iconos en pasos no alcanzados para limpiar la UI */
+.tracking-step:not(.completed):not(.active) .step-icon span {
+  display: none;
+}
+
+/* Animación de pulso para el estado activo */
+.tracking-step.active .step-icon::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(233, 30, 99, 0.4);
+  animation: pulse 2s infinite;
+  z-index: -1;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@media (max-width: 600px) {
+  .step-label {
+    font-size: 0.7rem;
+  }
+  .step-icon {
+    width: 24px;
+    height: 24px;
+    top: 12px;
+  }
+}

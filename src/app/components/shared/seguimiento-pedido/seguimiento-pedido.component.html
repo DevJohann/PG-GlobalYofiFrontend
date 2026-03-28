@@ -1,0 +1,13 @@
+<div class="tracking-container">
+  <div class="tracking-timeline">
+    <div *ngFor="let est of estados; let i = index" class="tracking-step" 
+         [class.completed]="isCompleted(i)" 
+         [class.active]="isCurrent(i)">
+      <div class="step-line" *ngIf="i > 0"></div>
+      <div class="step-icon">
+        <span class="material-icons" *ngIf="isCompleted(i) || isCurrent(i)">{{ est.icon }}</span>
+      </div>
+      <div class="step-label">{{ est.label }}</div>
+    </div>
+  </div>
+</div>
