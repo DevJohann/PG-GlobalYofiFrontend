@@ -26,6 +26,9 @@ export class PagoMetodoPageComponent implements OnInit {
     numeroDocumento: string = '';
     observaciones: string = '';
 
+    // Character limits for fields
+    readonly MAX_CHARS = 50;
+
     tiposDocumento = [
         { id: 'CC', nombre: 'Cédula de Ciudadanía' },
         { id: 'CE', nombre: 'Cédula de Extranjería' },
@@ -36,9 +39,14 @@ export class PagoMetodoPageComponent implements OnInit {
 
     metodos = [
         { id: 'RECIBO_PAGO', nombre: 'Pago al recibir', descripcion: 'Paga en efectivo cuando recibas tu pedido en la puerta de tu casa.', icono: '🏠' },
-        { id: 'TRANSFERENCIA', nombre: 'Transferencia Bancaria', descripcion: 'Realiza una transferencia a nuestra cuenta y envíanos el comprobante.', icono: '🏦' },
-        { id: 'RECOGER_TIENDA', nombre: 'Recoger en Tienda', descripcion: 'Ven por tu pedido directamente a nuestro local físico.', icono: '🛍️' }
+        { id: 'TRANSFERENCIA', nombre: 'Transferencia / Nequi', descripcion: 'Realiza una transferencia a nuestra cuenta y envíanos el comprobante.', icono: '🏦' },
+        { id: 'RECOGER_TIENDA', nombre: 'Recoger en Tienda', descripcion: 'Ven por tu pedido directamente a nuestro local físico. No se requiere dirección de envío.', icono: '🛍️' }
     ];
+
+    // Whether address fields should be shown (hidden for store pickup)
+    get mostrarDireccion(): boolean {
+        return this.metodoSeleccionado !== 'RECOGER_TIENDA';
+    }
 
     constructor(
         private carritoService: CarritoService,
@@ -88,28 +96,57 @@ export class PagoMetodoPageComponent implements OnInit {
         this.cdr.detectChanges();
     }
 
-    finalizarPedido(): void {
+    // Enforce max character length on model changes
+    limitarCampo(field: 'direccion' | 'ciudad' | 'numeroDocumento' | 'observaciones'): void {
+        if (this[field] && this[field].length > this.MAX_CHARS) {
+            (this as any)[field] = this[field].substring(0, this.MAX_CHARS);
+        }
+    }
+
+    async finalizarPedido(): Promise<void> {
         if (!this.metodoSeleccionado) {
             this.notificationService.info('Por favor selecciona un método de pago.');
             return;
+        }
+
+        // Validate required document fields (always required)
+        if (!this.tipoDocumento || !this.numeroDocumento) {
+            this.notificationService.error('⚠️ Por favor diligencia tu tipo y número de documento para continuar.');
+            return;
+        }
+
+        // Validate address fields only when NOT store pickup
+        if (this.mostrarDireccion) {
+            const camposFaltantes: string[] = [];
+            if (!this.ciudad.trim()) camposFaltantes.push('Ciudad');
+            if (!this.direccion.trim()) camposFaltantes.push('Dirección');
+
+            if (camposFaltantes.length > 0) {
+                this.notificationService.error(`⚠️ Por favor completa los siguientes campos: ${camposFaltantes.join(', ')}.`);
+                return;
+            }
         }
 
         const user = this.authService.getUser();
         const userId = user?.id || user?.clienteId;
 
         if (userId) {
+            // For store pickup, send empty address/city so backend knows
+            const direccionFinal = this.mostrarDireccion ? this.direccion : 'RECOGER_TIENDA';
+            const ciudadFinal = this.mostrarDireccion ? this.ciudad : 'TIENDA';
+
             this.carritoService.realizarPedido(
                 userId, 
                 this.metodoSeleccionado, 
-                this.direccion, 
-                this.ciudad,
+                direccionFinal, 
+                ciudadFinal,
                 this.tipoDocumento,
                 this.numeroDocumento,
                 this.observaciones
             ).subscribe({
                 next: (res: any) => {
-                    this.notificationService.success('✨ ¡Pedido realizado con éxito! Gracias por confiar en Global Yofi.');
-                    this.router.navigate(['/productos']);
+                    const pedidoId = res?.id || res?.idPedido;
+                    this.router.navigate(['/confirmacion-pago', pedidoId]);
                 },
                 error: (err: any) => {
                     console.error('Error al realizar pedido', err);

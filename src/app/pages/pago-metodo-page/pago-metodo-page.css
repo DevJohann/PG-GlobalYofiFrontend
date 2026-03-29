@@ -254,3 +254,50 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ━━━━━━━━━━━━ CHAR COUNTER ━━━━━━━━━━━━ */
+.char-count {
+    font-size: 0.75rem;
+    color: #aaa;
+    text-align: right;
+    margin-top: -4px;
+}
+
+.char-count.warn {
+    color: #e91e63;
+    font-weight: 600;
+}
+
+.form-group select {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-family: inherit;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: var(--pink-main);
+    box-shadow: 0 0 0 3px rgba(244, 166, 184, 0.1);
+}
+
+.form-group textarea {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-family: inherit;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--pink-main);
+    box-shadow: 0 0 0 3px rgba(244, 166, 184, 0.1);
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}

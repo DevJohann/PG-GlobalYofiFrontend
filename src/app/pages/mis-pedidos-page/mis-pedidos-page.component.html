@@ -42,11 +42,20 @@
         </div>
 
         <div class="pedido-details-grid">
-          <div class="detail-item">
+          <!-- Address: only shown for non-store-pickup -->
+          <div class="detail-item" *ngIf="pedido.metodoPago !== 'RECOGER_TIENDA' && pedido.direccion && pedido.direccion !== 'RECOGER_TIENDA'">
             <span class="material-icons">location_on</span>
             <div>
               <span class="label">Dirección de entrega</span>
               <span class="value">{{ pedido.direccion }}, {{ pedido.ciudad }}</span>
+            </div>
+          </div>
+          <!-- Store pickup indication -->
+          <div class="detail-item" *ngIf="pedido.metodoPago === 'RECOGER_TIENDA' || pedido.direccion === 'RECOGER_TIENDA'">
+            <span class="material-icons">store</span>
+            <div>
+              <span class="label">Modalidad</span>
+              <span class="value">Recoger en tienda</span>
             </div>
           </div>
           <div class="detail-item">
@@ -67,6 +76,14 @@
               <span class="item-price">{{ item.subtotal | currency }}</span>
             </li>
           </ul>
+        </div>
+
+        <!-- Cancel button — only for eligible orders -->
+        <div class="pedido-acciones" *ngIf="canCancelar(pedido)">
+          <button class="btn-cancelar" (click)="cancelarPedido(pedido)">
+            <span class="material-icons">cancel</span>
+            Cancelar Pedido
+          </button>
         </div>
       </div>
     </div>

@@ -80,8 +80,31 @@
           <div class="info-card">
             <h3>💳 Pago y Gestión</h3>
             <p><strong>Método:</strong> {{ pedidoSeleccionado.metodoPago }}</p>
+
+            <!-- Comprobante Download Link -->
+            <div class="comprobante-box" *ngIf="pagoSeleccionado?.comprobanteUrl">
+              <a [href]="'http://localhost:8080' + pagoSeleccionado.comprobanteUrl"
+                 target="_blank"
+                 class="btn-comprobante">
+                📄 Ver Comprobante de Pago
+              </a>
+            </div>
+            
+            <!-- Validar Pago button (visible when awaiting verification) -->
+            <div class="validar-pago-box" *ngIf="pedidoSeleccionado.estado === 'Pendiente Verificación Pago'">
+              <p class="validar-info">⏳ El cliente subió un comprobante. Verifica y aprueba el pago.</p>
+              <button class="btn-validar" (click)="validarPago(extraerId(pedidoSeleccionado))">
+                ✅ Validar Pago
+              </button>
+            </div>
+
             <label for="cambiarEstado"><strong>Cambiar Estado:</strong></label>
             <select id="cambiarEstado" #estadoSelect [value]="pedidoSeleccionado.estado" (change)="cambiarEstado(extraerId(pedidoSeleccionado), estadoSelect.value)">
+              <!-- Payment states -->
+              <option value="Pendiente de Pago">Pendiente de Pago</option>
+              <option value="Pendiente Verificación Pago">Pendiente Verificación Pago</option>
+              <option value="Pagado">Pagado</option>
+              <!-- Logistics states -->
               <option value="Pendiente de envío">Pendiente de envío</option>
               <option value="Preparando envío">Preparando envío</option>
               <option value="Enviado">Enviado</option>

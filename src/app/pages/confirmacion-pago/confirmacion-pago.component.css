@@ -1,0 +1,380 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at top left, #fce4ec 0%, #f8f8f8 60%);
+  padding: 80px 20px 40px;
+  font-family: 'Inter', sans-serif;
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.confirmacion-container {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ━━━━━━━━━━━━ HEADER ━━━━━━━━━━━━ */
+.confirmacion-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.success-icon {
+  font-size: 4rem;
+  margin-bottom: 12px;
+}
+
+.confirmacion-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin: 0 0 10px;
+}
+
+.referencia-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #e91e63, #ff5252);
+  color: white;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.monto-total {
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.monto-total strong {
+  color: #e91e63;
+  font-size: 1.3rem;
+}
+
+/* ━━━━━━━━━━━━ INSTRUCTION CARD ━━━━━━━━━━━━ */
+.instrucciones-card {
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 8px 30px rgba(233, 30, 99, 0.08);
+  border: 1px solid #fce4ec;
+  margin-bottom: 20px;
+}
+
+.instrucciones-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin-bottom: 8px;
+}
+
+.instrucciones-card h2 .material-icons {
+  color: #e91e63;
+}
+
+.instrucciones-desc {
+  color: #777;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* ━━━━━━━━━━━━ PAYMENT DATA ROWS ━━━━━━━━━━━━ */
+.datos-pago {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #fdf6f9;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.dato-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.dato-row .material-icons {
+  color: #e91e63;
+  font-size: 1.4rem;
+}
+
+.dato-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dato-value {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.dato-value.monto {
+  color: #e91e63;
+  font-size: 1.1rem;
+}
+
+.dato-value.ref {
+  font-family: 'Courier New', monospace;
+  background: #fce4ec;
+  padding: 2px 8px;
+  border-radius: 6px;
+  color: #c2185b;
+}
+
+/* ━━━━━━━━━━━━ QR CODE ━━━━━━━━━━━━ */
+.qr-section {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.qr-label {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.qr-image {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  border-radius: 16px;
+  border: 2px solid #fce4ec;
+  padding: 10px;
+}
+
+.qr-placeholder {
+  width: 180px;
+  height: 180px;
+  border: 2px dashed #f8bbd0;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  color: #bbb;
+}
+
+.qr-placeholder .material-icons {
+  font-size: 4rem;
+  color: #f8bbd0;
+}
+
+/* ━━━━━━━━━━━━ UPLOAD SECTION ━━━━━━━━━━━━ */
+.upload-section {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 24px;
+}
+
+.upload-section h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.upload-section p {
+  color: #777;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.upload-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 2px dashed #f8bbd0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  color: #e91e63;
+  font-weight: 600;
+  transition: all 0.3s;
+  margin-bottom: 16px;
+}
+
+.upload-label:hover {
+  background: #fce4ec;
+}
+
+.preview-box {
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 1px solid #fce4ec;
+}
+
+.preview-box img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+/* ━━━━━━━━━━━━ STATUS CARD ━━━━━━━━━━━━ */
+.estado-card {
+  text-align: center;
+  padding: 40px 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.estado-card.verificacion {
+  background: linear-gradient(135deg, #fff8e1, #fffde7);
+  border: 1px solid #ffe082;
+}
+
+.estado-card .material-icons {
+  font-size: 3rem;
+  color: #ffa000;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.estado-card h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.estado-card p {
+  color: #777;
+}
+
+.ref-text {
+  margin-top: 16px;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+/* ━━━━━━━━━━━━ INFO BOX ━━━━━━━━━━━━ */
+.info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #e3f2fd;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 20px;
+  color: #1565c0;
+  font-size: 0.9rem;
+}
+
+.info-box .material-icons {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+/* ━━━━━━━━━━━━ BUTTONS ━━━━━━━━━━━━ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  transition: all 0.3s;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #e91e63, #ff5252);
+  color: white;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 30, 99, 0.3);
+}
+
+.btn-whatsapp {
+  background: #25d366;
+  color: white;
+  width: 100%;
+  margin-top: 20px;
+  border: none;
+  font-size: 1rem;
+}
+
+.btn-whatsapp:hover {
+  background: #128c7e;
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: white;
+  border: 2px solid #e91e63;
+  color: #e91e63;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #888;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.bottom-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+  text-align: center;
+}
+
+/* ━━━━━━━━━━━━ LOAD/ERROR ━━━━━━━━━━━━ */
+.loading-box, .error-box {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.spinner {
+  border: 4px solid #fce4ec;
+  border-top: 4px solid #e91e63;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-box .material-icons {
+  font-size: 3rem;
+  color: #e91e63;
+  display: block;
+  margin-bottom: 16px;
+}

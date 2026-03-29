@@ -177,3 +177,37 @@
   font-weight: 600;
   color: #333;
 }
+
+/* ━━━━━━━━━━━━ CANCEL ORDER ━━━━━━━━━━━━ */
+.pedido-acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px dashed #eee;
+}
+
+.btn-cancelar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 2px solid #e91e63;
+  color: #e91e63;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-cancelar:hover {
+  background: #e91e63;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.btn-cancelar .material-icons {
+  font-size: 1.1rem;
+}

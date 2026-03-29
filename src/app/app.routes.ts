@@ -20,6 +20,8 @@ import { ProductDetail } from './pages/product-detail/product-detail';
 import { CarritoPageComponent } from './pages/carrito-page/carrito-page';
 import { PagoMetodoPageComponent } from './pages/pago-metodo-page/pago-metodo-page';
 import { MisPedidosPageComponent } from './pages/mis-pedidos-page/mis-pedidos-page.component';
+import { ConfirmacionPagoComponent } from './pages/confirmacion-pago/confirmacion-pago.component';
+import { ConfigPagosPageComponent } from './pages/admin-pages/config-pagos-page/config-pagos-page.component';
 
 export const routes: Routes = [
     { path: '', component: Landing },
@@ -27,6 +29,7 @@ export const routes: Routes = [
     { path: 'productos/:id', component: ProductDetail },
     { path: 'carrito', component: CarritoPageComponent },
     { path: 'pago-metodo', component: PagoMetodoPageComponent },
+    { path: 'confirmacion-pago/:pedidoId', component: ConfirmacionPagoComponent },
     { path: 'mis-pedidos', component: MisPedidosPageComponent },
     { path: 'login', component: Login },
     { path: 'registro', component: Register },
@@ -46,7 +49,8 @@ export const routes: Routes = [
             { path: 'pedidos-crud', component: PedidosCrudPage },
             { path: 'categorias', component: CategoriasCrudPage },
             { path: 'proveedores', component: ProveedoresCrudPage },
-            { path: 'clientes-crud', component: ClientesCrudPage }
+            { path: 'clientes-crud', component: ClientesCrudPage },
+            { path: 'config-pagos', component: ConfigPagosPageComponent }
         ]
     }
 ];

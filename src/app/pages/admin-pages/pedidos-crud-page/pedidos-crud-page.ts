@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PedidoService, PedidoAdminDTO } from '../../../services/pedido.service';
+import { PagoService } from '../../../services/pago.service';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../../services/notification.service';
 
@@ -14,11 +15,13 @@ import { NotificationService } from '../../../services/notification.service';
 export class PedidosCrudPage implements OnInit {
   pedidos: PedidoAdminDTO[] = [];
   pedidoSeleccionado: PedidoAdminDTO | null = null;
+  pagoSeleccionado: any = null;
   cargando = false;
   cargandoDetalle = false;
 
   constructor(
     private pedidoService: PedidoService,
+    private pagoService: PagoService,
     private cdr: ChangeDetectorRef,
     private notificationService: NotificationService
   ) {}
@@ -57,6 +60,20 @@ export class PedidosCrudPage implements OnInit {
       next: (fullPedido) => {
         this.pedidoSeleccionado = fullPedido;
         this.cargandoDetalle = false;
+        
+        // Fetch payment details to get comprobanteUrl if available
+        this.pagoSeleccionado = null;
+        this.pagoService.obtenerPago(id).subscribe({
+          next: (pagoData) => {
+            this.pagoSeleccionado = pagoData;
+            this.cdr.detectChanges();
+          },
+          error: () => {
+            // No payment record exists for this order
+            this.cdr.detectChanges();
+          }
+        });
+
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -69,6 +86,7 @@ export class PedidosCrudPage implements OnInit {
 
   cerrarDetalles(): void {
     this.pedidoSeleccionado = null;
+    this.pagoSeleccionado = null;
     this.cdr.detectChanges();
   }
 
@@ -93,6 +111,24 @@ export class PedidosCrudPage implements OnInit {
     });
   }
 
+  validarPago(pedidoId: number): void {
+    this.pagoService.validarPago(pedidoId).subscribe({
+      next: () => {
+        this.notificationService.success(`✅ Pago del pedido #${pedidoId} validado. El estado ahora es "Pagado".`);
+        this.cargarPedidos();
+        if (this.pedidoSeleccionado) {
+          this.pedidoSeleccionado.estado = 'Pagado';
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        const msg = err.error?.message || 'No se pudo validar el pago.';
+        this.notificationService.error(`🚨 ${msg}`);
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
   extraerId(pedido: PedidoAdminDTO): number {
     return pedido.id || pedido.idPedido || pedido.pedidoId || 0;
   }
@@ -100,6 +136,8 @@ export class PedidosCrudPage implements OnInit {
   getStatusClass(estado: string): string {
     if (!estado) return 'pendiente';
     const e = estado.toLowerCase();
+    if (e.includes('verificaci')) return 'verificacion';
+    if (e.includes('pagado')) return 'pagado';
     if (e.includes('pendiente')) return 'pendiente';
     if (e.includes('preparando')) return 'procesando';
     if (e.includes('enviado')) return 'enviado';

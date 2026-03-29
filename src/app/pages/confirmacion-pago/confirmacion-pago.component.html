@@ -1,0 +1,216 @@
+<div class="confirmacion-container fade-in" *ngIf="!loading && !error && pago">
+
+  <!-- Header con Referencia -->
+  <div class="confirmacion-header">
+    <div class="success-icon">🎉</div>
+    <h1>¡Pedido Confirmado!</h1>
+    <p class="referencia-badge">{{ pago.referencia }}</p>
+    <p class="monto-total">Total: <strong>{{ pago.totalPedido | number:'1.0-0' }} COP</strong></p>
+  </div>
+
+  <!-- ════════════════════════ TRANSFERENCIA / NEQUI ════════════════════════ -->
+  <div *ngIf="esTransferencia">
+    
+    <!-- Instrucciones si aún no subió comprobante -->
+    <div *ngIf="!comprobanteEnviado" class="instrucciones-card">
+      <h2><span class="material-icons">account_balance_wallet</span> Instrucciones de Pago</h2>
+      <p class="instrucciones-desc">Realiza la transferencia por <strong>Nequi</strong> a los siguientes datos y luego sube el comprobante.</p>
+
+      <div class="datos-pago">
+        <div class="dato-row">
+          <span class="material-icons">phone</span>
+          <div>
+            <span class="dato-label">Número Nequi</span>
+            <span class="dato-value">{{ nequiNumero }}</span>
+          </div>
+        </div>
+        <div class="dato-row">
+          <span class="material-icons">person</span>
+          <div>
+            <span class="dato-label">A nombre de</span>
+            <span class="dato-value">{{ nequiNombre }}</span>
+          </div>
+        </div>
+        <div class="dato-row">
+          <span class="material-icons">attach_money</span>
+          <div>
+            <span class="dato-label">Valor a pagar</span>
+            <span class="dato-value monto">{{ pago.totalPedido | number:'1.0-0' }} COP</span>
+          </div>
+        </div>
+        <div class="dato-row">
+          <span class="material-icons">tag</span>
+          <div>
+            <span class="dato-label">Referencia (escríbela en el mensaje)</span>
+            <span class="dato-value ref">{{ pago.referencia }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QR Code -->
+      <div class="qr-section">
+        <p class="qr-label">Escanea el QR con Nequi:</p>
+        <img [src]="qrImageUrl" alt="QR Nequi" class="qr-image"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="qr-placeholder" style="display:none">
+          <span class="material-icons">qr_code_2</span>
+          <p>QR en proceso de configuración</p>
+        </div>
+      </div>
+
+      <!-- Upload Comprobante -->
+      <div class="upload-section">
+        <h3>📎 Subir Comprobante de Pago</h3>
+        <p>Una vez que hayas transferido, sube la captura de pantalla aquí.</p>
+
+        <label class="upload-label" for="fileInput">
+          <span class="material-icons">upload_file</span>
+          <span>{{ archivoSeleccionado ? archivoSeleccionado.name : 'Seleccionar imagen...' }}</span>
+        </label>
+        <input type="file" id="fileInput" accept="image/*" (change)="onFileSelected($event)" style="display:none">
+
+        <!-- Preview -->
+        <div class="preview-box" *ngIf="previewUrl">
+          <img [src]="previewUrl" alt="Vista previa">
+        </div>
+
+        <button class="btn btn-primary" [disabled]="!archivoSeleccionado || subiendo" (click)="subirComprobante()">
+          <span class="material-icons">send</span>
+          {{ subiendo ? 'Enviando...' : 'Enviar Comprobante' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Comprobante ya enviado -->
+    <div *ngIf="comprobanteEnviado" class="estado-card verificacion">
+      <span class="material-icons">hourglass_top</span>
+      <h2>Comprobante Enviado</h2>
+      <p>Estamos verificando tu pago. Te notificaremos cuando se confirme.</p>
+      <p class="ref-text">Referencia: <strong>{{ pago.referencia }}</strong></p>
+    </div>
+
+    <!-- WhatsApp CTA -->
+    <button class="btn btn-whatsapp" (click)="abrirWhatsApp()">
+      <span>💬</span> Contactar por WhatsApp
+    </button>
+  </div>
+
+  <!-- ════════════════════════ CONTRA ENTREGA ════════════════════════ -->
+  <div *ngIf="esContraEntrega" class="instrucciones-card">
+    <h2><span class="material-icons">home</span> Pago al Recibir</h2>
+    <p class="instrucciones-desc">Tu pedido será enviado y pagarás en efectivo al momento de la entrega.</p>
+
+    <div class="datos-pago">
+      <div class="dato-row">
+        <span class="material-icons">payments</span>
+        <div>
+          <span class="dato-label">Método de pago</span>
+          <span class="dato-value">Efectivo al recibir</span>
+        </div>
+      </div>
+      <div class="dato-row">
+        <span class="material-icons">attach_money</span>
+        <div>
+          <span class="dato-label">Valor a tener listo</span>
+          <span class="dato-value monto">{{ pago.totalPedido | number:'1.0-0' }} COP</span>
+        </div>
+      </div>
+      <div class="dato-row">
+        <span class="material-icons">tag</span>
+        <div>
+          <span class="dato-label">Referencia del pedido</span>
+          <span class="dato-value ref">{{ pago.referencia }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <span class="material-icons">info</span>
+      <p>Ten el valor exacto listo. El transportador no siempre tiene cambio disponible.</p>
+    </div>
+
+    <button class="btn btn-whatsapp" (click)="abrirWhatsApp()">
+      <span>💬</span> Preguntar por mi pedido
+    </button>
+  </div>
+
+  <!-- ════════════════════════ RECOGER EN TIENDA ════════════════════════ -->
+  <div *ngIf="esRecogerTienda" class="instrucciones-card">
+    <h2><span class="material-icons">store</span> Recoge tu Pedido en Tienda</h2>
+    <p class="instrucciones-desc">Tu pedido estará listo para recoger. Preséntate en nuestro local con tu referencia de pedido.</p>
+
+    <div class="datos-pago">
+      <div class="dato-row">
+        <span class="material-icons">location_on</span>
+        <div>
+          <span class="dato-label">Dirección</span>
+          <span class="dato-value">{{ tiendaDireccion }}</span>
+        </div>
+      </div>
+      <div class="dato-row">
+        <span class="material-icons">schedule</span>
+        <div>
+          <span class="dato-label">Horario de atención</span>
+          <span class="dato-value">{{ tiendaHorario }}</span>
+        </div>
+      </div>
+      <div class="dato-row">
+        <span class="material-icons">timer</span>
+        <div>
+          <span class="dato-label">Tiempo de preparación</span>
+          <span class="dato-value">{{ tiendaTiempoPreparacion }}</span>
+        </div>
+      </div>
+      <div class="dato-row">
+        <span class="material-icons">attach_money</span>
+        <div>
+          <span class="dato-label">Total a pagar en tienda</span>
+          <span class="dato-value monto">{{ pago.totalPedido | number:'1.0-0' }} COP</span>
+        </div>
+      </div>
+      <div class="dato-row">
+        <span class="material-icons">tag</span>
+        <div>
+          <span class="dato-label">Referencia</span>
+          <span class="dato-value ref">{{ pago.referencia }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <span class="material-icons">info</span>
+      <p>Te avisaremos cuando tu pedido esté listo. También puedes llamarnos o escribirnos si tienes dudas.</p>
+    </div>
+
+    <button class="btn btn-whatsapp" (click)="abrirWhatsApp()">
+      <span>💬</span> Confirmar por WhatsApp
+    </button>
+  </div>
+
+  <!-- Botón navegar a Mis Pedidos -->
+  <div class="bottom-actions">
+    <a routerLink="/mis-pedidos" class="btn btn-outline">
+      <span class="material-icons">inventory_2</span>
+      Ver Mis Pedidos
+    </a>
+    <a routerLink="/productos" class="btn btn-ghost">Seguir comprando</a>
+  </div>
+
+</div>
+
+<!-- Loading state -->
+<div class="confirmacion-container" *ngIf="loading">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <p>Cargando información del pago...</p>
+  </div>
+</div>
+
+<!-- Error state -->
+<div class="confirmacion-container" *ngIf="error">
+  <div class="error-box">
+    <span class="material-icons">error_outline</span>
+    <p>{{ error }}</p>
+    <a routerLink="/mis-pedidos" class="btn btn-primary">Ver Mis Pedidos</a>
+  </div>
+</div>
