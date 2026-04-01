@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './components/navbar/navbar';
@@ -13,7 +13,8 @@ import { filter } from 'rxjs';
   standalone: true,
   imports: [CommonModule, RouterOutlet, NavbarComponent, FooterComponent, NotificationComponent],
   templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  styleUrls: ['./app.css'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class App implements OnInit {
   isAdminRoute = false;

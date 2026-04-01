@@ -8,3 +8,17 @@
 
 <!-- 🌸 Sistema de Notificaciones Global -->
 <app-notification></app-notification>
+
+<!-- 🤖 Bot de Asistencia (Dialogflow CX) -->
+<div *ngIf="!isAdminRoute">
+  <df-messenger
+    location="us-central1"
+    project-id="global-yofi-chatbot"
+    agent-id="31bb4b5b-d7f9-465f-a80b-228565e15d26"
+    language-code="es"
+    max-query-length="-1">
+    <df-messenger-chat-bubble
+      chat-title="GlobalYofiBot">
+    </df-messenger-chat-bubble>
+  </df-messenger>
+</div>
