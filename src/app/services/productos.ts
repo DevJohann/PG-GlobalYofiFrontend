@@ -67,9 +67,14 @@ export class ProductosService {
   // 🔹 MÉTODOS PÚBLICOS (no requieren autenticación)
   // ==============================================================
 
-  /** 📦 Obtener todos los productos */
+  /** 📦 Obtener todos los productos (solo activos para público) */
   getProductos(): Observable<Producto[]> {
     return this.http.get<Producto[]>(this.apiUrl);
+  }
+
+  /** 🛡️ Obtener TODOS los productos (incluidos inactivos - solo ADMIN) */
+  getProductosAdmin(): Observable<Producto[]> {
+    return this.http.get<Producto[]>(`${this.apiUrl}/admin`);
   }
 
   /** 🆔 Obtener un producto por su ID */

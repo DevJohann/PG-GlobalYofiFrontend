@@ -1,0 +1,160 @@
+.user-management-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.header-content h1 {
+  font-size: 2.2rem;
+  color: #2d3436;
+  margin-bottom: 0.5rem;
+}
+
+.header-content p {
+  color: #636e72;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  padding: 0.8rem 1.2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+  min-width: 320px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  margin-left: 0.8rem;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th {
+  text-align: left;
+  padding: 1.2rem;
+  background: #fdf2f8; /* Soft pink admin theme */
+  color: #be185d;
+  font-weight: 600;
+  border-bottom: 2px solid #f9a8d4;
+}
+
+td {
+  padding: 1.2rem;
+  border-bottom: 1px solid #f1f2f6;
+  color: #2d3436;
+}
+
+.inactive-row td {
+  background: #f9fafb;
+  color: #9ca3af;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ec4899, #be185d);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.rol-select {
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.rol-select:focus {
+  border-color: #ec4899;
+}
+
+.status-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-badge.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.btn-icon {
+  background: transparent;
+  color: #636e72;
+  padding: 0.6rem;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.btn-icon:hover {
+  background: #f1f2f6;
+  color: #be185d;
+}
+
+.loading-state, .empty-state {
+  padding: 4rem;
+  text-align: center;
+  color: #636e72;
+}
+
+.empty-state .material-icons {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .search-box {
+    min-width: 100%;
+  }
+}

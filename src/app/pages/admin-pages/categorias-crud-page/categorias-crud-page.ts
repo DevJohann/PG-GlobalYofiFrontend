@@ -41,7 +41,7 @@ export class CategoriasCrudPage implements OnInit {
   cargarCategorias(): void {
     this.cargando = true;
     this.cdr.detectChanges();
-    this.categoriaService.getCategorias().subscribe({
+    this.categoriaService.getCategoriasAdmin().subscribe({
       next: (data) => {
         this.categorias = data;
         this.cargando = false;
@@ -106,11 +106,11 @@ export class CategoriasCrudPage implements OnInit {
   }
 
   async eliminarCategoria(id: number): Promise<void> {
-    const confirmada = await this.notificationService.confirm('¿Estás seguro de que deseas eliminar esta categoría?');
+    const confirmada = await this.notificationService.confirm('¿Deseas cambiar el estado (Activar/Desactivar) de esta categoría?');
     if (confirmada) {
       this.categoriaService.eliminarCategoria(id).subscribe({
         next: () => {
-          this.notificationService.success('🗑️ Categoría eliminada');
+          this.notificationService.success('✅ Estado de la categoría actualizado');
           this.cargarCategorias();
         },
         error: (err) => {

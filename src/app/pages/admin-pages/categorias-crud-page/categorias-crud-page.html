@@ -30,17 +30,20 @@
       </thead>
       <tbody>
         <tr *ngFor="let cat of categorias">
-          <td>#{{ cat.id }}</td>
-          <td class="name-cell">{{ cat.nombre }}</td>
-          <td class="desc-cell">{{ cat.descripcion }}</td>
+          <td>{{ cat.id }}</td>
+          <td>{{ cat.nombre }}</td>
+          <td>{{ cat.descripcion }}</td>
           <td>
-            <span class="badge" [ngClass]="cat.activa ? 'active' : 'inactive'">
+            <span class="status-badge" [class.active]="cat.activa" [class.inactive]="!cat.activa">
               {{ cat.activa ? 'Activa' : 'Inactiva' }}
             </span>
           </td>
-          <td class="actions-cell">
-            <button class="btn-icon edit" (click)="editarCategoria(cat)" title="Editar">✏️</button>
-            <button class="btn-icon delete" (click)="eliminarCategoria(cat.id!)" title="Eliminar">🗑️</button>
+          <td>
+            <button class="btn-icon" (click)="editarCategoria(cat)" title="Editar">✏️</button>
+            <button class="btn-icon" (click)="eliminarCategoria(cat.id!)" 
+                    [title]="cat.activa ? 'Desactivar' : 'Activar'">
+              {{ cat.activa ? '🚫' : '✅' }}
+            </button>
           </td>
         </tr>
       </tbody>

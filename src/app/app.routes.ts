@@ -22,6 +22,7 @@ import { PagoMetodoPageComponent } from './pages/pago-metodo-page/pago-metodo-pa
 import { MisPedidosPageComponent } from './pages/mis-pedidos-page/mis-pedidos-page.component';
 import { ConfirmacionPagoComponent } from './pages/confirmacion-pago/confirmacion-pago.component';
 import { ConfigPagosPageComponent } from './pages/admin-pages/config-pagos-page/config-pagos-page.component';
+import { UsuariosCrudPageComponent } from './pages/admin-pages/usuarios-crud-page/usuarios-crud-page';
 
 export const routes: Routes = [
     { path: '', component: Landing },
@@ -50,6 +51,7 @@ export const routes: Routes = [
             { path: 'categorias', component: CategoriasCrudPage },
             { path: 'proveedores', component: ProveedoresCrudPage },
             { path: 'clientes-crud', component: ClientesCrudPage },
+            { path: 'usuarios', component: UsuariosCrudPageComponent },
             { path: 'config-pagos', component: ConfigPagosPageComponent }
         ]
     }

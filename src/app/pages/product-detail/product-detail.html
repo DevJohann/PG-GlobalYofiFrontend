@@ -53,9 +53,8 @@
                 </button>
             </div>
 
-            <div class="extra-info">
-                <p>🚚 Envío gratuito en compras superiores a $150,000</p>
-                <p>✨ 100% Autenticidad garantizada</p>
+            <div class="extra-info" *ngIf="config">
+                <p class="condiciones-text">{{ config.condicionesCompra }}</p>
             </div>
         </div>
     </div>

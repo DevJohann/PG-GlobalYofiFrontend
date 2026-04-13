@@ -47,17 +47,21 @@
             </div>
             <div class="summary-row">
                 <span>Envío</span>
-                <span>{{ carrito.totalEstimado >= 150000 ? 'Gratis' : '15,000 $' }}</span>
+                <span>{{ costoEnvio === 0 ? 'Gratis' : (costoEnvio | number) + ' $' }}</span>
             </div>
             <hr>
             <div class="summary-row total-row">
                 <span>Total a pagar</span>
-                <span>{{ (carrito.totalEstimado >= 150000 ? carrito.totalEstimado : carrito.totalEstimado + 15000) |
-                    number }} $</span>
+                <span>{{ totalFinal | number }} $</span>
             </div>
 
             <button class="btn btn-primary btn-block btn-pay" (click)="procederAlPago()">Proceder al Pago 💳</button>
             <button class="btn btn-outline btn-block" routerLink="/productos">Seguir Comprando</button>
+            
+            <div class="condiciones-compra-box" *ngIf="config?.condicionesCompra">
+                <h4>Condiciones de compra</h4>
+                <p>{{ config?.condicionesCompra }}</p>
+            </div>
         </div>
 
     </div>

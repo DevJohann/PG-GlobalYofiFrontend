@@ -26,31 +26,31 @@
           <th>NIT</th>
           <th>Contacto</th>
           <th>Ciudad</th>
+          <th>Teléfono</th>
           <th>Estado</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let prov of proveedores">
-          <td>#{{ prov.id }}</td>
-          <td>
-            <div class="name-cell">{{ prov.nombre }}</div>
-            <div class="email-sub">{{ prov.email }}</div>
-          </td>
+          <td>{{ prov.id }}</td>
+          <td>{{ prov.nombre }}</td>
           <td>{{ prov.nit }}</td>
-          <td>
-            <div class="contact-name">{{ prov.contactoPrincipal }}</div>
-            <div class="phone-sub">{{ prov.telefono }}</div>
-          </td>
+          <td>{{ prov.contactoPrincipal }}</td>
           <td>{{ prov.ciudad }}</td>
+          <td>{{ prov.telefono }}</td>
           <td>
-            <span class="badge" [ngClass]="prov.estado.toLowerCase()">
-              {{ prov.estado }}
+            <span class="status-badge" [class.active]="prov.estado.toUpperCase() === 'ACTIVO'" 
+                  [class.inactive]="prov.estado.toUpperCase() !== 'ACTIVO'">
+              {{ prov.estado || 'INACTIVO' | titlecase }}
             </span>
           </td>
-          <td class="actions-cell">
-            <button class="btn-icon edit" (click)="editarProveedor(prov)" title="Editar">✏️</button>
-            <button class="btn-icon delete" (click)="eliminarProveedor(prov.id!)" title="Eliminar">🗑️</button>
+          <td>
+            <button class="btn-icon" (click)="editarProveedor(prov)" title="Editar">✏️</button>
+            <button class="btn-icon" (click)="eliminarProveedor(prov.id!)" 
+                    [title]="prov.estado.toUpperCase() === 'ACTIVO' ? 'Desactivar' : 'Activar'">
+              {{ prov.estado.toUpperCase() === 'ACTIVO' ? '🚫' : '✅' }}
+            </button>
           </td>
         </tr>
       </tbody>

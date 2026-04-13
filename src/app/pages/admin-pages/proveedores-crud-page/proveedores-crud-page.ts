@@ -46,7 +46,7 @@ export class ProveedoresCrudPage implements OnInit {
   cargarProveedores(): void {
     this.cargando = true;
     this.cdr.detectChanges();
-    this.proveedorService.getProveedores().subscribe({
+    this.proveedorService.getProveedoresAdmin().subscribe({
       next: (data) => {
         this.proveedores = data;
         this.cargando = false;
@@ -111,11 +111,11 @@ export class ProveedoresCrudPage implements OnInit {
   }
 
   async eliminarProveedor(id: number): Promise<void> {
-    const confirmada = await this.notificationService.confirm('¿Estás seguro de que deseas eliminar este proveedor?');
+    const confirmada = await this.notificationService.confirm('¿Deseas cambiar el estado (Activar/Desactivar) de este proveedor? El proveedor no se borrará físicamente.');
     if (confirmada) {
       this.proveedorService.eliminarProveedor(id).subscribe({
         next: () => {
-          this.notificationService.success('🗑️ Proveedor eliminado');
+          this.notificationService.success('✅ Estado del proveedor actualizado');
           this.cargarProveedores();
         },
         error: (err) => {

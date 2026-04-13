@@ -67,6 +67,7 @@
             <h3>👤 Información del Cliente</h3>
             <p><strong>Nombre:</strong> {{ pedidoSeleccionado.nombreCliente }}</p>
             <p><strong>Email:</strong> {{ pedidoSeleccionado.emailCliente }}</p>
+            <p *ngIf="pedidoSeleccionado.telefonoPago"><strong>Teléfono Contacto:</strong> {{ pedidoSeleccionado.telefonoPago }}</p>
             <p *ngIf="pedidoSeleccionado.tipoDocumento"><strong>Documento:</strong> {{ pedidoSeleccionado.tipoDocumento }} - {{ pedidoSeleccionado.numeroDocumento }}</p>
           </div>
           

@@ -30,9 +30,9 @@
 
     <div class="footer-section contact">
       <h4>Contacto</h4>
-      <p>📍 Bogotá, Colombia</p>
-      <p>📧 contacto@globalyofi.com</p>
-      <p>📞 +57 300 000 0000</p>
+      <p>📍 {{ config?.tiendaDireccion || 'Bogotá, Colombia' }}</p>
+      <p>📧 {{ config?.contactoEmail || 'contacto@globalyofi.com' }}</p>
+      <p>📞 +{{ config?.contactoTelefono || config?.whatsappNumero || '57 300 000 0000' }}</p>
     </div>
   </div>
   <div class="footer-bottom">

@@ -14,13 +14,13 @@
     <!-- Instrucciones si aún no subió comprobante -->
     <div *ngIf="!comprobanteEnviado" class="instrucciones-card">
       <h2><span class="material-icons">account_balance_wallet</span> Instrucciones de Pago</h2>
-      <p class="instrucciones-desc">Realiza la transferencia por <strong>Nequi</strong> a los siguientes datos y luego sube el comprobante.</p>
+      <p class="instrucciones-desc">Realiza la transferencia por <strong>{{ qrTexto }}</strong> a los siguientes datos y luego sube el comprobante.</p>
 
       <div class="datos-pago">
         <div class="dato-row">
           <span class="material-icons">phone</span>
           <div>
-            <span class="dato-label">Número Nequi</span>
+            <span class="dato-label">Número {{ qrTexto }}</span>
             <span class="dato-value">{{ nequiNumero }}</span>
           </div>
         </div>
@@ -47,14 +47,28 @@
         </div>
       </div>
 
-      <!-- QR Code -->
-      <div class="qr-section">
-        <p class="qr-label">Escanea el QR con Nequi:</p>
-        <img [src]="qrImageUrl" alt="QR Nequi" class="qr-image"
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-        <div class="qr-placeholder" style="display:none">
-          <span class="material-icons">qr_code_2</span>
-          <p>QR en proceso de configuración</p>
+      <!-- QR Code and Additional Info -->
+      <div class="qr-container-flex">
+        <div class="qr-section">
+          <p class="qr-label">Escanea el QR con {{ qrTexto }}:</p>
+          <img [src]="qrImageUrl" [alt]="'QR ' + qrTexto" class="qr-image"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+          <div class="qr-placeholder" style="display:none">
+            <span class="material-icons">qr_code_2</span>
+            <p>QR en proceso de configuración</p>
+          </div>
+        </div>
+
+        <!-- Dynamic Info Boxes -->
+        <div class="additional-info-grid" *ngIf="config && (config.qrInfoLabel1 || config.qrInfoLabel2)">
+          <div class="info-card-mini" *ngIf="config.qrInfoLabel1">
+            <span class="info-label">{{ config.qrInfoLabel1 }}</span>
+            <span class="info-value">{{ config.qrInfoValue1 }}</span>
+          </div>
+          <div class="info-card-mini" *ngIf="config.qrInfoLabel2">
+            <span class="info-label">{{ config.qrInfoLabel2 }}</span>
+            <span class="info-value">{{ config.qrInfoValue2 }}</span>
+          </div>
         </div>
       </div>
 

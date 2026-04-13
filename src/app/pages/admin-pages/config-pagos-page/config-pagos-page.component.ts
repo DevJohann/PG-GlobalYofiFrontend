@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { NotificationService } from '../../../services/notification.service';
+import { ConfiguracionService, ConfiguracionDTO } from '../../../services/configuracion.service';
 
 @Component({
   selector: 'app-config-pagos-page',
@@ -14,9 +15,29 @@ import { NotificationService } from '../../../services/notification.service';
 export class ConfigPagosPageComponent implements OnInit {
   private apiUrl = 'http://localhost:8080/api/pagos/config';
 
-  // Config fields
-  nequiNumero: string = '';
-  nequiNombre: string = '';
+  // Model for the configuration
+  config: ConfiguracionDTO = {
+    nequiNumero: '',
+    nequiNombre: '',
+    qrTexto: 'Transferencia',
+    qrInfoLabel1: '',
+    qrInfoValue1: '',
+    qrInfoLabel2: '',
+    qrInfoValue2: '',
+    condicionesCompra: '',
+    precioEnvioGratis: 150000,
+    precioEnvio: 15000,
+    whatsappNumero: '',
+    contactoTelefono: '',
+    contactoEmail: '',
+    tiendaDireccion: '',
+    tiendaHorario: '',
+    tiendaTiempoPreparacion: '',
+    habilitarTransferencia: true,
+    habilitarReciboPago: true,
+    habilitarRecogerTienda: true
+  };
+
   qrPreviewUrl: string | null = null;
   qrArchivoSeleccionado: File | null = null;
 
@@ -25,7 +46,7 @@ export class ConfigPagosPageComponent implements OnInit {
   cargando = true;
 
   constructor(
-    private http: HttpClient,
+    private configService: ConfiguracionService,
     private notificationService: NotificationService,
     private cdr: ChangeDetectorRef
   ) {}
@@ -36,16 +57,16 @@ export class ConfigPagosPageComponent implements OnInit {
 
   cargarConfig(): void {
     this.cargando = true;
-    this.http.get<any>(this.apiUrl).subscribe({
+    this.configService.getConfig().subscribe({
       next: (config) => {
-        this.nequiNumero = config.nequiNumero || '';
-        this.nequiNombre = config.nequiNombre || '';
-        this.qrPreviewUrl = config.qrImageUrl || null;
+        this.config = { ...this.config, ...config };
+        if (config.qrImageUrl) {
+          this.qrPreviewUrl = 'http://localhost:8080' + config.qrImageUrl;
+        }
         this.cargando = false;
         this.cdr.detectChanges();
       },
       error: () => {
-        // Config might not exist yet — that's fine
         this.cargando = false;
         this.cdr.detectChanges();
       }
@@ -54,14 +75,11 @@ export class ConfigPagosPageComponent implements OnInit {
 
   guardarConfig(): void {
     this.guardando = true;
-    const payload = {
-      nequiNumero: this.nequiNumero,
-      nequiNombre: this.nequiNombre
-    };
-    this.http.post<any>(this.apiUrl, payload).subscribe({
+    this.configService.guardarConfig(this.config).subscribe({
       next: (res) => {
         this.guardando = false;
-        this.notificationService.success('✅ Configuración de pago guardada exitosamente.');
+        this.config = { ...this.config, ...res };
+        this.notificationService.success('✅ Configuración global guardada exitosamente.');
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -91,10 +109,10 @@ export class ConfigPagosPageComponent implements OnInit {
     this.subiendoQr = true;
     const formData = new FormData();
     formData.append('file', this.qrArchivoSeleccionado);
-    this.http.post<any>(`${this.apiUrl}/qr`, formData).subscribe({
+    this.configService.subirQr(this.qrArchivoSeleccionado).subscribe({
       next: (res) => {
         this.subiendoQr = false;
-        this.qrPreviewUrl = res.qrImageUrl;
+        this.qrPreviewUrl = 'http://localhost:8080' + (res.qrImageUrl || '');
         this.qrArchivoSeleccionado = null;
         this.notificationService.success('✅ QR cargado exitosamente. Los clientes ya pueden verlo.');
         this.cdr.detectChanges();

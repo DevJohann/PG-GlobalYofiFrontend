@@ -30,6 +30,11 @@
                         <span class="char-count" [class.warn]="numeroDocumento.length >= MAX_CHARS - 5">{{ numeroDocumento.length }}/{{ MAX_CHARS }}</span>
                     </div>
                     <div class="form-group">
+                        <label for="telefonoPago">Teléfono de Contacto (Celular)</label>
+                        <input type="tel" id="telefonoPago" [(ngModel)]="telefonoPago" name="telefonoPago"
+                               placeholder="Ej: 3101234567" required>
+                    </div>
+                    <div class="form-group">
                         <label for="ciudad">Ciudad</label>
                         <input type="text" id="ciudad" [(ngModel)]="ciudad" name="ciudad"
                                placeholder="Ej: Bogotá" [maxlength]="MAX_CHARS"
@@ -71,8 +76,13 @@
                         <label for="numeroDocumentoTienda">Número de Documento</label>
                         <input type="text" id="numeroDocumentoTienda" [(ngModel)]="numeroDocumento" name="numeroDocumentoTienda"
                                placeholder="Ej: 1020304050" [maxlength]="MAX_CHARS"
-                               (ngModelChange)="limitarCampo('numeroDocumento')">
+                               (ngModelChange)="limitarCampo('numeroDocumento')" required>
                         <span class="char-count" [class.warn]="numeroDocumento.length >= MAX_CHARS - 5">{{ numeroDocumento.length }}/{{ MAX_CHARS }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefonoPagoTienda">Teléfono de Contacto (Celular)</label>
+                        <input type="tel" id="telefonoPagoTienda" [(ngModel)]="telefonoPago" name="telefonoPagoTienda"
+                               placeholder="Ej: 3101234567" required>
                     </div>
                 </div>
             </section>
@@ -83,14 +93,15 @@
                 <p class="section-desc">Selecciona tu opción preferida</p>
                 
                 <div class="metodos-grid">
-                    <div *ngFor="let metodo of metodos" 
+                    <div *ngFor="let metodo of metodosFiltrados" 
                          class="metodo-card" 
                          [class.selected]="metodoSeleccionado === metodo.id"
-                         (click)="seleccionarMetodo(metodo.id)">
+                         [class.disabled]="metodo.deshabilitado"
+                         (click)="!metodo.deshabilitado && seleccionarMetodo(metodo.id)">
                         <div class="metodo-icon">{{ metodo.icono }}</div>
                         <div class="metodo-info">
                             <h3>{{ metodo.nombre }}</h3>
-                            <p>{{ metodo.descripcion }}</p>
+                            <p>{{ metodo.deshabilitado ? '⚠️ Este método no está disponible actualmente' : metodo.descripcion }}</p>
                         </div>
                         <div class="metodo-check" *ngIf="metodoSeleccionado === metodo.id">✔</div>
                     </div>
@@ -109,18 +120,21 @@
                     </div>
                     <div class="summary-row">
                         <span>Envío</span>
-                        <span>{{ (metodoSeleccionado === 'RECOGER_TIENDA') ? 'Gratis (en tienda)' : (carrito.totalEstimado >= 150000 ? 'Gratis' : '15,000 $') }}</span>
+                        <span>{{ costoEnvio === 0 ? 'Gratis' : (costoEnvio | number) + ' $' }}</span>
+                    </div>
+                    <div class="shipping-info" *ngIf="carrito && config && carrito.totalEstimado < precioEnvioGratis && metodoSeleccionado !== 'RECOGER_TIENDA'">
+                        <p class="small-info">🎁 ¡Agrega {{ (precioEnvioGratis - carrito.totalEstimado) | number }} $ más para envío gratis!</p>
                     </div>
                     <hr>
                     <div class="summary-row total-row">
                         <span>Total a pagar</span>
-                        <span>{{ (metodoSeleccionado === 'RECOGER_TIENDA' || carrito.totalEstimado >= 150000 ? carrito.totalEstimado : carrito.totalEstimado + 15000) | number }} $</span>
+                        <span>{{ totalFinal | number }} $</span>
                     </div>
                 </div>
 
                 <div class="pago-actions">
                     <button class="btn btn-primary btn-block" 
-                            [disabled]="!metodoSeleccionado || !tipoDocumento || !numeroDocumento || (mostrarDireccion && (!direccion || !ciudad))" 
+                            [disabled]="!metodoSeleccionado || !tipoDocumento || !numeroDocumento || !telefonoPago || (mostrarDireccion && (!direccion || !ciudad))" 
                             (click)="finalizarPedido()">
                         Finalizar Pedido ✨
                     </button>

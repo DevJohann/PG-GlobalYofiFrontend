@@ -33,9 +33,14 @@ export class CategoriaService {
     });
   }
 
-  /** 📚 Obtener todas las categorías */
+  /** 📚 Obtener categorías activas (Público) */
   getCategorias(): Observable<Categoria[]> {
     return this.http.get<Categoria[]>(this.apiUrl);
+  }
+
+  /** 🛡️ Obtener todas las categorías (Admin - incluye inactivas) */
+  getCategoriasAdmin(): Observable<Categoria[]> {
+    return this.http.get<Categoria[]>(`${this.apiUrl}/admin`, { headers: this.getAuthHeaders() });
   }
 
   /** 🆔 Obtener una categoría por ID */

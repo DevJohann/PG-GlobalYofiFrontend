@@ -18,8 +18,9 @@
       <li routerLinkActive="active"><a routerLink="categorias">Categorías</a></li>
       <li routerLinkActive="active"><a routerLink="proveedores">Proveedores</a></li>
       <li routerLinkActive="active"><a routerLink="pedidos-crud">Pedidos</a></li>
-      <li routerLinkActive="active"><a routerLink="clientes-crud">Clientes</a></li>
-      <li routerLinkActive="active"><a routerLink="config-pagos">💳 Config. Pagos</a></li>
+      <li routerLinkActive="active"><a routerLink="./clientes-crud"><span class="material-icons">people</span> Clientes</a></li>
+      <li routerLinkActive="active"><a routerLink="./usuarios"><span class="material-icons">manage_accounts</span> Usuarios / Roles</a></li>
+      <li routerLinkActive="active"><a routerLink="./config-pagos"><span class="material-icons">settings</span> Configuración</a></li>
     </ul>
 
     <button class="btn-logout" (click)="logout()">Cerrar sesión</button>

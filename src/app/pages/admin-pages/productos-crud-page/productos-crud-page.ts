@@ -60,11 +60,11 @@ export class ProductosCrudPage implements OnInit, AfterViewInit {
 
   cargarProductos(): void {
     this.cargando = true;
-    this.productosService.getProductos().subscribe({
+    this.productosService.getProductosAdmin().subscribe({
       next: (data) => {
         this.productos = data;
         this.cargando = false;
-        this.cdr.detectChanges(); // 👈 Forzamos actualización visual inmediata
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('❌ Error al cargar productos:', err);
@@ -87,12 +87,12 @@ export class ProductosCrudPage implements OnInit, AfterViewInit {
   // ============================
 
   async eliminar(id: number): Promise<void> {
-    const confirmada = await this.notificationService.confirm('¿Seguro que deseas eliminar este producto? Esta acción no se puede deshacer.');
+    const confirmada = await this.notificationService.confirm('¿Deseas cambiar el estado (Activar/Desactivar) de este producto? El producto no se borrará físicamente.');
     if (!confirmada) return;
 
     this.productosService.eliminarProducto(id).subscribe({
       next: () => {
-        this.notificationService.success('🗑️ Producto eliminado correctamente');
+        this.notificationService.success('✅ Estado del producto actualizado correctamente');
         this.cargarProductos();
         this.cdr.detectChanges();
       },

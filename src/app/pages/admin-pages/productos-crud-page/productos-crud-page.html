@@ -75,8 +75,12 @@
 
           <!-- Acciones -->
           <td>
-            <button class="btn-editar" (click)="editar(p.id)" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; margin-right: 10px;">✏️</button>
-            <button class="btn-eliminar" (click)="eliminar(p.id)">🗑️</button>
+            <button class="btn-editar" (click)="editar(p.id)" title="Editar">✏️</button>
+            <button [class]="p.estado?.toUpperCase() === 'ACTIVO' ? 'btn-desactivar' : 'btn-activar'" 
+                    (click)="eliminar(p.id)" 
+                    [title]="p.estado?.toUpperCase() === 'ACTIVO' ? 'Desactivar' : 'Activar'">
+              {{ p.estado?.toUpperCase() === 'ACTIVO' ? '🚫' : '✅' }}
+            </button>
           </td>
         </tr>
       </tbody>

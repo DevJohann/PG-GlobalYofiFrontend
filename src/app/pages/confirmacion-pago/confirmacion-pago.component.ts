@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PagoService, PagoDTO } from '../../services/pago.service';
 import { NotificationService } from '../../services/notification.service';
+import { ConfiguracionService, ConfiguracionDTO } from '../../services/configuracion.service';
 
 @Component({
   selector: 'app-confirmacion-pago',
@@ -24,19 +25,22 @@ export class ConfirmacionPagoComponent implements OnInit {
   subiendo = false;
   comprobanteEnviado = false;
 
-  // Dynamic store/payment config
-  nequiNumero = 'Cargando...';
-  nequiNombre = 'Cargando...';
-  qrImageUrl = '/assets/qr-nequi.png';
+  // Dynamic config data
+  config: ConfiguracionDTO | null = null;
+  nequiNumero = '';
+  nequiNombre = '';
+  qrImageUrl = '';
+  qrTexto = 'Transferencia';
 
-  readonly tiendaDireccion = 'Calle 6 # 2-26, Gama, Cundinamarca';
-  readonly tiendaHorario = 'Lunes a Sábado: 8am – 6pm';
-  readonly tiendaTiempoPreparacion = '1-2 días hábiles';
+  tiendaDireccion = '';
+  tiendaHorario = '';
+  tiendaTiempoPreparacion = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private pagoService: PagoService,
+    private configService: ConfiguracionService,
     private notificationService: NotificationService,
     private cdr: ChangeDetectorRef
   ) {}
@@ -56,16 +60,26 @@ export class ConfirmacionPagoComponent implements OnInit {
   }
 
   cargarConfiguracion(): void {
-    this.pagoService.getConfiguracion().subscribe({
+    this.configService.getConfig().subscribe({
       next: (config) => {
-        if (config.nequiNumero) this.nequiNumero = config.nequiNumero;
-        if (config.nequiNombre) this.nequiNombre = config.nequiNombre;
+        this.config = config;
+        this.nequiNumero = config.nequiNumero || '';
+        this.nequiNombre = config.nequiNombre || '';
+        this.qrTexto = config.qrTexto || 'Transferencia';
+        
         if (config.qrImageUrl) {
           this.qrImageUrl = 'http://localhost:8080' + config.qrImageUrl;
+        } else {
+          this.qrImageUrl = '/assets/qr-nequi.png';
         }
+
+        this.tiendaDireccion = config.tiendaDireccion || 'Calle 6 # 2-26, Gama, Cundinamarca';
+        this.tiendaHorario = config.tiendaHorario || 'Lunes a Sábado: 8am – 6pm';
+        this.tiendaTiempoPreparacion = config.tiendaTiempoPreparacion || '1-2 días hábiles';
+        
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error al cargar config de Nequi', err)
+      error: (err) => console.error('Error al cargar configuración global', err)
     });
   }
 
@@ -141,7 +155,7 @@ export class ConfirmacionPagoComponent implements OnInit {
   }
 
   abrirWhatsApp(): void {
-    const numero = '573101234567'; // configurable
+    const numero = this.config?.whatsappNumero || '573101234567';
     const msg = encodeURIComponent(`Hola! Acabo de realizar el pedido ${this.pago?.referencia} y quiero confirmar el pago.`);
     window.open(`https://wa.me/${numero}?text=${msg}`, '_blank');
   }

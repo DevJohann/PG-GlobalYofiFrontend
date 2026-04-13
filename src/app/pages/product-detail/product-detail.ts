@@ -5,6 +5,7 @@ import { ProductosService, Producto } from '../../services/productos';
 import { AuthService } from '../../services/auth';
 import { CarritoService } from '../../services/carrito.service';
 import { NotificationService } from '../../services/notification.service';
+import { ConfiguracionService, ConfiguracionDTO } from '../../services/configuracion.service';
 
 @Component({
     selector: 'app-product-detail',
@@ -21,12 +22,14 @@ export class ProductDetail implements OnInit {
     userEmail: string | null = null;
     cantidad: number = 1;
     private isBrowser: boolean;
+    config: ConfiguracionDTO | null = null;
 
     constructor(
         private route: ActivatedRoute,
         public productosService: ProductosService,
         private authService: AuthService,
         public carritoService: CarritoService,
+        private configService: ConfiguracionService,
         private cdr: ChangeDetectorRef,
         private notificationService: NotificationService,
         @Inject(PLATFORM_ID) private platformId: Object
@@ -40,6 +43,17 @@ export class ProductDetail implements OnInit {
             this.cargarProducto(+id);
         }
         this.checkLoginStatus();
+        this.cargarConfiguracion();
+    }
+
+    cargarConfiguracion(): void {
+        this.configService.getConfig().subscribe({
+            next: (config) => {
+                this.config = config;
+                this.cdr.detectChanges();
+            },
+            error: (err) => console.error('Error al cargar config global en detalle', err)
+        });
     }
 
     cargarProducto(id: number): void {

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CarritoService } from '../../services/carrito.service';
 import { AuthService } from '../../services/auth';
 import { NotificationService } from '../../services/notification.service';
+import { ConfiguracionService, ConfiguracionDTO } from '../../services/configuracion.service';
 
 @Component({
     selector: 'app-pago-metodo-page',
@@ -24,7 +25,12 @@ export class PagoMetodoPageComponent implements OnInit {
     ciudad: string = '';
     tipoDocumento: string = '';
     numeroDocumento: string = '';
+    telefonoPago: string = '';
     observaciones: string = '';
+
+    // Configuración dinámica
+    config: ConfiguracionDTO | null = null;
+    cargandoConfig = true;
 
     // Character limits for fields
     readonly MAX_CHARS = 50;
@@ -37,11 +43,34 @@ export class PagoMetodoPageComponent implements OnInit {
         { id: 'PASAPORTE', nombre: 'Pasaporte' }
     ];
 
-    metodos = [
-        { id: 'RECIBO_PAGO', nombre: 'Pago al recibir', descripcion: 'Paga en efectivo cuando recibas tu pedido en la puerta de tu casa.', icono: '🏠' },
-        { id: 'TRANSFERENCIA', nombre: 'Transferencia / Nequi', descripcion: 'Realiza una transferencia a nuestra cuenta y envíanos el comprobante.', icono: '🏦' },
-        { id: 'RECOGER_TIENDA', nombre: 'Recoger en Tienda', descripcion: 'Ven por tu pedido directamente a nuestro local físico. No se requiere dirección de envío.', icono: '🛍️' }
+    metodos: any[] = [
+        { id: 'TRANSFERENCIA', nombre: 'Transferencia', descripcion: 'Realiza una transferencia a nuestra cuenta y envíanos el comprobante.', icono: '🏦', key: 'habilitarTransferencia' },
+        { id: 'RECIBO_PAGO', nombre: 'Pago al recibir', descripcion: 'Paga en efectivo cuando recibas tu pedido en la puerta de tu casa.', icono: '🏠', key: 'habilitarReciboPago' },
+        { id: 'RECOGER_TIENDA', nombre: 'Recoger en Tienda', descripcion: 'Ven por tu pedido directamente a nuestro local físico. No se requiere dirección de envío.', icono: '🛍️', key: 'habilitarRecogerTienda' }
     ];
+
+    get metodosFiltrados(): any[] {
+        if (!this.config) return this.metodos.map(m => ({ ...m, deshabilitado: false }));
+        return this.metodos.map(m => ({
+            ...m,
+            deshabilitado: !(this.config as any)[m.key!]
+        }));
+    }
+
+    get costoEnvio(): number {
+        if (!this.config || this.metodoSeleccionado === 'RECOGER_TIENDA') return 0;
+        const subtotal = this.carrito?.totalEstimado || 0;
+        if (subtotal >= (this.config.precioEnvioGratis ?? 150000)) return 0;
+        return this.config.precioEnvio ?? 15000;
+    }
+
+    get totalFinal(): number {
+        return (this.carrito?.totalEstimado || 0) + this.costoEnvio;
+    }
+
+    get precioEnvioGratis(): number {
+        return this.config?.precioEnvioGratis ?? 150000;
+    }
 
     // Whether address fields should be shown (hidden for store pickup)
     get mostrarDireccion(): boolean {
@@ -51,6 +80,7 @@ export class PagoMetodoPageComponent implements OnInit {
     constructor(
         private carritoService: CarritoService,
         private authService: AuthService,
+        private configService: ConfiguracionService,
         private router: Router,
         private cdr: ChangeDetectorRef,
         private notificationService: NotificationService
@@ -58,12 +88,27 @@ export class PagoMetodoPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.checkLoginStatus();
+        this.cargarConfiguracion();
         this.carritoService.cart$.subscribe(cart => {
             this.carrito = cart;
             if (!cart || cart.items.length === 0) {
                 this.router.navigate(['/carrito']);
             }
             this.cdr.detectChanges();
+        });
+    }
+
+    cargarConfiguracion(): void {
+        this.configService.getConfig().subscribe({
+            next: (config) => {
+                this.config = config;
+                this.cargandoConfig = false;
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                console.error('Error al cargar config', err);
+                this.cargandoConfig = false;
+            }
         });
     }
 
@@ -109,9 +154,9 @@ export class PagoMetodoPageComponent implements OnInit {
             return;
         }
 
-        // Validate required document fields (always required)
-        if (!this.tipoDocumento || !this.numeroDocumento) {
-            this.notificationService.error('⚠️ Por favor diligencia tu tipo y número de documento para continuar.');
+        // Validate required fields
+        if (!this.tipoDocumento || !this.numeroDocumento || !this.telefonoPago) {
+            this.notificationService.error('⚠️ Por favor diligencia tu tipo de documento, número y teléfono de contacto para continuar.');
             return;
         }
 
@@ -142,7 +187,8 @@ export class PagoMetodoPageComponent implements OnInit {
                 ciudadFinal,
                 this.tipoDocumento,
                 this.numeroDocumento,
-                this.observaciones
+                this.observaciones,
+                this.telefonoPago
             ).subscribe({
                 next: (res: any) => {
                     const pedidoId = res?.id || res?.idPedido;

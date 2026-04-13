@@ -38,9 +38,14 @@ export class ProveedorService {
     });
   }
 
-  /** 🧾 Obtener todos los proveedores */
+  /** 🧾 Obtener proveedores activos (Público) */
   getProveedores(): Observable<Proveedor[]> {
     return this.http.get<Proveedor[]>(this.apiUrl);
+  }
+
+  /** 🛡️ Obtener TODOS los proveedores (Admin - incluye inactivos) */
+  getProveedoresAdmin(): Observable<Proveedor[]> {
+    return this.http.get<Proveedor[]>(`${this.apiUrl}/admin`, { headers: this.getAuthHeaders() });
   }
 
   /** 🆔 Obtener un proveedor por ID */

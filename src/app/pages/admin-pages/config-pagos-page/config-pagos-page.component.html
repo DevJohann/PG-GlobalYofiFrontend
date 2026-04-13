@@ -1,66 +1,189 @@
 <div class="config-pagos-page">
   <header class="page-header">
-    <h1>⚙️ Configuración de Pagos</h1>
-    <p>Administra la información de Nequi que verán los clientes al pagar.</p>
+    <h1>⚙️ Configuración Global del Sistema</h1>
+    <p>Administra los textos dinámicos, precios de envío y métodos de pago de GlobalYofi.</p>
   </header>
 
   <div class="config-grid" *ngIf="!cargando">
 
-    <!-- ═══ Datos Nequi ═══ -->
+    <!-- ═══ 1. Configuración de Transferencia / QR ═══ -->
     <section class="config-card">
-      <h2><span class="material-icons">account_balance_wallet</span> Datos de Nequi</h2>
-      <p class="card-desc">Esta información se mostrará al cliente cuando seleccione pago por transferencia.</p>
+      <h2><span class="material-icons">account_balance_wallet</span> Transferencia y QR</h2>
+      <p class="card-desc">Personaliza la entidad bancaria y la información del QR.</p>
 
-      <div class="form-group">
-        <label for="nequiNumero">Número de Nequi</label>
-        <input type="tel" id="nequiNumero" [(ngModel)]="nequiNumero"
-               placeholder="Ej: 310 123 4567" maxlength="15">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="qrTexto">Nombre de la Entidad (ej: Bancolombia, Daviplata)</label>
+          <input type="text" id="qrTexto" [(ngModel)]="config.qrTexto" placeholder="Ej: Transferencia Bancaria">
+        </div>
+        <div class="form-group">
+          <label for="nequiNumero">Número de Cuenta/Celular</label>
+          <input type="tel" id="nequiNumero" [(ngModel)]="config.nequiNumero" placeholder="Ej: 000-000000-00">
+        </div>
+        <div class="form-group full-width">
+          <label for="nequiNombre">Nombre del titular</label>
+          <input type="text" id="nequiNombre" [(ngModel)]="config.nequiNombre" placeholder="Ej: Global Yofi SAS">
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="nequiNombre">Nombre del titular</label>
-        <input type="text" id="nequiNombre" [(ngModel)]="nequiNombre"
-               placeholder="Ej: Global Yofi SAS" maxlength="80">
+      <hr class="divider">
+      <h3>Información Adicional (Cuadros al lado del QR)</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Etiqueta 1 (ej: Tipo)</label>
+          <input type="text" [(ngModel)]="config.qrInfoLabel1" placeholder="Ej: Tipo de Cuenta">
+        </div>
+        <div class="form-group">
+          <label>Valor 1</label>
+          <input type="text" [(ngModel)]="config.qrInfoValue1" placeholder="Ej: Ahorros">
+        </div>
+        <div class="form-group">
+          <label>Etiqueta 2 (ej: Banco)</label>
+          <input type="text" [(ngModel)]="config.qrInfoLabel2" placeholder="Ej: Banco">
+        </div>
+        <div class="form-group">
+          <label>Valor 2</label>
+          <input type="text" [(ngModel)]="config.qrInfoValue2" placeholder="Ej: Bancolombia">
+        </div>
       </div>
 
-      <button class="btn btn-primary" [disabled]="guardando || !nequiNumero || !nequiNombre" (click)="guardarConfig()">
-        <span class="material-icons">save</span>
-        {{ guardando ? 'Guardando...' : 'Guardar Configuración' }}
-      </button>
+      <div class="qr-upload-area">
+        <h3><span class="material-icons">qr_code_2</span> Imagen del QR</h3>
+        <div class="qr-preview" *ngIf="qrPreviewUrl">
+          <img [src]="qrPreviewUrl" alt="QR Preview" class="qr-img">
+        </div>
+        <div class="qr-placeholder" *ngIf="!qrPreviewUrl">
+          <span class="material-icons">qr_code_2</span>
+          <p>Sin imagen QR</p>
+        </div>
+        <label class="upload-label" for="qrFileInput">
+          <span class="material-icons">upload_file</span>
+          <span>{{ qrArchivoSeleccionado ? qrArchivoSeleccionado.name : 'Cambiar imagen QR...' }}</span>
+        </label>
+        <input type="file" id="qrFileInput" accept="image/*" style="display:none" (change)="onQrSelected($event)">
+        
+        <button class="btn btn-outline" [disabled]="!qrArchivoSeleccionado || subiendoQr" (click)="subirQr()">
+          {{ subiendoQr ? 'Subiendo...' : 'Subir Imagen QR' }}
+        </button>
+      </div>
     </section>
 
-    <!-- ═══ QR Code ═══ -->
+    <!-- ═══ 2. Operación y Precios de Envío ═══ -->
     <section class="config-card">
-      <h2><span class="material-icons">qr_code_2</span> Código QR de Nequi</h2>
-      <p class="card-desc">Sube el QR que los clientes escanearán para realizar el pago. Reemplaza el anterior automáticamente.</p>
+      <h2><span class="material-icons">local_shipping</span> Operación y Envíos</h2>
+      <p class="card-desc">Define los costos de logística y mensajes informativos.</p>
 
-      <!-- Current QR preview -->
-      <div class="qr-preview" *ngIf="qrPreviewUrl">
-        <p class="qr-label">QR actual:</p>
-        <img [src]="qrPreviewUrl" alt="QR Nequi" class="qr-img">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="precioEnvio">Costo de Envío Estándar ($)</label>
+          <input type="number" id="precioEnvio" [(ngModel)]="config.precioEnvio">
+        </div>
+        <div class="form-group">
+          <label for="precioEnvioGratis">Umbral Envío Gratis ($)</label>
+          <input type="number" id="precioEnvioGratis" [(ngModel)]="config.precioEnvioGratis">
+        </div>
+        <div class="form-group full-width">
+          <label for="condicionesCompra">Texto: "Condiciones de compra" (Vista Detalles)</label>
+          <textarea id="condicionesCompra" [(ngModel)]="config.condicionesCompra" rows="4" 
+                    placeholder="Ej: Envío gratuito sobre $150.000..."></textarea>
+        </div>
       </div>
-      <div class="qr-placeholder" *ngIf="!qrPreviewUrl">
-        <span class="material-icons">qr_code_2</span>
-        <p>No hay QR configurado</p>
+    </section>
+
+    <!-- ═══ 3. Contacto y Soporte ═══ -->
+    <section class="config-card">
+      <h2><span class="material-icons">contact_support</span> Contacto y Redes</h2>
+      <p class="card-desc">Datos globales que aparecen en el checkout y footer.</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="whatsappNumero">Celular WhatsApp (Sin espacios)</label>
+          <input type="text" id="whatsappNumero" [(ngModel)]="config.whatsappNumero" placeholder="Ej: 573101234567">
+        </div>
+        <div class="form-group">
+          <label for="contactoTelefono">Teléfono Oficina</label>
+          <input type="text" id="contactoTelefono" [(ngModel)]="config.contactoTelefono">
+        </div>
+        <div class="form-group full-width">
+          <label for="contactoEmail">Email de contacto</label>
+          <input type="email" id="contactoEmail" [(ngModel)]="config.contactoEmail">
+        </div>
       </div>
+    </section>
 
-      <!-- Upload -->
-      <label class="upload-label" for="qrFileInput">
-        <span class="material-icons">upload_file</span>
-        <span>{{ qrArchivoSeleccionado ? qrArchivoSeleccionado.name : 'Seleccionar imagen QR...' }}</span>
-      </label>
-      <input type="file" id="qrFileInput" accept="image/*" style="display:none" (change)="onQrSelected($event)">
+    <!-- ═══ 4. Información de Tienda Física ═══ -->
+    <section class="config-card">
+      <h2><span class="material-icons">storefront</span> Tienda Física</h2>
+      <p class="card-desc">Información para clientes que recogen en tienda.</p>
 
-      <button class="btn btn-primary" [disabled]="!qrArchivoSeleccionado || subiendoQr" (click)="subirQr()">
-        <span class="material-icons">cloud_upload</span>
-        {{ subiendoQr ? 'Subiendo...' : 'Subir QR' }}
-      </button>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label for="tiendaDireccion">Dirección de la tienda</label>
+          <input type="text" id="tiendaDireccion" [(ngModel)]="config.tiendaDireccion">
+        </div>
+        <div class="form-group">
+          <label for="tiendaHorario">Horario de atención</label>
+          <input type="text" id="tiendaHorario" [(ngModel)]="config.tiendaHorario">
+        </div>
+        <div class="form-group">
+          <label for="tiendaTiempoPreparacion">Tiempo de preparación (ej: 1-2 días)</label>
+          <input type="text" id="tiendaTiempoPreparacion" [(ngModel)]="config.tiendaTiempoPreparacion">
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 5. Métodos de Pago Habilitados ═══ -->
+    <section class="config-card">
+      <h2><span class="material-icons">credit_card</span> Métodos de Pago</h2>
+      <p class="card-desc">Activa o desactiva los métodos disponibles para el cliente.</p>
+
+      <div class="toggle-list">
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <span class="toggle-title">Transferencia / Banco</span>
+            <span class="toggle-desc">Permite pagar vía Transferencia Bancaria, Daviplata o cualquier banco.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="config.habilitarTransferencia">
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <span class="toggle-title">Pago al Recibir (Casa)</span>
+            <span class="toggle-desc">Habilita el cobro en efectivo al entregar.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="config.habilitarReciboPago">
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <span class="toggle-title">Recoger en Tienda</span>
+            <span class="toggle-desc">Habilita la opción de recoger en el local.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="config.habilitarRecogerTienda">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
     </section>
 
   </div>
 
+  <div class="floating-actions" *ngIf="!cargando">
+    <button class="btn btn-primary btn-large" [disabled]="guardando" (click)="guardarConfig()">
+      <span class="material-icons">save</span>
+      {{ guardando ? 'Guardando Cambios...' : 'Guardar Todo' }}
+    </button>
+  </div>
+
   <div class="loading-box" *ngIf="cargando">
     <div class="spinner"></div>
-    <p>Cargando configuración...</p>
+    <p>Cargando configuración global...</p>
   </div>
 </div>

@@ -1,0 +1,70 @@
+<div class="user-management-page fade-in">
+  <header class="page-header">
+    <div class="header-content">
+      <h1>👥 Gestión de Usuarios</h1>
+      <p>Administra los roles y el estado de acceso de todos los registrados.</p>
+    </div>
+    <div class="header-actions">
+      <div class="search-box">
+        <span class="material-icons">search</span>
+        <input type="text" [(ngModel)]="filtro" (ngModelChange)="aplicarFiltro()" 
+               placeholder="Buscar por nombre o email...">
+      </div>
+    </div>
+  </header>
+
+  <div class="table-container card">
+    <table *ngIf="!cargando && usuariosFiltrados.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of usuariosFiltrados" [class.inactive-row]="!u.activo">
+          <td class="id-col">{{ u.idUsuario }}</td>
+          <td class="name-col">
+            <div class="user-info">
+              <span class="user-avatar">{{ u.nombre.charAt(0) }}</span>
+              <span>{{ u.nombre }}</span>
+            </div>
+          </td>
+          <td>{{ u.email }}</td>
+          <td>
+            <select [ngModel]="u.rol" (ngModelChange)="cambiarRol(u, $event)" class="rol-select">
+              <option value="CLIENTE">CLIENTE</option>
+              <option value="ADMIN">ADMINISTRADOR</option>
+            </select>
+          </td>
+          <td>
+            <span class="status-badge" [class.active]="u.activo" [class.inactive]="!u.activo">
+              {{ u.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-icon" (click)="toggleActivo(u)" [title]="u.activo ? 'Desactivar' : 'Activar'">
+              <span class="material-icons">{{ u.activo ? 'person_off' : 'person_add' }}</span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!cargando && usuariosFiltrados.length === 0">
+      <span class="material-icons">group_off</span>
+      <p>No se encontraron usuarios que coincidan con la búsqueda.</p>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-state" *ngIf="cargando">
+      <div class="spinner"></div>
+      <p>Cargando lista de usuarios...</p>
+    </div>
+  </div>
+</div>

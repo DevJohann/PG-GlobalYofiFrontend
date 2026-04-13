@@ -7,6 +7,7 @@ import { CarritoService, CarritoDTO, ItemCarritoDTO } from '../../services/carri
 import { ProductosService } from '../../services/productos';
 import { AuthService } from '../../services/auth';
 import { NotificationService } from '../../services/notification.service';
+import { ConfiguracionService, ConfiguracionDTO } from '../../services/configuracion.service';
 
 @Component({
     selector: 'app-carrito-page',
@@ -19,6 +20,7 @@ export class CarritoPageComponent implements OnInit {
     carrito: CarritoDTO | null = null;
     isLoggedIn = false;
     userEmail: string | null = null;
+    config: ConfiguracionDTO | null = null;
     private destroy$ = new Subject<void>();
 
     constructor(
@@ -27,7 +29,8 @@ export class CarritoPageComponent implements OnInit {
         private authService: AuthService,
         private router: Router,
         private cdr: ChangeDetectorRef,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private configService: ConfiguracionService
     ) { }
 
     ngOnInit(): void {
@@ -50,6 +53,11 @@ export class CarritoPageComponent implements OnInit {
         if (userId && !this.carrito) {
             this.carritoService.getCartByClientId(userId).subscribe();
         }
+
+        this.configService.getConfig().pipe(takeUntil(this.destroy$)).subscribe(cfg => {
+            this.config = cfg;
+            this.cdr.detectChanges();
+        });
     }
 
     checkLoginStatus(): void {
@@ -95,6 +103,18 @@ export class CarritoPageComponent implements OnInit {
     procederAlPago(): void {
         if (!this.carrito || this.carrito.items.length === 0) return;
         this.router.navigate(['/pago-metodo']);
+    }
+
+    get costoEnvio(): number {
+        if (!this.config) return 15000;
+        const subtotal = this.carrito?.totalEstimado || 0;
+        const umbralGratis = this.config.precioEnvioGratis ?? 150000;
+        if (subtotal >= umbralGratis) return 0;
+        return this.config.precioEnvio ?? 15000;
+    }
+
+    get totalFinal(): number {
+        return (this.carrito?.totalEstimado || 0) + this.costoEnvio;
     }
 
     private enriquecerCarritoConImagenes(): void {

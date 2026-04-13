@@ -284,3 +284,26 @@
         position: relative;
     }
 }
+
+/* 📜 CONDICIONES DE COMPRA */
+.condiciones-compra-box {
+    margin-top: 25px;
+    padding: 20px;
+    background-color: #fff8fb;
+    border-radius: 12px;
+    border-left: 4px solid var(--pink-main);
+}
+
+.condiciones-compra-box h4 {
+    color: var(--pink-strong);
+    font-size: 1rem;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.condiciones-compra-box p {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+}
