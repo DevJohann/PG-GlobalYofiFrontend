@@ -1,59 +1,79 @@
-# FrontEndGlobalYofi
+# Global Yofi - Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.7.
+Este es el repositorio del frontend para **Global Yofi**, una plataforma de comercio electrónico y administración para una tienda de productos de belleza. Desarrollado con **Angular 20**, ofrece una experiencia de usuario moderna, reactiva y segura.
 
-## Development server
+---
 
-To start a local development server, run:
+## 🚀 Tecnologías Principales
 
-```bash
-ng serve
-```
+| Tecnología | Propósito |
+|------------|-----------|
+| **Angular 20** | Framework principal de la aplicación. |
+| **RxJS** | Gestión de flujos de datos asíncronos. |
+| **Chart.js** | Visualización de reportes y estadísticas en el panel admin. |
+| **JWT** | Autenticación segura mediante interceptores. |
+| **Tailwind / CSS** | Diseño responsivo y moderno. |
+| **Dialogflow CX** | Integración de chatbot para asistencia al cliente. |
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## ✨ Características Destacadas
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### 🛒 Interfaz de Cliente
+- **Catálogo de Productos**: Exploración con filtros avanzados por categoría y precio.
+- **Carrito de Compras**: Gestión dinámica de artículos y persistencia local.
+- **Proceso de Pago (Checkout)**: Flujo multi-paso para selección de método de pago y confirmación.
+- **Historial de Pedidos**: Los clientes pueden seguir el estado de sus compras.
 
-```bash
-ng generate component component-name
-```
+### 🤖 Asistencia Inteligente
+- **Chatbot Integrado**: Soporte en tiempo real mediante Dialogflow CX para recomendaciones y consultas de stock.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### 🛡️ Panel Administrativo
+- **Dashboard de Reportes**: Gráficos interactivos de inventario y ventas.
+- **Gestión de Entidades**: CRUD completo de productos, categorías y proveedores.
+- **Seguridad**: Rutas protegidas mediante Guards y manejo de roles.
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+## 🛠️ Instalación y Configuración
 
-To build the project run:
+### 1. Requisitos Previos
+- **Node.js**: Versión 18 o superior.
+- **Angular CLI**: Instalado globalmente (`npm install -g @angular/cli`).
 
-```bash
-ng build
-```
+### 2. Pasos de Instalación
+1. Clonar el repositorio.
+2. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+3. Ejecutar el servidor de desarrollo:
+   ```bash
+   ng serve
+   ```
+   La aplicación estará disponible en `http://localhost:4200/`.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## ⚙️ Conexión con el Backend
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Por defecto, la aplicación está configurada para comunicarse con el backend en:
+`http://localhost:8080/api`
 
-```bash
-ng test
-```
+Para cambiar esta configuración, revisa los servicios en `src/app/services/`.
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## 📂 Estructura del Proyecto
 
-```bash
-ng e2e
-```
+- `src/app/pages`: Vistas principales (Login, Tienda, Admin, Carrito).
+- `src/app/components`: Componentes reutilizables (Navbar, Footer, Notificaciones).
+- `src/app/services`: Lógica de comunicación con la API y estado global.
+- `src/app/interceptors`: Manejo automático de tokens JWT en las peticiones.
+- `src/app/routes.ts`: Definición de la navegación y protecciones de ruta.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 👥 Autores
+- **Edison Mauricio Beltrán**
+- **Johann Toncon**
