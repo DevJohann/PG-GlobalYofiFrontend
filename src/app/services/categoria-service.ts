@@ -62,4 +62,9 @@ export class CategoriaService {
   eliminarCategoria(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
+
+  /** 🔄 Activar/Desactivar categoría */
+  toggleCategoriaEstado(id: number): Observable<Categoria> {
+    return this.http.patch<Categoria>(`${this.apiUrl}/${id}/toggle`, {}, { headers: this.getAuthHeaders() });
+  }
 }

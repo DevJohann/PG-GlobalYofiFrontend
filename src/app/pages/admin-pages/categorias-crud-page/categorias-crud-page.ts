@@ -108,7 +108,7 @@ export class CategoriasCrudPage implements OnInit {
   async eliminarCategoria(id: number): Promise<void> {
     const confirmada = await this.notificationService.confirm('¿Deseas cambiar el estado (Activar/Desactivar) de esta categoría?');
     if (confirmada) {
-      this.categoriaService.eliminarCategoria(id).subscribe({
+      this.categoriaService.toggleCategoriaEstado(id).subscribe({
         next: () => {
           this.notificationService.success('✅ Estado de la categoría actualizado');
           this.cargarCategorias();
