@@ -1,7 +1,7 @@
 <app-navbar *ngIf="!isAdminRoute"></app-navbar>
 
 <main [style.padding-top]="isAdminRoute ? '0' : '80px'" style="min-height: 80vh;">
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </main>
 
 <app-footer *ngIf="!isAdminRoute"></app-footer>
@@ -11,14 +11,9 @@
 
 <!-- 🤖 Bot de Asistencia (Dialogflow CX) -->
 <div *ngIf="!isAdminRoute">
-  <df-messenger
-    location="us-central1"
-    project-id="global-yofi-chatbot"
-    agent-id="31bb4b5b-d7f9-465f-a80b-228565e15d26"
-    language-code="es"
-    max-query-length="-1">
-    <df-messenger-chat-bubble
-      chat-title="GlobalYofiBot">
+  <df-messenger location="us-central1" project-id="global-yofi-chatbot" agent-id="702acb66-ac8e-4e33-8161-5736699bc7fd"
+    language-code="es" max-query-length="-1">
+    <df-messenger-chat-bubble chat-title="GlobalYofiBot2">
     </df-messenger-chat-bubble>
   </df-messenger>
 </div>
