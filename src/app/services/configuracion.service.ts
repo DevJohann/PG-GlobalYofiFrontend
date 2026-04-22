@@ -35,7 +35,8 @@ export interface ConfiguracionDTO {
   providedIn: 'root'
 })
 export class ConfiguracionService {
-  private apiUrl = 'http://localhost:8080/api/pagos/config';
+  // private apiUrl = 'http://localhost:8080/api/pagos/config';
+  private apiUrl = 'http://pg-globalyofibackend.railway.internal/api/pagos/config';
 
   /** Cache de la configuración: se solicita una sola vez por sesión */
   private config$: Observable<ConfiguracionDTO> | null = null;

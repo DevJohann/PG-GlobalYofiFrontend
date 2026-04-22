@@ -31,7 +31,8 @@ export interface Cliente {
   providedIn: 'root'
 })
 export class ClienteService {
-  private readonly apiUrl = 'http://localhost:8080/api/clientes';
+  // private readonly apiUrl = 'http://localhost:8080/api/clientes';
+  private readonly apiUrl = 'http://pg-globalyofibackend.railway.internal/api/clientes';
   private isBrowser: boolean;
 
   constructor(

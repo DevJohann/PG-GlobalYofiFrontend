@@ -29,8 +29,10 @@ interface RegisterRequest {
   providedIn: 'root'
 })
 export class AuthService {
-  private loginUrl = 'http://localhost:8080/api/auth/login';
-  private registerUrl = 'http://localhost:8080/api/auth/register';
+  // private loginUrl = 'http://localhost:8080/api/auth/login';
+  private loginUrl = 'http://pg-globalyofibackend.railway.internal/api/auth/login';
+  // private registerUrl = 'http://localhost:8080/api/auth/register';
+  private registerUrl = 'http://pg-globalyofibackend.railway.internal/api/auth/register';
   private isBrowser: boolean;
 
   private currentUserSubject = new BehaviorSubject<any>(null);

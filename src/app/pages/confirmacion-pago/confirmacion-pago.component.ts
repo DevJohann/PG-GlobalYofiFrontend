@@ -68,7 +68,8 @@ export class ConfirmacionPagoComponent implements OnInit {
         this.qrTexto = config.qrTexto || 'Transferencia';
         
         if (config.qrImageUrl) {
-          this.qrImageUrl = 'http://localhost:8080' + config.qrImageUrl;
+          // this.qrImageUrl = 'http://localhost:8080' + config.qrImageUrl;
+          this.qrImageUrl = 'http://pg-globalyofibackend.railway.internal' + config.qrImageUrl;
         } else {
           this.qrImageUrl = '/assets/qr-nequi.png';
         }

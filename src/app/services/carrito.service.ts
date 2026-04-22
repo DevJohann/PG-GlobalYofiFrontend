@@ -23,9 +23,12 @@ export interface ItemCarritoDTO {
     providedIn: 'root'
 })
 export class CarritoService {
-    private apiUrl = 'http://localhost:8080/api/carrito';
-    private orderApiUrl = 'http://localhost:8080/api/pedidos';
-    private clienteApiUrl = 'http://localhost:8080/api/clientes';
+    // private apiUrl = 'http://localhost:8080/api/carrito';
+    private apiUrl = 'http://pg-globalyofibackend.railway.internal/api/carrito';
+    // private orderApiUrl = 'http://localhost:8080/api/pedidos';
+    private orderApiUrl = 'http://pg-globalyofibackend.railway.internal/api/pedidos';
+    // private clienteApiUrl = 'http://localhost:8080/api/clientes';
+    private clienteApiUrl = 'http://pg-globalyofibackend.railway.internal/api/clientes';
 
     // Estado global del carrito
     private cartSubject = new BehaviorSubject<CarritoDTO | null>(null);

@@ -13,7 +13,8 @@ import { ConfiguracionService, ConfiguracionDTO } from '../../../services/config
   styleUrls: ['./config-pagos-page.component.css']
 })
 export class ConfigPagosPageComponent implements OnInit {
-  private apiUrl = 'http://localhost:8080/api/pagos/config';
+  // private apiUrl = 'http://localhost:8080/api/pagos/config';
+  private apiUrl = 'http://pg-globalyofibackend.railway.internal/api/pagos/config';
 
   // Model for the configuration
   config: ConfiguracionDTO = {
@@ -61,7 +62,8 @@ export class ConfigPagosPageComponent implements OnInit {
       next: (config) => {
         this.config = { ...this.config, ...config };
         if (config.qrImageUrl) {
-          this.qrPreviewUrl = 'http://localhost:8080' + config.qrImageUrl;
+          // this.qrPreviewUrl = 'http://localhost:8080' + config.qrImageUrl;
+          this.qrPreviewUrl = 'http://pg-globalyofibackend.railway.internal' + config.qrImageUrl;
         }
         this.cargando = false;
         this.cdr.detectChanges();
@@ -112,7 +114,8 @@ export class ConfigPagosPageComponent implements OnInit {
     this.configService.subirQr(this.qrArchivoSeleccionado).subscribe({
       next: (res) => {
         this.subiendoQr = false;
-        this.qrPreviewUrl = 'http://localhost:8080' + (res.qrImageUrl || '');
+        // this.qrPreviewUrl = 'http://localhost:8080' + (res.qrImageUrl || '');
+        this.qrPreviewUrl = 'http://pg-globalyofibackend.railway.internal' + (res.qrImageUrl || '');
         this.qrArchivoSeleccionado = null;
         this.notificationService.success('✅ QR cargado exitosamente. Los clientes ya pueden verlo.');
         this.cdr.detectChanges();

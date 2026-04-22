@@ -20,7 +20,8 @@ export interface PagoDTO {
   providedIn: 'root'
 })
 export class PagoService {
-  private apiUrl = 'http://localhost:8080/api/pagos';
+  // private apiUrl = 'http://localhost:8080/api/pagos';
+  private apiUrl = 'http://pg-globalyofibackend.railway.internal/api/pagos';
 
   constructor(private http: HttpClient) {}
 

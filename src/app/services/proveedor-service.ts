@@ -20,7 +20,8 @@ export interface Proveedor {
   providedIn: 'root'
 })
 export class ProveedorService {
-  private readonly apiUrl = 'http://localhost:8080/api/proveedores';
+  // private readonly apiUrl = 'http://localhost:8080/api/proveedores';
+  private readonly apiUrl = 'http://pg-globalyofibackend.railway.internal/api/proveedores';
   private isBrowser: boolean;
 
   constructor(

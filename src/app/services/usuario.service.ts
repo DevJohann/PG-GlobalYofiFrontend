@@ -14,7 +14,8 @@ export interface Usuario {
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrl = 'http://localhost:8080/api/usuarios';
+  // private apiUrl = 'http://localhost:8080/api/usuarios';
+  private apiUrl = 'http://pg-globalyofibackend.railway.internal/api/usuarios';
 
   constructor(private http: HttpClient) {}
 

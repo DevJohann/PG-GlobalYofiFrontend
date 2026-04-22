@@ -8,7 +8,8 @@ import { NotificationService } from './notification.service';
   providedIn: 'root'
 })
 export class ReportesService {
-  private readonly baseUrl = 'http://localhost:8080/api/reportes';
+  // private readonly baseUrl = 'http://localhost:8080/api/reportes';
+  private readonly baseUrl = 'http://pg-globalyofibackend.railway.internal/api/reportes';
 
   constructor(private http: HttpClient, private notificationService: NotificationService) {}
 

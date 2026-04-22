@@ -34,7 +34,8 @@ export interface LineaPedidoDTO {
   providedIn: 'root'
 })
 export class PedidoService {
-  private apiUrl = 'http://localhost:8080/api/pedidos';
+  // private apiUrl = 'http://localhost:8080/api/pedidos';
+  private apiUrl = 'http://pg-globalyofibackend.railway.internal/api/pedidos';
   private isBrowser: boolean;
 
   constructor(

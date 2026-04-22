@@ -15,7 +15,8 @@ export interface Categoria {
   providedIn: 'root'
 })
 export class CategoriaService {
-  private readonly apiUrl = 'http://localhost:8080/api/categorias';
+  // private readonly apiUrl = 'http://localhost:8080/api/categorias';
+  private readonly apiUrl = 'http://pg-globalyofibackend.railway.internal/api/categorias';
   private isBrowser: boolean;
 
   constructor(
