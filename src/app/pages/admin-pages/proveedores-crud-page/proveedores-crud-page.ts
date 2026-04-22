@@ -110,17 +110,18 @@ export class ProveedoresCrudPage implements OnInit {
     }
   }
 
-  async eliminarProveedor(id: number): Promise<void> {
-    const confirmada = await this.notificationService.confirm('¿Deseas cambiar el estado (Activar/Desactivar) de este proveedor? El proveedor no se borrará físicamente.');
-    if (confirmada) {
-      this.proveedorService.eliminarProveedor(id).subscribe({
+  async toggleEstadoProveedor(prov: Proveedor): Promise<void> {
+    const accion = prov.estado?.toUpperCase() === 'ACTIVO' ? 'desactivar' : 'activar';
+    const confirmada = await this.notificationService.confirm(`¿Deseas ${accion} este proveedor?`);
+    if (confirmada && prov.id) {
+      this.proveedorService.toggleEstadoProveedor(prov.id).subscribe({
         next: () => {
-          this.notificationService.success('✅ Estado del proveedor actualizado');
+          this.notificationService.success(`✅ Proveedor ${accion === 'activar' ? 'activado' : 'desactivado'} con éxito`);
           this.cargarProveedores();
         },
         error: (err) => {
-          console.error('Error al eliminar', err);
-          this.notificationService.error('🚨 No se pudo eliminar el proveedor. Verifique si tiene productos o compras asociadas.');
+          console.error('Error al cambiar estado', err);
+          this.notificationService.error('🚨 No se pudo cambiar el estado del proveedor.');
         }
       });
     }

@@ -86,26 +86,27 @@ export class ProductosCrudPage implements OnInit, AfterViewInit {
   // Eliminar producto
   // ============================
 
-  async eliminar(id: number): Promise<void> {
-    const confirmada = await this.notificationService.confirm('¿Deseas cambiar el estado (Activar/Desactivar) de este producto? El producto no se borrará físicamente.');
+  async toggleEstado(prod: Producto): Promise<void> {
+    const accion = prod.estado?.toUpperCase() === 'ACTIVO' ? 'desactivar' : 'activar';
+    const confirmada = await this.notificationService.confirm(`¿Deseas ${accion} este producto?`);
     if (!confirmada) return;
 
-    this.productosService.eliminarProducto(id).subscribe({
+    this.productosService.toggleEstadoProducto(prod.id).subscribe({
       next: () => {
-        this.notificationService.success('✅ Estado del producto actualizado correctamente');
+        this.notificationService.success(`✅ Producto ${accion === 'activar' ? 'activado' : 'desactivado'} correctamente`);
         this.cargarProductos();
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('❌ Error al eliminar producto:', err);
+        console.error(`❌ Error al ${accion} producto:`, err);
         if (err.status === 403) {
-          this.notificationService.error('🚫 No tienes permisos para eliminar este producto.');
+          this.notificationService.error(`🚫 No tienes permisos para ${accion} este producto.`);
         } else if (err.status === 401) {
           this.notificationService.error('🔒 Sesión expirada. Inicia sesión nuevamente.');
           localStorage.removeItem('token');
           setTimeout(() => window.location.href = '/login', 2000);
         } else {
-          this.notificationService.error('❌ Error al eliminar el producto.');
+          this.notificationService.error(`❌ Error al cambiar el estado del producto.`);
         }
         this.cdr.detectChanges();
       }

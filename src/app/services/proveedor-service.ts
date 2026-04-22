@@ -67,4 +67,9 @@ export class ProveedorService {
   eliminarProveedor(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
+
+  /** 🔄 Alternar estado activo/inactivo del proveedor */
+  toggleEstadoProveedor(id: number): Observable<Proveedor> {
+    return this.http.patch<Proveedor>(`${this.apiUrl}/${id}/toggle`, {}, { headers: this.getAuthHeaders() });
+  }
 }

@@ -146,9 +146,16 @@ export class ProductosService {
     });
   }
 
-  /** 🗑️ Eliminar producto por ID */
+  /** 🗑️ Eliminar producto por ID (desactivación lógica) */
   eliminarProducto(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  /** 🔄 Alternar estado activo/inactivo del producto */
+  toggleEstadoProducto(id: number): Observable<Producto> {
+    return this.http.patch<Producto>(`${this.apiUrl}/${id}/toggle`, {}, {
       headers: this.getAuthHeaders()
     });
   }

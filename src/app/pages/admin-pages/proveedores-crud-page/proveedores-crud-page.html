@@ -47,7 +47,7 @@
           </td>
           <td>
             <button class="btn-icon" (click)="editarProveedor(prov)" title="Editar">✏️</button>
-            <button class="btn-icon" (click)="eliminarProveedor(prov.id!)" 
+            <button class="btn-icon" (click)="toggleEstadoProveedor(prov)" 
                     [title]="prov.estado.toUpperCase() === 'ACTIVO' ? 'Desactivar' : 'Activar'">
               {{ prov.estado.toUpperCase() === 'ACTIVO' ? '🚫' : '✅' }}
             </button>
