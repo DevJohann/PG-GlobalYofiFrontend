@@ -23,6 +23,7 @@
                 "input": "public"
               }
             ],
+            "outputPath": "dist",
             "styles": [
               "src/styles.css"
             ],
