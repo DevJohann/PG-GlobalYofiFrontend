@@ -1,3 +1,4 @@
+import { API_CONFIG } from '../config/api.config';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
@@ -34,8 +35,7 @@ export interface LineaPedidoDTO {
   providedIn: 'root'
 })
 export class PedidoService {
-  // private apiUrl = 'http://localhost:8080/api/pedidos';
-  private apiUrl = 'http://pg-globalyofibackend.railway.internal/api/pedidos';
+  private apiUrl = `${API_CONFIG.apiUrl}/pedidos`;
   private isBrowser: boolean;
 
   constructor(
@@ -63,7 +63,7 @@ export class PedidoService {
   // Actualizar estado del pedido (Ej: PENDIENTE -> ENVIADO)
   actualizarEstado(id: number, nuevoEstado: string): Observable<PedidoAdminDTO> {
     return this.http.put<PedidoAdminDTO>(
-      `${this.apiUrl}/${id}/estado`, 
+      `${this.apiUrl}/${id}/estado`,
       { estado: nuevoEstado }
     );
   }

@@ -1,3 +1,4 @@
+import { API_CONFIG } from '../config/api.config';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, shareReplay } from 'rxjs';
@@ -35,13 +36,12 @@ export interface ConfiguracionDTO {
   providedIn: 'root'
 })
 export class ConfiguracionService {
-  // private apiUrl = 'http://localhost:8080/api/pagos/config';
-  private apiUrl = 'http://pg-globalyofibackend.railway.internal/api/pagos/config';
+  private apiUrl = `${API_CONFIG.apiUrl}/pagos/config`;
 
   /** Cache de la configuración: se solicita una sola vez por sesión */
   private config$: Observable<ConfiguracionDTO> | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /** Obtiene la configuración del sistema (cacheada con shareReplay) */
   getConfig(): Observable<ConfiguracionDTO> {

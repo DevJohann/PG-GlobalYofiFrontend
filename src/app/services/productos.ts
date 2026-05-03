@@ -1,3 +1,4 @@
+import { API_CONFIG } from '../config/api.config';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
@@ -23,10 +24,8 @@ export interface Producto {
   providedIn: 'root'
 })
 export class ProductosService {
-  // private readonly apiUrl = 'http://localhost:8080/api/productos';
-  private readonly apiUrl = 'http://pg-globalyofibackend.railway.internal/api/productos';
-  // private readonly baseUrl = 'http://localhost:8080';
-  private readonly baseUrl = 'http://pg-globalyofibackend.railway.internal';
+  private readonly apiUrl = `${API_CONFIG.apiUrl}/productos`;
+  private readonly baseUrl = API_CONFIG.baseUrl;
   private isBrowser: boolean;
 
   constructor(
@@ -39,7 +38,7 @@ export class ProductosService {
   /** 🖼️ Obtener la URL completa de la imagen */
   getImagenUrl(path: string | null | undefined): string {
     if (!path || path.trim() === '') {
-      return 'assets/img/yofi/MascotaGlobalYofi.png'; 
+      return 'assets/img/yofi/MascotaGlobalYofi.png';
     }
 
     // Si la ruta ya es completa (http/https), la retornamos
@@ -49,12 +48,12 @@ export class ProductosService {
 
     // Normalizar el path: asegurar que empiece con /uploads/ si viene del backend
     // Si viene como /img/ se cambia a /uploads/ (asumiendo patrón del backend)
-    let normalizedPath = path.startsWith('/img/') 
-      ? path.replace('/img/', '/uploads/') 
+    let normalizedPath = path.startsWith('/img/')
+      ? path.replace('/img/', '/uploads/')
       : path;
 
     if (!normalizedPath.startsWith('/uploads/') && !normalizedPath.startsWith('assets/')) {
-       normalizedPath = '/uploads/' + (normalizedPath.startsWith('/') ? normalizedPath.substring(1) : normalizedPath);
+      normalizedPath = '/uploads/' + (normalizedPath.startsWith('/') ? normalizedPath.substring(1) : normalizedPath);
     }
 
     // Si es un asset local, no le ponemos el baseUrl
@@ -100,7 +99,7 @@ export class ProductosService {
   /** 🧩 Obtener productos por filtros combinados (categorías, precio, búsqueda) */
   getFilterProductos(categoriaIds: number[] | null, min: number | null, max: number | null, search: string | null, sortBy: string | null, estado: string | null = null): Observable<Producto[]> {
     let params = new HttpParams();
-    
+
     if (categoriaIds && categoriaIds.length > 0) {
       params = params.set('categoriaIds', categoriaIds.join(','));
     }

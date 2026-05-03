@@ -67,15 +67,18 @@
             <h3>👤 Información del Cliente</h3>
             <p><strong>Nombre:</strong> {{ pedidoSeleccionado.nombreCliente }}</p>
             <p><strong>Email:</strong> {{ pedidoSeleccionado.emailCliente }}</p>
-            <p *ngIf="pedidoSeleccionado.telefonoPago"><strong>Teléfono Contacto:</strong> {{ pedidoSeleccionado.telefonoPago }}</p>
-            <p *ngIf="pedidoSeleccionado.tipoDocumento"><strong>Documento:</strong> {{ pedidoSeleccionado.tipoDocumento }} - {{ pedidoSeleccionado.numeroDocumento }}</p>
+            <p *ngIf="pedidoSeleccionado.telefonoPago"><strong>Teléfono Contacto:</strong> {{
+              pedidoSeleccionado.telefonoPago }}</p>
+            <p *ngIf="pedidoSeleccionado.tipoDocumento"><strong>Documento:</strong> {{ pedidoSeleccionado.tipoDocumento
+              }} - {{ pedidoSeleccionado.numeroDocumento }}</p>
           </div>
-          
+
           <div class="info-card">
             <h3>📍 Dirección de Envío</h3>
             <p><strong>Dirección:</strong> {{ pedidoSeleccionado.direccion }}</p>
             <p><strong>Ciudad:</strong> {{ pedidoSeleccionado.ciudad }}</p>
-            <p *ngIf="pedidoSeleccionado.observaciones"><strong>Indicaciones:</strong> {{ pedidoSeleccionado.observaciones }}</p>
+            <p *ngIf="pedidoSeleccionado.observaciones"><strong>Indicaciones:</strong> {{
+              pedidoSeleccionado.observaciones }}</p>
           </div>
 
           <div class="info-card">
@@ -84,13 +87,11 @@
 
             <!-- Comprobante Download Link -->
             <div class="comprobante-box" *ngIf="pagoSeleccionado?.comprobanteUrl">
-              <a [href]="'http://localhost:8080' + pagoSeleccionado.comprobanteUrl"
-                 target="_blank"
-                 class="btn-comprobante">
+              <a [href]="config.baseUrl + pagoSeleccionado.comprobanteUrl" target="_blank" class="btn-comprobante">
                 📄 Ver Comprobante de Pago
               </a>
             </div>
-            
+
             <!-- Validar Pago button (visible when awaiting verification) -->
             <div class="validar-pago-box" *ngIf="pedidoSeleccionado.estado === 'Pendiente Verificación Pago'">
               <p class="validar-info">⏳ El cliente subió un comprobante. Verifica y aprueba el pago.</p>
@@ -100,7 +101,8 @@
             </div>
 
             <label for="cambiarEstado"><strong>Cambiar Estado:</strong></label>
-            <select id="cambiarEstado" #estadoSelect [value]="pedidoSeleccionado.estado" (change)="cambiarEstado(extraerId(pedidoSeleccionado), estadoSelect.value)">
+            <select id="cambiarEstado" #estadoSelect [value]="pedidoSeleccionado.estado"
+              (change)="cambiarEstado(extraerId(pedidoSeleccionado), estadoSelect.value)">
               <!-- Payment states -->
               <option value="Pendiente de Pago">Pendiente de Pago</option>
               <option value="Pendiente Verificación Pago">Pendiente Verificación Pago</option>
@@ -150,10 +152,10 @@
         <button class="btn-primary" (click)="cerrarDetalles()">Cerrar</button>
       </div>
     </div>
-    
+
     <div class="modal-content loading-modal" *ngIf="cargandoDetalle">
-       <div class="spinner"></div>
-       <p>Cargando detalles del pedido...</p>
+      <div class="spinner"></div>
+      <p>Cargando detalles del pedido...</p>
     </div>
   </div>
 </div>

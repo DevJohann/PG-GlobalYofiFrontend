@@ -1,3 +1,4 @@
+import { API_CONFIG } from '../../config/api.config';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -43,7 +44,7 @@ export class ConfirmacionPagoComponent implements OnInit {
     private configService: ConfiguracionService,
     private notificationService: NotificationService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarConfiguracion();
@@ -66,10 +67,9 @@ export class ConfirmacionPagoComponent implements OnInit {
         this.nequiNumero = config.nequiNumero || '';
         this.nequiNombre = config.nequiNombre || '';
         this.qrTexto = config.qrTexto || 'Transferencia';
-        
+
         if (config.qrImageUrl) {
-          // this.qrImageUrl = 'http://localhost:8080' + config.qrImageUrl;
-          this.qrImageUrl = 'http://pg-globalyofibackend.railway.internal' + config.qrImageUrl;
+          this.qrImageUrl = API_CONFIG.baseUrl + config.qrImageUrl;
         } else {
           this.qrImageUrl = '/assets/qr-nequi.png';
         }
@@ -77,7 +77,7 @@ export class ConfirmacionPagoComponent implements OnInit {
         this.tiendaDireccion = config.tiendaDireccion || 'Calle 6 # 2-26, Gama, Cundinamarca';
         this.tiendaHorario = config.tiendaHorario || 'Lunes a Sábado: 8am – 6pm';
         this.tiendaTiempoPreparacion = config.tiendaTiempoPreparacion || '1-2 días hábiles';
-        
+
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error al cargar configuración global', err)

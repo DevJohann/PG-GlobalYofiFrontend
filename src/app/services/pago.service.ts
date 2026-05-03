@@ -1,3 +1,4 @@
+import { API_CONFIG } from '../config/api.config';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -20,10 +21,9 @@ export interface PagoDTO {
   providedIn: 'root'
 })
 export class PagoService {
-  // private apiUrl = 'http://localhost:8080/api/pagos';
-  private apiUrl = 'http://pg-globalyofibackend.railway.internal/api/pagos';
+  private apiUrl = `${API_CONFIG.apiUrl}/pagos`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   iniciarPago(pedidoId: number): Observable<PagoDTO> {
     return this.http.post<PagoDTO>(`${this.apiUrl}/${pedidoId}/iniciar`, {});

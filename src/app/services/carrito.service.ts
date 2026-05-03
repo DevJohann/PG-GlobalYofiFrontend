@@ -1,3 +1,4 @@
+import { API_CONFIG } from '../config/api.config';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
@@ -23,12 +24,9 @@ export interface ItemCarritoDTO {
     providedIn: 'root'
 })
 export class CarritoService {
-    // private apiUrl = 'http://localhost:8080/api/carrito';
-    private apiUrl = 'http://pg-globalyofibackend.railway.internal/api/carrito';
-    // private orderApiUrl = 'http://localhost:8080/api/pedidos';
-    private orderApiUrl = 'http://pg-globalyofibackend.railway.internal/api/pedidos';
-    // private clienteApiUrl = 'http://localhost:8080/api/clientes';
-    private clienteApiUrl = 'http://pg-globalyofibackend.railway.internal/api/clientes';
+    private apiUrl = `${API_CONFIG.apiUrl}/carrito`;
+    private orderApiUrl = `${API_CONFIG.apiUrl}/pedidos`;
+    private clienteApiUrl = `${API_CONFIG.apiUrl}/clientes`;
 
     // Estado global del carrito
     private cartSubject = new BehaviorSubject<CarritoDTO | null>(null);

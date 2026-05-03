@@ -1,4 +1,5 @@
 // ✅ src/app/services/reportes.service.ts
+import { API_CONFIG } from '../config/api.config';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,10 +9,9 @@ import { NotificationService } from './notification.service';
   providedIn: 'root'
 })
 export class ReportesService {
-  // private readonly baseUrl = 'http://localhost:8080/api/reportes';
-  private readonly baseUrl = 'http://pg-globalyofibackend.railway.internal/api/reportes';
+  private readonly baseUrl = `${API_CONFIG.apiUrl}/reportes`;
 
-  constructor(private http: HttpClient, private notificationService: NotificationService) {}
+  constructor(private http: HttpClient, private notificationService: NotificationService) { }
 
   // =====================================================
   // 🔐 Encabezado con token + manejo de sesión seguro

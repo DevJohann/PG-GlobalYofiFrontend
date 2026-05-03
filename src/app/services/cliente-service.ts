@@ -1,3 +1,4 @@
+import { API_CONFIG } from '../config/api.config';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
@@ -31,8 +32,7 @@ export interface Cliente {
   providedIn: 'root'
 })
 export class ClienteService {
-  // private readonly apiUrl = 'http://localhost:8080/api/clientes';
-  private readonly apiUrl = 'http://pg-globalyofibackend.railway.internal/api/clientes';
+  private readonly apiUrl = `${API_CONFIG.apiUrl}/clientes`;
   private isBrowser: boolean;
 
   constructor(

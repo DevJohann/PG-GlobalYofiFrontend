@@ -1,3 +1,4 @@
+import { API_CONFIG } from '../../../config/api.config';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PedidoService, PedidoAdminDTO } from '../../../services/pedido.service';
@@ -13,6 +14,7 @@ import { NotificationService } from '../../../services/notification.service';
   styleUrls: ['./pedidos-crud-page.css']
 })
 export class PedidosCrudPage implements OnInit {
+  public config = API_CONFIG;
   pedidos: PedidoAdminDTO[] = [];
   pedidoSeleccionado: PedidoAdminDTO | null = null;
   pagoSeleccionado: any = null;
@@ -24,7 +26,7 @@ export class PedidosCrudPage implements OnInit {
     private pagoService: PagoService,
     private cdr: ChangeDetectorRef,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarPedidos();
@@ -53,14 +55,14 @@ export class PedidosCrudPage implements OnInit {
       console.error('No se pudo encontrar un ID válido en el objeto pedido', pedido);
       return;
     }
-    
+
     this.cargandoDetalle = true;
     this.cdr.detectChanges();
     this.pedidoService.getPedidoById(id).subscribe({
       next: (fullPedido) => {
         this.pedidoSeleccionado = fullPedido;
         this.cargandoDetalle = false;
-        
+
         // Fetch payment details to get comprobanteUrl if available
         this.pagoSeleccionado = null;
         this.pagoService.obtenerPago(id).subscribe({

@@ -1,3 +1,4 @@
+import { API_CONFIG } from '../config/api.config';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
@@ -20,8 +21,7 @@ export interface Proveedor {
   providedIn: 'root'
 })
 export class ProveedorService {
-  // private readonly apiUrl = 'http://localhost:8080/api/proveedores';
-  private readonly apiUrl = 'http://pg-globalyofibackend.railway.internal/api/proveedores';
+  private readonly apiUrl = `${API_CONFIG.apiUrl}/proveedores`;
   private isBrowser: boolean;
 
   constructor(

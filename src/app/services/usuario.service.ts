@@ -1,3 +1,4 @@
+import { API_CONFIG } from '../config/api.config';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -14,10 +15,9 @@ export interface Usuario {
   providedIn: 'root'
 })
 export class UsuarioService {
-  // private apiUrl = 'http://localhost:8080/api/usuarios';
-  private apiUrl = 'http://pg-globalyofibackend.railway.internal/api/usuarios';
+  private apiUrl = `${API_CONFIG.apiUrl}/usuarios`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /** Lista todos los usuarios (solo ADMIN) */
   listarTodos(): Observable<Usuario[]> {

@@ -1,3 +1,4 @@
+import { API_CONFIG } from '../config/api.config';
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
@@ -15,8 +16,7 @@ export interface Categoria {
   providedIn: 'root'
 })
 export class CategoriaService {
-  // private readonly apiUrl = 'http://localhost:8080/api/categorias';
-  private readonly apiUrl = 'http://pg-globalyofibackend.railway.internal/api/categorias';
+  private readonly apiUrl = `${API_CONFIG.apiUrl}/categorias`;
   private isBrowser: boolean;
 
   constructor(
