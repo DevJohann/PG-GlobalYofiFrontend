@@ -1,4 +1,4 @@
 export const API_CONFIG = {
-    baseUrl: 'http://pgglobalyofibackend.railway.internal:8080',
-    apiUrl: 'http://pgglobalyofibackend.railway.internal:8080/api'
+    baseUrl: 'https://pgglobalyofibackend-production.up.railway.app',
+    apiUrl: 'https://pgglobalyofibackend-production.up.railway.app/api'
 };
